@@ -4,36 +4,13 @@ import { columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
 import { data } from "./data/tasks";
 import StatsContainer from "@/components/StatsContainer";
+import Data from "./Data";
 
 export default async function TaskPage() {
   const tasks = data;
 
   return (
     <div className="flex min-h-screen w-full flex-col">
-      {/* <main className="flex flex-1 flex-col gap-4 md:gap-8 ">
-        <StatsContainer />
-
-        <div className="md:hidden">
-          <Image
-            src="/examples/tasks-light.png"
-            width={1280}
-            height={998}
-            alt="Playground"
-            className="block dark:hidden"
-          />
-          <Image
-            src="/examples/tasks-dark.png"
-            width={1280}
-            height={998}
-            alt="Playground"
-            className="hidden dark:block"
-          />
-        </div>
-        <div className="hidden h-full flex-1 flex-col space-y-8  md:flex">
-          <DataTable data={tasks} columns={columns} />
-        </div> */}
-
-      {/* </main> */}
       <div className=" gap-4 bg-white/50 p-20">
         <div className="size-20 bg-background">background</div>
         <div className="size-20 bg-foreground">foreground</div>
@@ -57,6 +34,7 @@ export default async function TaskPage() {
         <div className="size-20 bg-destructive">destructive</div>
         <div className="size-20 bg-[var(--input)]">--input</div>
       </div>
+      <Data />
     </div>
   );
 }
