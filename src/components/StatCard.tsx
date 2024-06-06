@@ -13,12 +13,16 @@ export const StatCard: React.FC<StatCardProps> = ({
   percentageChange,
 }) => {
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
+    <Card className="bg-transparent border-none py-5">
+      <CardHeader className="flex flex-row items-center justify-between p-0">
+        <CardTitle className="text-sm text-secondary-foreground leading-[1.4rem] font-normal">
+          {title}
+        </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
+      <CardContent className="p-0">
+        <div className="text-[1.625rem] leading-[2.6rem] tracking-[0.0625rem]">
+          {value}
+        </div>
         <p className="text-xs text-muted-foreground">
           {percentageChange > 0
             ? `+${percentageChange}%`

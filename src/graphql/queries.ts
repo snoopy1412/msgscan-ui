@@ -41,3 +41,33 @@ export const GET_MESSAGES = gql`
     }
   }
 `;
+
+export const GET_MESSAGE = gql`
+  query GetMessage($id: String!) {
+    message(id: $id) {
+      id
+      protocol
+      status
+      payload
+      params
+      sourceChainId
+      sourceBlockNumber
+      sourceBlockTimestamp
+      sourceTransactionHash
+      sourceTransactionIndex
+      sourceLogIndex
+      sourceDappAddress
+      sourcePortAddress
+      targetChainId
+      targetBlockNumber
+      targetBlockTimestamp
+      targetTransactionHash
+      targetTransactionIndex
+      targetLogIndex
+      targetDappAddress
+      targetPortAddress
+      protocolInfoType
+      protocolInfoId
+    }
+  }
+`;

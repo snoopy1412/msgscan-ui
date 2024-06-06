@@ -33,6 +33,13 @@
       --ring: 222.2 84% 4.9%;
 
       --radius: 0.25rem;
+
+      --header-height: 80px;
+      --footer-height: 60px;
+
+      --inflight: 43 97% 59%;
+      --success: 105 63% 62%;
+      --failure: 0 100% 71%;
     }
 
     .dark {

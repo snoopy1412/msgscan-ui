@@ -7,6 +7,7 @@ import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
@@ -32,16 +33,14 @@ export function ModeToggle() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {themeOptions.map((option) => (
-          <DropdownMenuItem
+          <DropdownMenuCheckboxItem
             key={option.value}
             onClick={() => setTheme(option.value)}
+            checked={theme === option.value}
             className="flex items-center justify-between"
           >
             <span>{option.name}</span>
-            {theme === option.value && (
-              <Check width={16} height={16} className="text-green-500" />
-            )}
-          </DropdownMenuItem>
+          </DropdownMenuCheckboxItem>
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
