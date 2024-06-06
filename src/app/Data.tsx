@@ -1,6 +1,8 @@
 "use client";
 
-import { APP_BASE_API_URL } from "@/config/site";
+import { APP_BASE_API_URL } from "@/config/api";
+import { client } from "@/graphql/client";
+import { GET_MESSAGES } from "@/graphql/queries";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { request, gql } from "graphql-request";
 
@@ -12,61 +14,11 @@ function useMessages({
   return useQuery({
     queryKey: ["messages", limit, orderBy, orderDirection],
     queryFn: async () => {
-      const query = gql`
-        query GetMessages(
-          $limit: Int
-          $orderBy: String
-          $orderDirection: String
-        ) {
-          messages(
-            limit: $limit
-            orderBy: $orderBy
-            orderDirection: $orderDirection
-          ) {
-            items {
-              id
-              protocol
-              status
-              payload
-              params
-              sourceChainId
-              sourceBlockNumber
-              sourceBlockTimestamp
-              sourceTransactionHash
-              sourceTransactionIndex
-              sourceLogIndex
-              sourceDappAddress
-              sourcePortAddress
-              targetChainId
-              targetBlockNumber
-              targetBlockTimestamp
-              targetTransactionHash
-              targetTransactionIndex
-              targetLogIndex
-              targetDappAddress
-              targetPortAddress
-              protocolInfoType
-              protocolInfoId
-            }
-            pageInfo {
-              endCursor
-              hasNextPage
-              hasPreviousPage
-              startCursor
-            }
-          }
-        }
-      `;
-
-      const variables = {
-        limit,
-        orderBy,
-        orderDirection,
-      };
-
-      const data = await request(APP_BASE_API_URL, query, variables);
+      const variables = { limit, orderBy, orderDirection };
+      const data = await client.request(GET_MESSAGES, variables);
       return data;
     },
+    placeholderData: true,
   });
 }
 

@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "cross-env NEXT_PUBLIC_DEPLOYMENT_MODE=mainnet next build",
+    "build:testnet": "cross-env NEXT_PUBLIC_DEPLOYMENT_MODE=testnet next build",
     "start": "next start",
     "lint": "next lint"
   },

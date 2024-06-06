@@ -10,9 +10,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "./ui/input";
-import { Network, NetworkMap } from "@/config/network";
+import { NetworkMap } from "@/config/network";
 import { Search } from "lucide-react";
 import { ModeToggle } from "./ModeToggle";
+import { DEPLOY_ENV } from "@/types/env";
 
 const Header = () => {
   return (
@@ -34,11 +35,11 @@ const Header = () => {
             <SelectValue placeholder="Select a network" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={Network.Mainnet}>
-              {NetworkMap[Network.Mainnet].title}
+            <SelectItem value={DEPLOY_ENV.MAINNET}>
+              {NetworkMap[DEPLOY_ENV.MAINNET].title}
             </SelectItem>
-            <SelectItem value={Network.Testnet}>
-              {NetworkMap[Network.Testnet].title}
+            <SelectItem value={DEPLOY_ENV.TESTNET}>
+              {NetworkMap[DEPLOY_ENV.TESTNET].title}
             </SelectItem>
           </SelectContent>
         </Select>

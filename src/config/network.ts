@@ -1,14 +1,11 @@
-export enum Network {
-  Testnet = "testnet",
-  Mainnet = "mainnet",
-}
+import { DEPLOY_ENV } from "@/types/env";
 
 export const NetworkMap = {
-  [Network.Testnet]: {
+  [DEPLOY_ENV.TESTNET]: {
     title: "Testnet",
     url: "https://testnet.scan.msgport.xyz",
   },
-  [Network.Mainnet]: {
+  [DEPLOY_ENV.MAINNET]: {
     title: "Mainnet",
     url: "https://scan.msgport.xyz",
   },
