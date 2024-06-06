@@ -17,6 +17,7 @@ import { client } from '@/graphql/client';
 import { GET_MESSAGE } from '@/graphql/queries';
 import MessageStatus from '@/components/MessageStatus';
 import OrmpInfo from './components/OrmpInfo';
+import { useParams } from 'next/navigation';
 
 function useMessage({ id } = {}) {
   return useQuery({
@@ -31,8 +32,9 @@ function useMessage({ id } = {}) {
 }
 
 const TxDetail = () => {
+  const params = useParams();
   const { data, status, error, isFetching } = useMessage({
-    id: '0x84ae8e7ca8b8e4a7bccbf8e2cc449fa6e4b2613b3c177b866b1a0bc602f3c3ab'
+    id: params?.id
   });
 
   return (

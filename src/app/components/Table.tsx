@@ -1,23 +1,24 @@
-"use client";
+'use client';
 import {
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+  TableRow
+} from '@/components/ui/table';
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
   PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import Toolbar from "./ToolBar";
-import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
-import MessageStatus from "@/components/MessageStatus";
+  PaginationPrevious
+} from '@/components/ui/pagination';
+import Toolbar from './ToolBar';
+import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
+import MessageStatus from '@/components/MessageStatus';
+import Link from 'next/link';
 
 interface TableProps {
   loading: boolean;
@@ -47,97 +48,105 @@ type Column = {
 
 const columns: Column[] = [
   {
-    dataIndex: "status",
-    title: "Status",
-    width: "7.78rem",
+    dataIndex: 'status',
+    title: 'Status',
+    width: '7.78rem',
     render(value, record, index) {
       return <MessageStatus status={value} />;
-    },
+    }
   },
   {
-    dataIndex: "id",
-    title: "Msgid",
-    width: "7.78rem",
+    dataIndex: 'id',
+    title: 'Msgid',
+    width: '7.78rem',
+    render(value, record, index) {
+      return (
+        <Link href={`/tx/${value}`} className="hover:underline">
+          {value}
+        </Link>
+      );
+    }
+  },
+  {
+    dataIndex: 'protocol',
+    title: 'Protocol',
+    width: '7.78rem',
     render(value, record, index) {
       return value;
-    },
+    }
   },
   {
-    dataIndex: "protocol",
-    title: "Protocol",
-    width: "7.78rem",
+    dataIndex: 'sourceTransactionHash',
+    title: 'Source Tx Hash',
+    width: '7.78rem',
+    render(value, record, index) {
+      return (
+        <Link href={`/tx/${value}`} className="hover:underline">
+          {value}
+        </Link>
+      );
+    }
+  },
+  {
+    dataIndex: 'sourceDappAddress',
+    title: 'From',
+    width: '7.78rem',
     render(value, record, index) {
       return value;
-    },
+    }
   },
   {
-    dataIndex: "sourceTransactionHash",
-    title: "Source Tx Hash",
-    width: "7.78rem",
+    dataIndex: 'targetTransactionHash',
+    title: 'Target Tx Hash',
+    width: '7.78rem',
     render(value, record, index) {
       return value;
-    },
+    }
   },
   {
-    dataIndex: "sourceDappAddress",
-    title: "From",
-    width: "7.78rem",
+    dataIndex: 'targetDappAddress',
+    title: 'To',
+    width: '7.78rem',
     render(value, record, index) {
       return value;
-    },
+    }
   },
   {
-    dataIndex: "targetTransactionHash",
-    title: "Target Tx Hash",
-    width: "7.78rem",
-    render(value, record, index) {
-      return value;
-    },
-  },
-  {
-    dataIndex: "targetDappAddress",
-    title: "To",
-    width: "7.78rem",
-    render(value, record, index) {
-      return value;
-    },
-  },
-  {
-    dataIndex: "sourceBlockTimestamp",
-    title: "Age",
-    width: "7.78rem",
+    dataIndex: 'sourceBlockTimestamp',
+    title: 'Age',
+    width: '7.78rem',
     render(value, record, index) {
       return formatTimeAgo(value);
-    },
+    }
   },
   {
-    dataIndex: "targetBlockTimestamp",
-    title: "TimeSpent",
-    width: "7.78rem",
+    dataIndex: 'targetBlockTimestamp',
+    title: 'TimeSpent',
+    width: '7.78rem',
     render(value, record, index) {
       return formatTimeDifference(record.sourceBlockTimestamp, value);
-    },
-  },
+    }
+  }
 ];
 
 const TableDemo = ({ loading, dataSource }: TableProps) => {
-  console.log("dataSource", dataSource);
+  console.log('dataSource', dataSource);
   return (
     <>
       <Toolbar />
       <Separator />
-      <Table className=" table-fixed">
+      <Table className="table-fixed">
         <TableHeader>
           <TableRow className="border-none px-5">
             {columns.map((column, index) => (
               <TableHead
                 className={cn(
-                  "h-14",
-                  "px-0",
-                  "pr-[1.88rem]",
-                  index === 0 && "pl-5",
-                  index === columns.length - 1 && "pr-5",
-                  column.width ? column.width : "w-[100px]"
+                  'h-14',
+                  'px-0',
+                  'pr-[1.88rem]',
+                  index === 0 && 'pl-5',
+                  index === columns.length - 1 && 'pr-5',
+                  column.width ? column.width : 'w-[100px]'
                 )}
                 key={column.dataIndex}
               >
@@ -150,22 +159,21 @@ const TableDemo = ({ loading, dataSource }: TableProps) => {
           {dataSource.map((message) => (
             <TableRow
               key={message?.id}
-              className="bg-card border-b-background last:border-b-0  border-b-[2px]"
+              className="border-b-[2px] border-b-background bg-card last:border-b-0"
             >
               {columns.map((column, index) => (
                 <TableCell
                   key={column.dataIndex}
                   className={cn(
-                    "border-none",
-                    "truncate",
-                    "px-0",
-                    "pr-[1.88rem]",
-                    index === 0 && "pl-5",
-                    index === columns.length - 1 && "pr-5",
-                    index === 0 && "rounded-[var(--radius)_0_0_var(--radius)]",
-                    index === columns.length - 1 &&
-                      "rounded-[0_var(--radius)_var(--radius)_0]",
-                    column.width ? column.width : "w-[100px]"
+                    'border-none',
+                    'truncate',
+                    'px-0',
+                    'pr-[1.88rem]',
+                    index === 0 && 'pl-5',
+                    index === columns.length - 1 && 'pr-5',
+                    index === 0 && 'rounded-[var(--radius)_0_0_var(--radius)]',
+                    index === columns.length - 1 && 'rounded-[0_var(--radius)_var(--radius)_0]',
+                    column.width ? column.width : 'w-[100px]'
                   )}
                 >
                   {column.render(message[column.dataIndex], message, index)}
@@ -175,12 +183,12 @@ const TableDemo = ({ loading, dataSource }: TableProps) => {
           ))}
         </TableBody>
       </Table>
-      <Pagination className="py-5  justify-end gap-[0.31rem]">
+      <Pagination className="justify-end gap-[0.31rem] py-5">
         <PaginationContent>
-          <PaginationItem className="bg-card rounded">
+          <PaginationItem className="rounded bg-card">
             <PaginationPrevious href="#" />
           </PaginationItem>
-          <PaginationItem className="bg-card rounded">
+          <PaginationItem className="rounded bg-card">
             <PaginationNext href="#" />
           </PaginationItem>
         </PaginationContent>
