@@ -7,17 +7,17 @@ interface Message {
   payload?: string; // 由于payload后面没有感叹号，表示它是可选的
   params?: string;
   status: number;
-  sourceChainId?: bigint;
-  sourceBlockNumber?: bigint;
-  sourceBlockTimestamp?: bigint;
+  sourceChainId?: string;
+  sourceBlockNumber?: string;
+  sourceBlockTimestamp?: string;
   sourceTransactionHash?: string;
   sourceTransactionIndex?: number;
   sourceLogIndex?: number;
   sourceDappAddress?: string;
   sourcePortAddress?: string;
-  targetChainId?: bigint;
-  targetBlockNumber?: bigint;
-  targetBlockTimestamp?: bigint;
+  targetChainId?: string;
+  targetBlockNumber?: string;
+  targetBlockTimestamp?: string;
   targetTransactionHash?: string;
   targetTransactionIndex?: number;
   targetLogIndex?: number;
@@ -45,27 +45,6 @@ export interface MessagePage {
 export interface MessagesResponse {
   messages: MessagePage;
 }
-
-interface OrmpInfo {
-  id: string;
-  chainId: bigint;
-  blockNumber: bigint;
-  blockTimestamp: bigint;
-  transactionHash: string;
-  transactionIndex: number;
-  logIndex: number;
-  msgHash: string;
-  messageChannel: string;
-  messageIndex: bigint;
-  messageFromChainId: bigint;
-  messageFrom: string;
-  messageToChainId: bigint;
-  messageTo: string;
-  messageGasLimit: bigint;
-  messageEncoded: string;
-  msgId?: string;
-}
-
 export interface MessageFilter {
   AND?: MessageFilter[];
   OR?: MessageFilter[];
@@ -286,4 +265,75 @@ export interface MessagesQueryVariables {
   before?: string;
   after?: string;
   limit?: number;
+}
+
+interface OrmpInfo {
+  id: string;
+  chainId: bigint;
+  blockNumber: bigint;
+  blockTimestamp: bigint;
+  transactionHash: string;
+  transactionIndex: number;
+  logIndex: number;
+  msgHash: string;
+  messageChannel: string;
+  messageIndex: bigint;
+  messageFromChainId: bigint;
+  messageFrom: string;
+  messageToChainId: bigint;
+  messageTo: string;
+  messageGasLimit: bigint;
+  messageEncoded: string;
+  msgId?: string;
+}
+export interface OrmpInfoResponse {
+  ormpInfo: OrmpInfo;
+}
+
+type MessagesInfoFilter = {
+  AND?: MessagesInfoFilter[];
+  OR?: MessagesInfoFilter[];
+  id?: string;
+  id_not?: string;
+  id_in?: string[];
+  id_not_in?: string[];
+  id_contains?: string;
+  id_not_contains?: string;
+  id_starts_with?: string;
+  id_ends_with?: string;
+  id_not_starts_with?: string;
+  id_not_ends_with?: string;
+  value?: string;
+  value_not?: string;
+  value_in?: string[];
+  value_not_in?: string[];
+  value_contains?: string;
+  value_not_contains?: string;
+  value_starts_with?: string;
+  value_ends_with?: string;
+  value_not_starts_with?: string;
+  value_not_ends_with?: string;
+};
+
+interface MessagesInfo {
+  id: string;
+  value: string;
+}
+
+interface MessagesInfoPage {
+  items: MessagesInfo[];
+  pageInfo: PageInfo;
+}
+
+interface MessagesInfosQueryVariables {
+  where?: MessagesInfoFilter;
+  orderBy?: string;
+  orderDirection?: 'asc' | 'desc';
+  before?: string;
+  after?: string;
+  limit?: number;
+}
+
+interface MessagesInfosResponse {
+  messagesInfos: MessagesInfoPage;
 }

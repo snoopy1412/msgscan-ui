@@ -65,12 +65,32 @@ export const GET_ORMP_INFO = gql`
   }
 `;
 
-export const GET_MESSAGES_INFO = gql`
-  query MessagesInfoQuery {
-    messagesInfos {
+export const GET_MESSAGES_INFOS = gql`
+  query GetMessagesInfos(
+    $where: MessagesInfoFilter
+    $orderBy: String
+    $orderDirection: String
+    $before: String
+    $after: String
+    $limit: Int
+  ) {
+    messagesInfos(
+      where: $where
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+      before: $before
+      after: $after
+      limit: $limit
+    ) {
       items {
         id
         value
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+        hasPreviousPage
+        startCursor
       }
     }
   }

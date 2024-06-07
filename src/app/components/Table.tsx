@@ -26,21 +26,20 @@ interface TableProps {
   dataSource: Message[];
 }
 
-function formatTimeDifference(timestamp1, timestamp2) {
-  const diff = timestamp2 - timestamp1;
-  const minutes = Math.floor(diff / 60);
+function formatTimeDifference(timestamp1: string, timestamp2: string) {
+  const diff = Number(timestamp2) - Number(timestamp1);
+  const minutes = Math.floor(Number(diff) / 60);
   return `${minutes} mins`;
 }
 
-// Helper function to format time as 'X mins ago'
-function formatTimeAgo(timestamp) {
-  const now = Math.floor(Date.now() / 1000); // current time in seconds
-  const diff = now - timestamp;
-  const minutes = Math.floor(diff / 60);
-  return `${minutes} mins ago`;
+function formatTimeAgo(timestamp: string) {
+  const now = Date.now();
+  const diff = now - Number(timestamp);
+  const seconds = diff / 1000;
+  const minutes = seconds / 60;
+  return `${Number(minutes)} mins ago`;
 }
 
-// 定义Column
 type Column = {
   dataIndex: string;
   title: string;
@@ -114,19 +113,21 @@ const columns: Column[] = [
     }
   },
   {
-    dataIndex: 'sourceBlockTimestamp',
+    dataIndex: 'age',
     title: 'Age',
     width: '7.78rem',
     render(value, record, index) {
-      return formatTimeAgo(value);
+      return record?.sourceBlockTimestamp ? formatTimeAgo(record?.sourceBlockTimestamp) : '';
     }
   },
   {
-    dataIndex: 'targetBlockTimestamp',
+    dataIndex: 'timeSpent',
     title: 'TimeSpent',
     width: '7.78rem',
     render(value, record, index) {
-      return formatTimeDifference(record.sourceBlockTimestamp, value);
+      return record.sourceBlockTimestamp && record?.targetBlockTimestamp
+        ? formatTimeDifference(record.sourceBlockTimestamp, record?.targetBlockTimestamp)
+        : '';
     }
   }
 ];
