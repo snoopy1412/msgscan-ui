@@ -19,11 +19,13 @@ import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import MessageStatus from '@/components/MessageStatus';
 import Link from 'next/link';
+import { Message } from '@/graphql/type';
 
 interface TableProps {
   loading: boolean;
-  dataSource: any[];
+  dataSource: Message[];
 }
+
 function formatTimeDifference(timestamp1, timestamp2) {
   const diff = timestamp2 - timestamp1;
   const minutes = Math.floor(diff / 60);
@@ -43,7 +45,7 @@ type Column = {
   dataIndex: string;
   title: string;
   width?: string;
-  render: (value: any, record: any, index: number) => any;
+  render: (value: any, record: Message, index: number) => any;
 };
 
 const columns: Column[] = [
@@ -129,7 +131,7 @@ const columns: Column[] = [
   }
 ];
 
-const TableDemo = ({ loading, dataSource }: TableProps) => {
+const DataTable = ({ loading, dataSource }: TableProps) => {
   console.log('dataSource', dataSource);
   return (
     <>
@@ -176,7 +178,7 @@ const TableDemo = ({ loading, dataSource }: TableProps) => {
                     column.width ? column.width : 'w-[100px]'
                   )}
                 >
-                  {column.render(message[column.dataIndex], message, index)}
+                  {column.render((message as unknown as any)[column.dataIndex], message, index)}
                 </TableCell>
               ))}
             </TableRow>
@@ -197,4 +199,4 @@ const TableDemo = ({ loading, dataSource }: TableProps) => {
   );
 };
 
-export default TableDemo;
+export default DataTable;

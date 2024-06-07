@@ -1,4 +1,5 @@
 'use client';
+
 import {
   ArrowRightFromLine,
   ArrowRightToLine,
@@ -13,30 +14,21 @@ import {
 import Card from './components/Card';
 import OrmpIcon from '@/components/OrmpIcon';
 import { useQuery } from '@tanstack/react-query';
-import { client } from '@/graphql/client';
-import { GET_MESSAGE } from '@/graphql/queries';
 import MessageStatus from '@/components/MessageStatus';
 import OrmpInfo from './components/OrmpInfo';
 import { useParams } from 'next/navigation';
+import { fetchMessage } from '@/graphql/services';
 
-function useMessage({ id } = {}) {
+function useMessage(id: string) {
   return useQuery({
     queryKey: ['message', id],
-    queryFn: async () => {
-      const variables = { id };
-      const data = await client.request(GET_MESSAGE, variables);
-      return data?.message || null;
-    },
-    placeholderData: true
+    queryFn: async () => fetchMessage(id)
   });
 }
 
 const TxDetail = () => {
   const params = useParams();
-  const { data, status, error, isFetching } = useMessage({
-    id: params?.id
-  });
-
+  const { data, status, error, isFetching } = useMessage(params?.id as string);
   return (
     <div>
       <header className="my-5 text-xl font-light leading-8 text-foreground">
@@ -44,54 +36,58 @@ const TxDetail = () => {
       </header>
       <div className="flex flex-col gap-[0.12rem]">
         <Card title="MsgId" icon={<SquareUser size={22} strokeWidth={1.25} />}>
-          <div className="w-full break-words">{data?.id}</div>
+          <div className="w-full break-words">{data?.message?.id}</div>
         </Card>
 
         <Card title="Status" icon={<PackageSearch size={22} strokeWidth={1.25} />}>
-          <MessageStatus status={data?.status} />
+          {typeof data?.message?.status !== 'undefined' && (
+            <MessageStatus status={data?.message?.status} />
+          )}
         </Card>
 
         <Card
           title="Source Transaction Hash"
           icon={<ArrowRightFromLine size={22} strokeWidth={1.25} />}
         >
-          <div className="w-full break-words">{data?.sourceTransactionHash}</div>
+          <div className="w-full break-words">{data?.message?.sourceTransactionHash}</div>
         </Card>
 
         <Card
           title="Target Transaction Hash"
           icon={<ArrowRightToLine size={22} strokeWidth={1.25} />}
         >
-          {data?.targetTransactionHash}
+          {data?.message?.targetTransactionHash}
         </Card>
 
         <Card title="Messaging Protocol" icon={<MessageSquareCode size={22} strokeWidth={1.25} />}>
-          {data?.protocol}
+          {data?.message?.protocol}
         </Card>
 
         <Card title="Message Payload" icon={<MessageSquareWarning size={22} strokeWidth={1.25} />}>
-          <div className="w-full break-words rounded bg-background p-5">{data?.payload}</div>
+          <div className="w-full break-words rounded bg-background p-5">
+            {data?.message?.payload}
+          </div>
         </Card>
 
         <Card title="Message Params" icon={<MessageSquareQuote size={22} strokeWidth={1.25} />}>
           <div className="word-breal w-full break-words rounded bg-background p-5">
-            {data?.params}
+            {data?.message?.params}
           </div>
         </Card>
 
         <Card title="Source Dapp Address" icon={<LayoutGrid size={22} strokeWidth={1.25} />}>
-          {data?.sourceDappAddress}
+          {data?.message?.sourceDappAddress}
         </Card>
 
         <Card title="Source Port Address" icon={<Unplug size={22} strokeWidth={1.25} />}>
-          {data?.sourcePortAddress}
+          {data?.message?.sourcePortAddress}
         </Card>
 
         <Card title="Target Dapp Address" icon={<LayoutGrid size={22} strokeWidth={1.25} />}>
-          {data?.targetDappAddress}
+          {data?.message?.targetDappAddress}
         </Card>
         <Card title="Target Port Address" icon={<Unplug size={22} strokeWidth={1.25} />}>
-          {data?.targetPortAddress}
+          {data?.message?.targetPortAddress}
         </Card>
 
         <Card title="ORMP Info" icon={<OrmpIcon />}>
