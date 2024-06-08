@@ -20,7 +20,7 @@ import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import MessageStatus from '@/components/MessageStatus';
 import Link from 'next/link';
-import { Message } from '@/graphql/type';
+import { Message, PageInfo } from '@/graphql/type';
 import { chains } from '@/config/chains';
 import { ChAIN_ID } from '@/types/chains';
 import { protocols } from '@/config/protocols';
@@ -164,7 +164,21 @@ const columns: Column[] = [
   }
 ];
 
-const DataTable = ({ loading, dataSource }: TableProps) => {
+interface TableProps {
+  loading: boolean;
+  dataSource: Message[];
+  pageInfo?: PageInfo;
+  onPreviousPageClick: React.MouseEventHandler<HTMLLIElement>;
+  onNextPageClick: React.MouseEventHandler<HTMLLIElement>;
+}
+
+const DataTable = ({
+  loading,
+  dataSource,
+  pageInfo,
+  onPreviousPageClick,
+  onNextPageClick
+}: TableProps) => {
   console.log('dataSource', dataSource);
   return (
     <>
@@ -220,11 +234,29 @@ const DataTable = ({ loading, dataSource }: TableProps) => {
       </Table>
       <Pagination className="justify-end gap-[0.31rem] py-5">
         <PaginationContent>
-          <PaginationItem className="rounded bg-card">
-            <PaginationPrevious href="#" />
+          <PaginationItem
+            className="rounded bg-card"
+            onClick={pageInfo?.hasPreviousPage ? onPreviousPageClick : undefined}
+          >
+            <PaginationPrevious
+              className={cn(
+                pageInfo?.hasPreviousPage
+                  ? 'cursor-pointer'
+                  : 'cursor-not-allowed text-secondary-foreground hover:bg-transparent hover:text-secondary-foreground'
+              )}
+            />
           </PaginationItem>
-          <PaginationItem className="rounded bg-card">
-            <PaginationNext href="#" />
+          <PaginationItem
+            className="rounded bg-card"
+            onClick={pageInfo?.hasNextPage ? onNextPageClick : undefined}
+          >
+            <PaginationNext
+              className={cn(
+                pageInfo?.hasNextPage
+                  ? 'cursor-pointer'
+                  : 'cursor-not-allowed text-secondary-foreground hover:bg-transparent hover:text-secondary-foreground'
+              )}
+            />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
