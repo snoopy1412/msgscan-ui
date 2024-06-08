@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import {
   Table,
   TableBody,
@@ -20,6 +21,9 @@ import { cn } from '@/lib/utils';
 import MessageStatus from '@/components/MessageStatus';
 import Link from 'next/link';
 import { Message } from '@/graphql/type';
+import { chains } from '@/config/chains';
+import { ChAIN_ID } from '@/types/chains';
+import { protocols } from '@/config/protocols';
 
 interface TableProps {
   loading: boolean;
@@ -52,7 +56,7 @@ const columns: Column[] = [
     dataIndex: 'status',
     title: 'Status',
     width: '7.78rem',
-    render(value, record, index) {
+    render(value) {
       return <MessageStatus status={value} />;
     }
   },
@@ -60,7 +64,7 @@ const columns: Column[] = [
     dataIndex: 'id',
     title: 'Msgid',
     width: '7.78rem',
-    render(value, record, index) {
+    render(value) {
       return (
         <Link href={`/tx/${value}`} className="hover:underline">
           {value}
@@ -72,8 +76,17 @@ const columns: Column[] = [
     dataIndex: 'protocol',
     title: 'Protocol',
     width: '7.78rem',
-    render(value, record, index) {
-      return value;
+    render(value) {
+      const protocol = protocols?.find((protocol) => protocol.value === value);
+      if (protocol) {
+        const Icon = protocol.icon;
+        return (
+          <div className="flex items-center gap-[0.31rem]">
+            <Icon />
+            <span className="text-sm">{protocol.title}</span>
+          </div>
+        );
+      }
     }
   },
   {
@@ -81,10 +94,25 @@ const columns: Column[] = [
     title: 'Source Tx Hash',
     width: '7.78rem',
     render(value, record, index) {
+      if (!value) return '';
+      const chain = chains?.find(
+        (chain) => chain.id === (Number(record?.sourceChainId) as unknown as ChAIN_ID)
+      );
       return (
-        <Link href={`/tx/${value}`} className="hover:underline">
-          {value}
-        </Link>
+        <div className="flex items-center">
+          {chain ? (
+            <Image
+              width={20}
+              height={20}
+              alt=""
+              src={chain.iconUrl}
+              className="mr-[0.31rem] rounded-full"
+            ></Image>
+          ) : null}
+          <Link href={`/tx/${value}`} className="truncate hover:underline">
+            {value}
+          </Link>
+        </div>
       );
     }
   },
@@ -101,7 +129,24 @@ const columns: Column[] = [
     title: 'Target Tx Hash',
     width: '7.78rem',
     render(value, record, index) {
-      return value;
+      if (!value) return '';
+      const chain = chains?.find(
+        (chain) => chain.id === (Number(record?.targetChainId) as unknown as ChAIN_ID)
+      );
+      return (
+        <div className="flex items-center">
+          {chain ? (
+            <Image
+              width={20}
+              height={20}
+              alt=""
+              src={chain.iconUrl}
+              className="mr-[0.31rem] rounded-full"
+            ></Image>
+          ) : null}
+          <span className="truncate">{value}</span>
+        </div>
+      );
     }
   },
   {

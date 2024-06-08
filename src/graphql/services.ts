@@ -54,7 +54,7 @@ export async function fetchMessagesInfos(
     );
     return response;
   } catch (error) {
-    console.error('messages request failed:', error);
+    console.error('messagesInfos request failed:', error);
     return null;
   }
 }

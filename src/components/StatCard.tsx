@@ -1,33 +1,26 @@
-import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { convertToNumber } from '@/utils';
 
 interface StatCardProps {
   title: string;
-  value: number;
+  value?: number | string;
   percentageChange: number;
 }
 
-export const StatCard: React.FC<StatCardProps> = ({
-  title,
-  value,
-  percentageChange,
-}) => {
+export const StatCard: React.FC<StatCardProps> = ({ title, value, percentageChange }) => {
+  const numberValue = convertToNumber(value);
   return (
-    <Card className="bg-transparent border-none py-5">
+    <Card className="border-none bg-transparent py-5">
       <CardHeader className="flex flex-row items-center justify-between p-0">
-        <CardTitle className="text-sm text-secondary-foreground leading-[1.4rem] font-normal">
+        <CardTitle className="text-sm font-normal leading-[1.4rem] text-secondary-foreground">
           {title}
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="text-[1.625rem] leading-[2.6rem] tracking-[0.0625rem]">
-          {value}
-        </div>
+        <div className="text-[1.625rem] leading-[2.6rem] tracking-[0.0625rem]">{numberValue}</div>
         <p className="text-xs text-muted-foreground">
-          {percentageChange > 0
-            ? `+${percentageChange}%`
-            : `${percentageChange}%`}{" "}
-          from last month
+          {percentageChange > 0 ? `+${percentageChange}%` : `${percentageChange}%`} from last month
         </p>
       </CardContent>
     </Card>

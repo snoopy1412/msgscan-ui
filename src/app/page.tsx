@@ -23,7 +23,9 @@ function useMessagesInfos(variables: MessagesQueryVariables = {}) {
 }
 
 export default function TaskPage() {
-  const { data, status, error, isFetching } = useMessages();
+  const { data, status, error, isFetching } = useMessages({
+    limit: 10
+  });
 
   const { data: messagesInfos } = useMessagesInfos();
 
@@ -31,7 +33,7 @@ export default function TaskPage() {
 
   return (
     <>
-      <StatsContainer />
+      <StatsContainer data={messagesInfos?.messagesInfos?.items} />
       <Separator />
       <DataTable loading={isFetching} dataSource={data?.messages?.items || []} />
     </>
