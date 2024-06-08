@@ -24,12 +24,12 @@ function useMessagesInfos(variables: MessagesQueryVariables = {}) {
 
 export default function TaskPage() {
   const { data, status, error, isFetching } = useMessages({
-    limit: 10
+    limit: 10,
+    orderBy: 'sourceBlockTimestamp',
+    orderDirection: 'desc'
   });
 
   const { data: messagesInfos } = useMessagesInfos();
-
-  console.log('messagesInfos', messagesInfos);
 
   return (
     <>

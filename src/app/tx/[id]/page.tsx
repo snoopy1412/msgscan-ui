@@ -81,7 +81,7 @@ const TxDetail = () => {
                 height={20}
                 alt=""
                 src={sourceChain.iconUrl}
-                className="mr-[0.31rem] rounded-full"
+                className="mr-[0.62rem] rounded-full"
               ></Image>
             ) : null}
             <div className="flex items-center gap-[0.62rem]">
@@ -110,7 +110,7 @@ const TxDetail = () => {
                 height={20}
                 alt=""
                 src={targetChain.iconUrl}
-                className="mr-[0.31rem] rounded-full"
+                className="mr-[0.62rem] rounded-full"
               ></Image>
             ) : null}
             <div className="flex items-center gap-[0.62rem]">

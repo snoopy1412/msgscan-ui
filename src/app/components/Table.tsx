@@ -24,24 +24,11 @@ import { Message } from '@/graphql/type';
 import { chains } from '@/config/chains';
 import { ChAIN_ID } from '@/types/chains';
 import { protocols } from '@/config/protocols';
+import { formatTimeAgo, formatTimeDifference } from '@/utils';
 
 interface TableProps {
   loading: boolean;
   dataSource: Message[];
-}
-
-function formatTimeDifference(timestamp1: string, timestamp2: string) {
-  const diff = Number(timestamp2) - Number(timestamp1);
-  const minutes = Math.floor(Number(diff) / 60);
-  return `${minutes} mins`;
-}
-
-function formatTimeAgo(timestamp: string) {
-  const now = Date.now();
-  const diff = now - Number(timestamp);
-  const seconds = diff / 1000;
-  const minutes = seconds / 60;
-  return `${Number(minutes)} mins ago`;
 }
 
 type Column = {

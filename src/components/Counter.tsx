@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect, useRef } from "react";
-import { animate } from "framer-motion";
-import { formatNumber } from "@/utils";
+import React, { useState, useEffect, useRef } from 'react';
+import { animate } from 'framer-motion';
+import { formatNumber } from '@/utils';
 
 interface CounterProps {
   target: number;
@@ -14,9 +14,9 @@ function Counter({ target }: CounterProps) {
   useEffect(() => {
     const prevTarget = prevTargetRef.current;
     animate(prevTarget, target, {
-      duration: 2,
-      ease: "easeInOut",
-      onUpdate: (latest) => setDisplayValue(parseFloat(latest.toFixed(2))),
+      duration: 1,
+      ease: 'easeInOut',
+      onUpdate: (latest) => setDisplayValue(parseFloat(latest.toFixed(2)))
     });
 
     prevTargetRef.current = target;

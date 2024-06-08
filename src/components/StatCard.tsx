@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { convertToNumber } from '@/utils';
+import Counter from './Counter';
 
 interface StatCardProps {
   title: string;
@@ -18,7 +19,9 @@ export const StatCard: React.FC<StatCardProps> = ({ title, value, percentageChan
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="text-[1.625rem] leading-[2.6rem] tracking-[0.0625rem]">{numberValue}</div>
+        <div className="text-[1.625rem] leading-[2.6rem] tracking-[0.0625rem]">
+          <Counter target={numberValue} />
+        </div>
         <p className="text-xs text-muted-foreground">
           {percentageChange > 0 ? `+${percentageChange}%` : `${percentageChange}%`} from last month
         </p>
