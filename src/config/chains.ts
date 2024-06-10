@@ -1,4 +1,5 @@
 import { ChAIN_ID, CHAIN } from '@/types/chains';
+import { TableFilterOption } from '@/types/helper';
 
 export const chains: CHAIN[] = [
   {
@@ -118,3 +119,8 @@ export const chains: CHAIN[] = [
     }
   }
 ];
+
+export const CHAIN_OPTIONS: TableFilterOption[] = chains?.map((chain) => ({
+  label: chain.shortName,
+  value: chain.id
+}));

@@ -15,7 +15,7 @@ import {
   PaginationNext,
   PaginationPrevious
 } from '@/components/ui/pagination';
-import Toolbar from './ToolBar';
+import Toolbar, { ToolbarProps } from './ToolBar';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import MessageStatus from '@/components/MessageStatus';
@@ -24,7 +24,12 @@ import { Message, PageInfo } from '@/graphql/type';
 import { chains } from '@/config/chains';
 import { ChAIN_ID } from '@/types/chains';
 import { protocols } from '@/config/protocols';
-import { formatTimeAgo, formatTimeDifference } from '@/utils';
+import { formatTimeAgo, formatTimeDifference, toShortText } from '@/utils';
+import { DateRange } from 'react-day-picker';
+
+import ChainTxDisplay from '@/components/ChainTxDisplay';
+import BlockchainAddressLink from '@/components/BlockchainAddressLink';
+import { use, useCallback, useState } from 'react';
 
 interface TableProps {
   loading: boolean;
@@ -53,7 +58,7 @@ const columns: Column[] = [
     width: '7.78rem',
     render(value) {
       return (
-        <Link href={`/tx/${value}`} className="hover:underline">
+        <Link href={`/tx/${value}`} className="hover:underline" title={value}>
           {value}
         </Link>
       );
@@ -80,74 +85,54 @@ const columns: Column[] = [
     dataIndex: 'sourceTransactionHash',
     title: 'Source Tx Hash',
     width: '7.78rem',
-    render(value, record, index) {
+    render(value, record) {
       if (!value) return '';
       const chain = chains?.find(
         (chain) => chain.id === (Number(record?.sourceChainId) as unknown as ChAIN_ID)
       );
-      return (
-        <div className="flex items-center">
-          {chain ? (
-            <Image
-              width={20}
-              height={20}
-              alt=""
-              src={chain.iconUrl}
-              className="mr-[0.31rem] rounded-full"
-            ></Image>
-          ) : null}
-          <Link href={`/tx/${value}`} className="truncate hover:underline">
-            {value}
-          </Link>
-        </div>
-      );
+      return <ChainTxDisplay chain={chain} value={value} isLink />;
     }
   },
   {
     dataIndex: 'sourceDappAddress',
     title: 'From',
     width: '7.78rem',
-    render(value, record, index) {
-      return value;
+    render(value, record) {
+      if (!value) return '';
+      const chain = chains?.find(
+        (chain) => chain.id === (Number(record?.sourceChainId) as unknown as ChAIN_ID)
+      );
+      return <BlockchainAddressLink chain={chain} address={value} />;
     }
   },
   {
     dataIndex: 'targetTransactionHash',
     title: 'Target Tx Hash',
     width: '7.78rem',
-    render(value, record, index) {
+    render(value, record) {
       if (!value) return '';
       const chain = chains?.find(
         (chain) => chain.id === (Number(record?.targetChainId) as unknown as ChAIN_ID)
       );
-      return (
-        <div className="flex items-center">
-          {chain ? (
-            <Image
-              width={20}
-              height={20}
-              alt=""
-              src={chain.iconUrl}
-              className="mr-[0.31rem] rounded-full"
-            ></Image>
-          ) : null}
-          <span className="truncate">{value}</span>
-        </div>
-      );
+      return <ChainTxDisplay chain={chain} value={value} isLink />;
     }
   },
   {
     dataIndex: 'targetDappAddress',
     title: 'To',
     width: '7.78rem',
-    render(value, record, index) {
-      return value;
+    render(value, record) {
+      if (!value) return '';
+      const chain = chains?.find(
+        (chain) => chain.id === (Number(record?.targetChainId) as unknown as ChAIN_ID)
+      );
+      return <BlockchainAddressLink chain={chain} address={value} />;
     }
   },
   {
     dataIndex: 'age',
     title: 'Age',
-    width: '7.78rem',
+    width: '5rem',
     render(value, record, index) {
       return record?.sourceBlockTimestamp ? formatTimeAgo(record?.sourceBlockTimestamp) : '';
     }
@@ -155,7 +140,8 @@ const columns: Column[] = [
   {
     dataIndex: 'timeSpent',
     title: 'TimeSpent',
-    width: '7.78rem',
+    width: '5rem',
+
     render(value, record, index) {
       return record.sourceBlockTimestamp && record?.targetBlockTimestamp
         ? formatTimeDifference(record.sourceBlockTimestamp, record?.targetBlockTimestamp)
@@ -166,23 +152,31 @@ const columns: Column[] = [
 
 interface TableProps {
   loading: boolean;
+  onChangeFilter: ToolbarProps['onChange'];
   dataSource: Message[];
   pageInfo?: PageInfo;
   onPreviousPageClick: React.MouseEventHandler<HTMLLIElement>;
   onNextPageClick: React.MouseEventHandler<HTMLLIElement>;
 }
 
+interface Filters {
+  status: (string | number)[];
+  date: DateRange | undefined;
+  sourceChains: (string | number)[];
+  targetChains: (string | number)[];
+}
+
 const DataTable = ({
   loading,
+  onChangeFilter,
   dataSource,
   pageInfo,
   onPreviousPageClick,
   onNextPageClick
 }: TableProps) => {
-  console.log('dataSource', dataSource);
   return (
-    <>
-      <Toolbar />
+    <div className="relative">
+      <Toolbar onChange={onChangeFilter} />
       <Separator />
       <Table className="table-fixed">
         <TableHeader>
@@ -194,9 +188,9 @@ const DataTable = ({
                   'px-0',
                   'pr-[1.88rem]',
                   index === 0 && 'pl-5',
-                  index === columns.length - 1 && 'pr-5',
-                  column.width ? column.width : 'w-[100px]'
+                  index === columns.length - 1 && 'pr-5'
                 )}
+                style={{ width: column.width ? column.width : '100px' }}
                 key={column.dataIndex}
               >
                 {column.title}
@@ -221,9 +215,9 @@ const DataTable = ({
                     index === 0 && 'pl-5',
                     index === columns.length - 1 && 'pr-5',
                     index === 0 && 'rounded-[var(--radius)_0_0_var(--radius)]',
-                    index === columns.length - 1 && 'rounded-[0_var(--radius)_var(--radius)_0]',
-                    column.width ? column.width : 'w-[100px]'
+                    index === columns.length - 1 && 'rounded-[0_var(--radius)_var(--radius)_0]'
                   )}
+                  style={{ width: column.width ? column.width : '100px' }}
                 >
                   {column.render((message as unknown as any)[column.dataIndex], message, index)}
                 </TableCell>
@@ -260,7 +254,7 @@ const DataTable = ({
           </PaginationItem>
         </PaginationContent>
       </Pagination>
-    </>
+    </div>
   );
 };
 

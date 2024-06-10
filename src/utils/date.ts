@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration';
+import { MessageFilter } from '@/graphql/type';
+import { DateRange } from 'react-day-picker';
 
 dayjs.extend(relativeTime);
 dayjs.extend(duration);
@@ -11,8 +13,6 @@ export function formatTimeDifference(timestamp1: string, timestamp2: string) {
   const diff = date2.diff(date1);
 
   const durationObj = dayjs.duration(diff);
-
-  console.log('durationObj', durationObj);
 
   const seconds = durationObj.asSeconds();
   const minutes = durationObj.asMinutes();
@@ -30,4 +30,23 @@ export function formatTimeDifference(timestamp1: string, timestamp2: string) {
 export function formatTimeAgo(timestamp: string) {
   const date = dayjs.unix(Number(timestamp));
   return dayjs().from(date);
+}
+
+type TimestampQuery = Pick<MessageFilter, 'sourceBlockTimestamp_gte' | 'sourceBlockTimestamp_lte'>;
+
+export function createTimestampQuery(date?: DateRange): TimestampQuery {
+  const query: TimestampQuery = {};
+
+  if (date?.from) {
+    query.sourceBlockTimestamp_gte = date.from.getTime();
+  }
+
+  if (date?.to) {
+    const endOfDay = new Date(date.to);
+    endOfDay.setDate(endOfDay.getDate() + 1);
+    endOfDay.setMilliseconds(-1);
+    query.sourceBlockTimestamp_lte = endOfDay.getTime();
+  }
+
+  return query;
 }

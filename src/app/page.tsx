@@ -8,6 +8,16 @@ import { MessagesQueryVariables } from '@/graphql/type';
 
 import DataTable from './components/Table';
 import { useCallback, useState } from 'react';
+import { DateRange } from 'react-day-picker';
+import { ToolbarProps } from './components/ToolBar';
+import { createTimestampQuery } from '@/utils';
+
+interface Filters {
+  status: (string | number)[];
+  date?: DateRange;
+  sourceChains: (string | number)[];
+  targetChains: (string | number)[];
+}
 
 function useMessages(variables: MessagesQueryVariables = {}) {
   return useQuery({
@@ -28,6 +38,38 @@ function useMessagesInfos(variables: MessagesQueryVariables = {}) {
 }
 
 export default function Page() {
+  const [filters, setFilters] = useState<Filters>({
+    status: [],
+    date: { from: undefined, to: undefined },
+    sourceChains: [],
+    targetChains: []
+  });
+
+  const handleChangeFilters = useCallback<ToolbarProps['onChange']>((filters) => {
+    const where: any = {};
+
+    where.status_in = filters.status && filters.status.length > 0 ? filters.status : undefined;
+
+    where.sourceChainId_in =
+      filters.sourceChains && filters.sourceChains.length > 0 ? filters.sourceChains : undefined;
+
+    where.targetChainId_in =
+      filters.targetChains && filters.targetChains.length > 0 ? filters.targetChains : undefined;
+
+    if (filters.date && (filters.date.from || filters.date.to)) {
+      Object.assign(where, createTimestampQuery(filters.date));
+    } else {
+      where.sourceBlockTimestamp_gte = undefined;
+      where.sourceBlockTimestamp_lte = undefined;
+    }
+
+    updateQueryVariables({
+      where: Object.keys(where).some((key) => where[key] !== undefined) ? where : undefined
+    });
+
+    setFilters(filters);
+  }, []);
+
   const [queryVariables, setQueryVariables] = useState<MessagesQueryVariables>({
     limit: 10,
     orderBy: 'sourceBlockTimestamp',
@@ -37,7 +79,8 @@ export default function Page() {
   const updateQueryVariables = (updates: Partial<MessagesQueryVariables>) => {
     setQueryVariables((prev) => ({ ...prev, ...updates }));
   };
-  const { data, status, error, isFetching } = useMessages(queryVariables);
+
+  const { data, status, error, isFetching, isRefetching, isPending } = useMessages(queryVariables);
 
   const { data: messagesInfos } = useMessagesInfos();
 
@@ -57,6 +100,7 @@ export default function Page() {
       <Separator />
       <DataTable
         loading={isFetching}
+        onChangeFilter={handleChangeFilters}
         dataSource={data?.messages?.items || []}
         pageInfo={data?.messages?.pageInfo}
         onPreviousPageClick={handlePreviousPageClick}
