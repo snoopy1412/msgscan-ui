@@ -1,12 +1,13 @@
-const OrmpIcon = () => {
+const LayerzeroIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
-      width="22"
-      height="22"
-      viewBox="0 0 22 22"
+      width={22}
+      height={22}
+      viewBox={'0 0 22 22'}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
+      {...props}
     >
       <circle cx="10.8887" cy="10.5" r="10" fill="url(#pattern0_22630_71)" />
       <circle cx="10.8887" cy="10.5" r="9.5" stroke="white" stroke-opacity="0.3" />
@@ -30,4 +31,4 @@ const OrmpIcon = () => {
   );
 };
 
-export default OrmpIcon;
+export default LayerzeroIcon;

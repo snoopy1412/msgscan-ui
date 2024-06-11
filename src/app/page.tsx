@@ -2,22 +2,14 @@
 import { Separator } from '@/components/ui/separator';
 
 import StatsContainer from '@/components/StatsContainer';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchMessages, fetchMessagesInfos } from '@/graphql/services';
 import { MessagesQueryVariables } from '@/graphql/type';
 
 import DataTable from './components/Table';
 import { useCallback, useState } from 'react';
-import { DateRange } from 'react-day-picker';
 import { ToolbarProps } from './components/ToolBar';
 import { createTimestampQuery } from '@/utils';
-
-interface Filters {
-  status: (string | number)[];
-  date?: DateRange;
-  sourceChains: (string | number)[];
-  targetChains: (string | number)[];
-}
 
 function useMessages(variables: MessagesQueryVariables = {}) {
   return useQuery({
@@ -25,7 +17,24 @@ function useMessages(variables: MessagesQueryVariables = {}) {
     queryFn: async () => fetchMessages(variables),
     refetchInterval: 5000,
     placeholderData(prevData) {
-      return prevData;
+      const hasRealData = prevData?.messages?.items.some((item) => item.status !== -1);
+      return hasRealData
+        ? prevData
+        : {
+            messages: {
+              items: Array.from({ length: variables.limit || 10 }).map((_, index) => ({
+                id: index.toString(),
+                protocol: 'eth',
+                status: -1
+              })),
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: false,
+                startCursor: undefined,
+                endCursor: undefined
+              }
+            }
+          };
     }
   });
 }
@@ -33,42 +42,48 @@ function useMessages(variables: MessagesQueryVariables = {}) {
 function useMessagesInfos(variables: MessagesQueryVariables = {}) {
   return useQuery({
     queryKey: ['messagesInfos', variables],
-    queryFn: async () => fetchMessagesInfos(variables)
+    queryFn: async () => fetchMessagesInfos(variables),
+    refetchInterval: 5000
   });
 }
 
 export default function Page() {
-  const [filters, setFilters] = useState<Filters>({
-    status: [],
-    date: { from: undefined, to: undefined },
-    sourceChains: [],
-    targetChains: []
-  });
+  const queryClient = useQueryClient();
 
-  const handleChangeFilters = useCallback<ToolbarProps['onChange']>((filters) => {
-    const where: any = {};
+  const handleChangeFilters = useCallback<ToolbarProps['onChange']>(
+    (filters) => {
+      const where: any = {};
 
-    where.status_in = filters.status && filters.status.length > 0 ? filters.status : undefined;
+      where.status_in = filters.status && filters.status.length > 0 ? filters.status : undefined;
 
-    where.sourceChainId_in =
-      filters.sourceChains && filters.sourceChains.length > 0 ? filters.sourceChains : undefined;
+      where.sourceChainId_in =
+        filters.sourceChains && filters.sourceChains.length > 0 ? filters.sourceChains : undefined;
 
-    where.targetChainId_in =
-      filters.targetChains && filters.targetChains.length > 0 ? filters.targetChains : undefined;
+      where.targetChainId_in =
+        filters.targetChains && filters.targetChains.length > 0 ? filters.targetChains : undefined;
 
-    if (filters.date && (filters.date.from || filters.date.to)) {
-      Object.assign(where, createTimestampQuery(filters.date));
-    } else {
-      where.sourceBlockTimestamp_gte = undefined;
-      where.sourceBlockTimestamp_lte = undefined;
-    }
+      if (filters.date && (filters.date.from || filters.date.to)) {
+        Object.assign(where, createTimestampQuery(filters.date));
+      } else {
+        where.sourceBlockTimestamp_gte = undefined;
+        where.sourceBlockTimestamp_lte = undefined;
+      }
 
-    updateQueryVariables({
-      where: Object.keys(where).some((key) => where[key] !== undefined) ? where : undefined
-    });
+      let params: MessagesQueryVariables = {
+        where: Object.keys(where).some((key) => where[key] !== undefined) ? where : undefined
+      };
+      if (params.where) {
+        params.after = undefined;
+        params.before = undefined;
+      }
 
-    setFilters(filters);
-  }, []);
+      updateQueryVariables(params);
+      queryClient.resetQueries({
+        queryKey: ['messages']
+      });
+    },
+    [queryClient]
+  );
 
   const [queryVariables, setQueryVariables] = useState<MessagesQueryVariables>({
     limit: 10,
@@ -80,7 +95,7 @@ export default function Page() {
     setQueryVariables((prev) => ({ ...prev, ...updates }));
   };
 
-  const { data, status, error, isFetching, isRefetching, isPending } = useMessages(queryVariables);
+  const { data, isFetching } = useMessages(queryVariables);
 
   const { data: messagesInfos } = useMessagesInfos();
 

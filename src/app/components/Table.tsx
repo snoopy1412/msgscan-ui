@@ -1,5 +1,4 @@
 'use client';
-import Image from 'next/image';
 import {
   Table,
   TableBody,
@@ -18,137 +17,21 @@ import {
 import Toolbar, { ToolbarProps } from './ToolBar';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import MessageStatus from '@/components/MessageStatus';
-import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { Message, PageInfo } from '@/graphql/type';
-import { chains } from '@/config/chains';
-import { ChAIN_ID } from '@/types/chains';
-import { protocols } from '@/config/protocols';
-import { formatTimeAgo, formatTimeDifference, toShortText } from '@/utils';
-import { DateRange } from 'react-day-picker';
+import { columns } from '../data/columns';
+import Spin from '@/components/ui/spin';
+import { useCallback, useEffect, useState } from 'react';
 
-import ChainTxDisplay from '@/components/ChainTxDisplay';
-import BlockchainAddressLink from '@/components/BlockchainAddressLink';
-import { use, useCallback, useState } from 'react';
+const fadeInOut = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.5 } }
+};
 
 interface TableProps {
   loading: boolean;
   dataSource: Message[];
 }
-
-type Column = {
-  dataIndex: string;
-  title: string;
-  width?: string;
-  render: (value: any, record: Message, index: number) => any;
-};
-
-const columns: Column[] = [
-  {
-    dataIndex: 'status',
-    title: 'Status',
-    width: '7.78rem',
-    render(value) {
-      return <MessageStatus status={value} />;
-    }
-  },
-  {
-    dataIndex: 'id',
-    title: 'Msgid',
-    width: '7.78rem',
-    render(value) {
-      return (
-        <Link href={`/tx/${value}`} className="hover:underline" title={value}>
-          {value}
-        </Link>
-      );
-    }
-  },
-  {
-    dataIndex: 'protocol',
-    title: 'Protocol',
-    width: '7.78rem',
-    render(value) {
-      const protocol = protocols?.find((protocol) => protocol.value === value);
-      if (protocol) {
-        const Icon = protocol.icon;
-        return (
-          <div className="flex items-center gap-[0.31rem]">
-            <Icon />
-            <span className="text-sm">{protocol.title}</span>
-          </div>
-        );
-      }
-    }
-  },
-  {
-    dataIndex: 'sourceTransactionHash',
-    title: 'Source Tx Hash',
-    width: '7.78rem',
-    render(value, record) {
-      if (!value) return '';
-      const chain = chains?.find(
-        (chain) => chain.id === (Number(record?.sourceChainId) as unknown as ChAIN_ID)
-      );
-      return <ChainTxDisplay chain={chain} value={value} isLink />;
-    }
-  },
-  {
-    dataIndex: 'sourceDappAddress',
-    title: 'From',
-    width: '7.78rem',
-    render(value, record) {
-      if (!value) return '';
-      const chain = chains?.find(
-        (chain) => chain.id === (Number(record?.sourceChainId) as unknown as ChAIN_ID)
-      );
-      return <BlockchainAddressLink chain={chain} address={value} />;
-    }
-  },
-  {
-    dataIndex: 'targetTransactionHash',
-    title: 'Target Tx Hash',
-    width: '7.78rem',
-    render(value, record) {
-      if (!value) return '';
-      const chain = chains?.find(
-        (chain) => chain.id === (Number(record?.targetChainId) as unknown as ChAIN_ID)
-      );
-      return <ChainTxDisplay chain={chain} value={value} isLink />;
-    }
-  },
-  {
-    dataIndex: 'targetDappAddress',
-    title: 'To',
-    width: '7.78rem',
-    render(value, record) {
-      if (!value) return '';
-      const chain = chains?.find(
-        (chain) => chain.id === (Number(record?.targetChainId) as unknown as ChAIN_ID)
-      );
-      return <BlockchainAddressLink chain={chain} address={value} />;
-    }
-  },
-  {
-    dataIndex: 'age',
-    title: 'Age',
-    width: '5rem',
-    render(value, record, index) {
-      return record?.sourceBlockTimestamp ? formatTimeAgo(record?.sourceBlockTimestamp) : '';
-    }
-  },
-  {
-    dataIndex: 'timeSpent',
-    title: 'TimeSpent',
-    width: '5rem',
-
-    render(value, record, index) {
-      return record.sourceBlockTimestamp && record?.targetBlockTimestamp
-        ? formatTimeDifference(record.sourceBlockTimestamp, record?.targetBlockTimestamp)
-        : '';
-    }
-  }
-];
 
 interface TableProps {
   loading: boolean;
@@ -159,13 +42,6 @@ interface TableProps {
   onNextPageClick: React.MouseEventHandler<HTMLLIElement>;
 }
 
-interface Filters {
-  status: (string | number)[];
-  date: DateRange | undefined;
-  sourceChains: (string | number)[];
-  targetChains: (string | number)[];
-}
-
 const DataTable = ({
   loading,
   onChangeFilter,
@@ -174,6 +50,30 @@ const DataTable = ({
   onPreviousPageClick,
   onNextPageClick
 }: TableProps) => {
+  const [activePageType, setActivePageType] = useState<'previous' | 'next' | ''>('');
+
+  const handlePreviousPageClick = useCallback<React.MouseEventHandler<HTMLLIElement>>(
+    (e) => {
+      setActivePageType('previous');
+      onPreviousPageClick(e);
+    },
+    [onPreviousPageClick]
+  );
+
+  const handleNextPageClick = useCallback<React.MouseEventHandler<HTMLLIElement>>(
+    (e) => {
+      setActivePageType('next');
+      onNextPageClick(e);
+    },
+    [onNextPageClick]
+  );
+
+  useEffect(() => {
+    if (!loading) {
+      setActivePageType('');
+    }
+  }, [loading]);
+
   return (
     <div className="relative">
       <Toolbar onChange={onChangeFilter} />
@@ -199,61 +99,83 @@ const DataTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {dataSource.map((message) => (
-            <TableRow
-              key={message?.id}
-              className="border-b-[2px] border-b-background bg-card last:border-b-0"
-            >
-              {columns.map((column, index) => (
-                <TableCell
-                  key={column.dataIndex}
-                  className={cn(
-                    'border-none',
-                    'truncate',
-                    'px-0',
-                    'pr-[1.88rem]',
-                    index === 0 && 'pl-5',
-                    index === columns.length - 1 && 'pr-5',
-                    index === 0 && 'rounded-[var(--radius)_0_0_var(--radius)]',
-                    index === columns.length - 1 && 'rounded-[0_var(--radius)_var(--radius)_0]'
-                  )}
-                  style={{ width: column.width ? column.width : '100px' }}
-                >
-                  {column.render((message as unknown as any)[column.dataIndex], message, index)}
-                </TableCell>
-              ))}
+          {dataSource?.length ? (
+            dataSource.map((message) => (
+              <TableRow
+                key={message?.id}
+                className="border-b-[2px] border-b-background bg-card last:border-b-0"
+              >
+                {columns.map((column, index) => (
+                  <TableCell
+                    key={column.dataIndex}
+                    className={cn(
+                      'border-none',
+                      'px-0',
+                      'pr-[1.88rem]',
+                      index === 0 && 'pl-5',
+                      index === columns.length - 1 && 'pr-5',
+                      index === 0 && 'rounded-[var(--radius)_0_0_var(--radius)]',
+                      index === columns.length - 1 && 'rounded-[0_var(--radius)_var(--radius)_0]'
+                    )}
+                    style={{ width: column.width ? column.width : '100px' }}
+                  >
+                    <motion.div
+                      initial="hidden"
+                      animate="visible"
+                      variants={fadeInOut}
+                      className="truncate"
+                    >
+                      {column.render((message as unknown as any)[column.dataIndex], message, index)}
+                    </motion.div>
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          ) : (
+            <TableRow className="border-none bg-card px-5">
+              <TableCell
+                colSpan={columns.length}
+                className="py-5 text-center text-muted-foreground"
+              >
+                Sorry, there&apos;s no data available with your current filters selection, please
+                try a different one.
+              </TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
-      <Pagination className="justify-end gap-[0.31rem] py-5">
-        <PaginationContent>
-          <PaginationItem
-            className="rounded bg-card"
-            onClick={pageInfo?.hasPreviousPage ? onPreviousPageClick : undefined}
-          >
-            <PaginationPrevious
-              className={cn(
-                pageInfo?.hasPreviousPage
-                  ? 'cursor-pointer'
-                  : 'cursor-not-allowed text-secondary-foreground hover:bg-transparent hover:text-secondary-foreground'
-              )}
-            />
-          </PaginationItem>
-          <PaginationItem
-            className="rounded bg-card"
-            onClick={pageInfo?.hasNextPage ? onNextPageClick : undefined}
-          >
-            <PaginationNext
-              className={cn(
-                pageInfo?.hasNextPage
-                  ? 'cursor-pointer'
-                  : 'cursor-not-allowed text-secondary-foreground hover:bg-transparent hover:text-secondary-foreground'
-              )}
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+      {dataSource?.length ? (
+        <Pagination className="justify-end gap-[0.31rem] py-5">
+          <PaginationContent>
+            <PaginationItem
+              className="rounded bg-card"
+              onClick={pageInfo?.hasPreviousPage ? handlePreviousPageClick : undefined}
+            >
+              <PaginationPrevious
+                loading={loading && activePageType === 'previous'}
+                className={cn(
+                  pageInfo?.hasPreviousPage
+                    ? 'cursor-pointer'
+                    : 'cursor-not-allowed text-secondary-foreground hover:bg-transparent hover:text-secondary-foreground'
+                )}
+              />
+            </PaginationItem>
+            <PaginationItem
+              className="rounded bg-card"
+              onClick={pageInfo?.hasNextPage ? handleNextPageClick : undefined}
+            >
+              <PaginationNext
+                loading={loading && activePageType === 'next'}
+                className={cn(
+                  pageInfo?.hasNextPage
+                    ? 'cursor-pointer'
+                    : 'cursor-not-allowed text-secondary-foreground hover:bg-transparent hover:text-secondary-foreground'
+                )}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      ) : null}
     </div>
   );
 };
