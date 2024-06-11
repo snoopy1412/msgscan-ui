@@ -54,19 +54,21 @@ const TableChainFilter = ({ options, value, onChange, title, limit }: TableChain
         <Button
           variant="outline"
           size="sm"
-          className="gap-[0.31rem] border-none text-sm font-normal"
+          className="flex w-full items-center justify-between gap-[0.31rem] border-none text-sm font-normal lg:w-auto"
         >
           <span className="text-secondary-foreground">{title}:</span>
-          <SelectedLabels options={options} value={value} />
-          <ChevronDown
-            size={16}
-            strokeWidth={1.5}
-            className={cn('transform transition-transform', open ? 'rotate-180' : 'rotate-0')}
-          />
+          <div className="flex items-center gap-[0.31rem]">
+            <SelectedLabels options={options} value={value} />
+            <ChevronDown
+              size={16}
+              strokeWidth={1.5}
+              className={cn('transform transition-transform', open ? 'rotate-180' : 'rotate-0')}
+            />
+          </div>
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-[28rem] p-0 text-[0.75rem] text-secondary-foreground"
+        className="container p-0 text-[0.75rem] text-secondary-foreground lg:w-[28rem]"
         align="end"
       >
         <div className="flex items-center justify-between px-[1.25rem] py-[0.62rem]">
@@ -86,7 +88,7 @@ const TableChainFilter = ({ options, value, onChange, title, limit }: TableChain
           </span>
         </div>
         <Separator />
-        <div className="grid grid-cols-3 px-[1.25rem]">
+        <div className="flex flex-col px-[1.25rem] lg:grid lg:grid-cols-3">
           {sortedOptions.map(({ value: optionValue, label }) => {
             const isSelected = value.includes(optionValue);
             return (

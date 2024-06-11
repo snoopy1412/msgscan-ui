@@ -20,8 +20,8 @@ import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { Message, PageInfo } from '@/graphql/type';
 import { columns } from '../data/columns';
-import Spin from '@/components/ui/spin';
 import { useCallback, useEffect, useState } from 'react';
+import ToolBarMobile from './ToolBarMobile';
 
 const fadeInOut = {
   hidden: { opacity: 0 },
@@ -76,7 +76,8 @@ const DataTable = ({
 
   return (
     <div className="relative">
-      <Toolbar onChange={onChangeFilter} />
+      <Toolbar onChange={onChangeFilter} className="hidden lg:flex" />
+      <ToolBarMobile onChange={onChangeFilter} className="flex lg:hidden" />
       <Separator />
       <Table className="table-fixed">
         <TableHeader>

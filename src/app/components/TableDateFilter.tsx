@@ -46,23 +46,25 @@ const TableDateFilter = ({ date, onChange }: TableDateFilterProps) => {
         <Button
           variant="outline"
           size="sm"
-          className="gap-[0.31rem] border-none text-sm font-normal"
+          className="flex w-full items-center justify-between gap-[0.31rem] border-none text-sm font-normal lg:w-auto"
         >
           <span className="text-secondary-foreground">Date:</span>
-          <span className="text-sm text-foreground">
-            {!date?.from && !date?.to
-              ? 'All'
-              : `${date.from?.toLocaleDateString() ?? ''} - ${date.to?.toLocaleDateString() ?? ''}`}
-          </span>
+          <div className="flex items-center gap-[0.31rem]">
+            <span className="text-sm text-foreground">
+              {!date?.from && !date?.to
+                ? 'All'
+                : `${date.from?.toLocaleDateString() ?? ''} - ${date.to?.toLocaleDateString() ?? ''}`}
+            </span>
 
-          <ChevronDown
-            size={16}
-            strokeWidth={1.5}
-            className={cn('transform transition-transform', open ? 'rotate-180' : 'rotate-0')}
-          />
+            <ChevronDown
+              size={16}
+              strokeWidth={1.5}
+              className={cn('transform transition-transform', open ? 'rotate-180' : 'rotate-0')}
+            />
+          </div>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[35rem] p-0" align="end">
+      <PopoverContent className="container p-0 lg:w-[35rem]" align="end">
         <Calendar
           initialFocus
           mode="range"

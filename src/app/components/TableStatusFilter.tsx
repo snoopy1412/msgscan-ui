@@ -45,18 +45,20 @@ const TableStatusFilter = ({
         <Button
           variant="outline"
           size="sm"
-          className="gap-[0.31rem] border-none text-sm font-normal"
+          className="flex w-full items-center justify-between gap-[0.31rem] border-none text-sm font-normal lg:w-auto"
         >
-          <span className="text-secondary-foreground">{title}</span>
-          <SelectedLabels options={options} value={value} />
-          <ChevronDown
-            size={16}
-            strokeWidth={1.5}
-            className={cn('transform transition-transform', open ? 'rotate-180' : 'rotate-0')}
-          />
+          <span className="text-secondary-foreground">{title}:</span>
+          <div className="flex items-center gap-[0.31rem]">
+            <SelectedLabels options={options} value={value} />
+            <ChevronDown
+              size={16}
+              strokeWidth={1.5}
+              className={cn('transform transition-transform', open ? 'rotate-180' : 'rotate-0')}
+            />
+          </div>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[10rem] p-0" align="end">
+      <PopoverContent className="container p-0 lg:w-[10rem]" align="end">
         <Command>
           <CommandList>
             <CommandGroup className="p-0">
