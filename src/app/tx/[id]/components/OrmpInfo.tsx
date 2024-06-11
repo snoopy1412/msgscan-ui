@@ -28,10 +28,10 @@ const OrmpInfo = () => {
     <div className="bg-background">
       {data?.map((item, index) => (
         <div className={cn('flex items-center', 'border-b border-b-muted')} key={index}>
-          <div className="w-[7.5rem] border-r border-r-muted p-5 text-[0.75rem] text-muted-foreground">
+          <div className="w-[7.5rem] shrink-0 border-r border-r-muted p-5 text-[0.75rem] text-muted-foreground">
             {item?.title}
           </div>
-          <div className="flex-1 p-5 text-[0.75rem] text-foreground">{item?.value}</div>
+          <div className="flex-1 truncate p-5 text-[0.75rem] text-foreground">{item?.value}</div>
         </div>
       ))}
     </div>

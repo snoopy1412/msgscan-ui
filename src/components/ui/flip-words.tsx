@@ -72,7 +72,7 @@ export const FlipWords = ({
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             transition={{
               delay: index * 0.08,
-              duration: 0.4
+              duration: 0.3
             }}
             className="inline-block"
           >
