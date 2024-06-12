@@ -14,7 +14,7 @@ const MessageStatus = ({ status }: MessageStatusProps) => {
   switch (status) {
     case MESSAGE_STATUS.PENDING:
       return (
-        <Badge className="gap-[0.19rem] bg-[hsl(var(--inflight))] text-foreground hover:bg-[hsl(var(--inflight))]/80 dark:text-background">
+        <Badge className="gap-[0.19rem] bg-[hsl(var(--inflight))] text-xs text-foreground hover:bg-[hsl(var(--inflight))]/80 dark:text-background">
           <Inflight />
           Inflight
         </Badge>
@@ -22,14 +22,14 @@ const MessageStatus = ({ status }: MessageStatusProps) => {
 
     case MESSAGE_STATUS.SUCCESS:
       return (
-        <Badge className="gap-[0.19rem] bg-[hsl(var(--success))] text-foreground hover:bg-[hsl(var(--success))]/80 dark:text-background">
+        <Badge className="gap-[0.19rem] bg-[hsl(var(--success))] text-xs text-foreground hover:bg-[hsl(var(--success))]/80 dark:text-background">
           <Success />
           Success
         </Badge>
       );
     case MESSAGE_STATUS.FAILED:
       return (
-        <Badge className="gap-[0.19rem] bg-[hsl(var(--failure))] text-foreground hover:bg-[hsl(var(--failure))]/80 dark:text-background">
+        <Badge className="gap-[0.19rem] bg-[hsl(var(--failure))] text-xs text-foreground hover:bg-[hsl(var(--failure))]/80 dark:text-background">
           <Failed />
           Failed
         </Badge>

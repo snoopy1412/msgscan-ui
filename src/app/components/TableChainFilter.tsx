@@ -86,7 +86,7 @@ const TableChainFilter = ({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className={cn('p-0 text-[0.75rem] text-secondary-foreground', contentClassName)}
+        className={cn('p-0 text-xs text-secondary-foreground', contentClassName)}
         align="end"
       >
         <div className="flex items-center justify-between px-[1.25rem] py-[0.62rem]">

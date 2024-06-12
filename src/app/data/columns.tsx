@@ -23,7 +23,7 @@ export const columns: Column[] = [
   {
     dataIndex: 'status',
     title: 'Status',
-    width: '7.78rem',
+    width: '8.7rem',
     render(value, record) {
       if (record?.status === -1) {
         return <Skeleton className="h-[22px] w-full rounded-full" />;
@@ -34,7 +34,7 @@ export const columns: Column[] = [
   {
     dataIndex: 'id',
     title: 'Msgid',
-    width: '7.78rem',
+    width: '10rem',
     render(value, record) {
       if (record?.status === -1) {
         return <Skeleton className="h-[22px] w-full rounded-full" />;
@@ -69,7 +69,7 @@ export const columns: Column[] = [
   {
     dataIndex: 'sourceTransactionHash',
     title: 'Source Tx Hash',
-    width: '7.78rem',
+    width: '10rem',
     render(value, record) {
       if (record?.status === -1) {
         return <Skeleton className="h-[22px] w-full rounded-full" />;
@@ -84,7 +84,7 @@ export const columns: Column[] = [
   {
     dataIndex: 'sourceDappAddress',
     title: 'From',
-    width: '7.78rem',
+    width: '8rem',
     render(value, record) {
       if (record?.status === -1) {
         return <Skeleton className="h-[22px] w-full rounded-full" />;
@@ -99,7 +99,7 @@ export const columns: Column[] = [
   {
     dataIndex: 'targetTransactionHash',
     title: 'Target Tx Hash',
-    width: '7.78rem',
+    width: '10rem',
     render(value, record) {
       if (record?.status === -1) {
         return <Skeleton className="h-[22px] w-full rounded-full" />;
@@ -114,7 +114,7 @@ export const columns: Column[] = [
   {
     dataIndex: 'targetDappAddress',
     title: 'To',
-    width: '7.78rem',
+    width: '8rem',
     render(value, record) {
       if (record?.status === -1) {
         return <Skeleton className="h-[22px] w-full rounded-full" />;

@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <footer className="container flex h-[var(--footer-height)] items-center">
       <div className="flex w-full items-center justify-between">
-        <span className="text-[0.75rem] font-light capitalize text-secondary-foreground lg:text-sm lg:text-foreground">
+        <span className="text-xs font-light capitalize text-secondary-foreground lg:text-sm lg:text-foreground">
           &copy; {currentYear} {APP_NAME}
         </span>
 

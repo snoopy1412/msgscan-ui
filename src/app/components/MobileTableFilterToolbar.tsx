@@ -102,7 +102,7 @@ const MobileTableFilterToolbar = ({ className }: MobileTableFilterToolbarProps) 
           className="gap-[0.31rem] border-none text-sm font-normal"
         >
           <SlidersHorizontal size={20} strokeWidth={1.25} className="text-secondary-foreground" />
-          <span className="text-secondary-foreground">
+          <span className="text-xs text-secondary-foreground">
             Filters {selectedNumber ? `(${selectedNumber})` : ''}
           </span>
         </Button>

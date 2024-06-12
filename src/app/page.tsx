@@ -12,6 +12,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { createTimestampQuery } from '@/utils';
 import useFilterStore from '@/store/filter';
 import { REFRESH_INTERVAL } from '@/config/site';
+import SearchBar from '@/components/SearchBar';
 
 function useMessages(variables: MessagesQueryVariables = {}) {
   return useQuery({
@@ -120,6 +121,9 @@ export default function Page() {
 
   return (
     <>
+      <div className="block lg:hidden">
+        <SearchBar />
+      </div>
       <div className="py-[2.5rem] lg:py-0">
         <StatsContainer data={messagesInfos?.messagesInfos?.items} />
       </div>
