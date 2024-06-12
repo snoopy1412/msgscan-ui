@@ -14,9 +14,19 @@ interface TableChainFilterProps {
   onChange: (newValue: (string | number)[]) => void;
   title: React.ReactNode;
   limit: number;
+  buttonClassName?: string;
+  contentClassName?: string;
 }
 
-const TableChainFilter = ({ options, value, onChange, title, limit }: TableChainFilterProps) => {
+const TableChainFilter = ({
+  options,
+  value,
+  onChange,
+  title,
+  limit,
+  buttonClassName,
+  contentClassName
+}: TableChainFilterProps) => {
   const [open, setOpen] = useState(false);
 
   const sortedOptions = useMemo(() => {
@@ -38,7 +48,12 @@ const TableChainFilter = ({ options, value, onChange, title, limit }: TableChain
     if (value.length === limit) {
       onChange([]);
     } else {
-      onChange(sortedOptions.slice(0, limit).map((option) => option.value));
+      const newValue = new Set(value);
+      for (const option of sortedOptions) {
+        if (newValue.size >= limit) break;
+        newValue.add(option.value);
+      }
+      onChange(Array.from(newValue));
     }
   };
 
@@ -54,7 +69,10 @@ const TableChainFilter = ({ options, value, onChange, title, limit }: TableChain
         <Button
           variant="outline"
           size="sm"
-          className="flex w-full items-center justify-between gap-[0.31rem] border-none text-sm font-normal lg:w-auto"
+          className={cn(
+            'flex items-center gap-[0.31rem] border-none text-sm font-normal',
+            buttonClassName
+          )}
         >
           <span className="text-secondary-foreground">{title}:</span>
           <div className="flex items-center gap-[0.31rem]">
@@ -68,7 +86,7 @@ const TableChainFilter = ({ options, value, onChange, title, limit }: TableChain
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="container p-0 text-[0.75rem] text-secondary-foreground lg:w-[28rem]"
+        className={cn('p-0 text-[0.75rem] text-secondary-foreground', contentClassName)}
         align="end"
       >
         <div className="flex items-center justify-between px-[1.25rem] py-[0.62rem]">

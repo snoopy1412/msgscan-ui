@@ -66,7 +66,7 @@ const ToolBarMobile = ({ onChange, className }: ToolbarProps) => {
         </Button>
       </div>
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent className="w-full sm:w-full sm:max-w-full lg:hidden">
+        <SheetContent className="w-full sm:w-full sm:max-w-full">
           <SheetHeader>
             <SheetTitle>Filters</SheetTitle>
           </SheetHeader>
@@ -77,9 +77,16 @@ const ToolBarMobile = ({ onChange, className }: ToolbarProps) => {
               onChange={setSelectedStatuses}
               title="Status"
               onClearFilters={handleResetStatus}
+              contentClassName="w-full" // 存疑
+              buttonClassName="justify-between w-full"
             />
 
-            <TableDateFilter onChange={setDate} date={date} />
+            <TableDateFilter
+              onChange={setDate}
+              date={date}
+              contentClassName="w-full" // 存疑
+              buttonClassName="justify-between w-full"
+            />
 
             <TableChainFilter
               options={CHAIN_OPTIONS}
@@ -87,6 +94,8 @@ const ToolBarMobile = ({ onChange, className }: ToolbarProps) => {
               onChange={setSelectedSourceChains}
               title="Source"
               limit={6}
+              contentClassName="w-full" // 存疑
+              buttonClassName="justify-between w-full"
             />
 
             <TableChainFilter
@@ -95,6 +104,8 @@ const ToolBarMobile = ({ onChange, className }: ToolbarProps) => {
               onChange={setSelectedTargetChains}
               title="Target"
               limit={6}
+              contentClassName="w-full" // 存疑
+              buttonClassName="justify-between w-full"
             />
             <Separator className="block lg:hidden" />
             <Button

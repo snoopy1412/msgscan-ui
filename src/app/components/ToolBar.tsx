@@ -58,9 +58,10 @@ const Toolbar = ({ onChange, className }: ToolbarProps) => {
           onChange={setSelectedStatuses}
           title="Status"
           onClearFilters={handleResetStatus}
+          contentClassName="w-[10rem]"
         />
 
-        <TableDateFilter onChange={setDate} date={date} />
+        <TableDateFilter onChange={setDate} date={date} contentClassName="w-[35rem]" />
 
         <TableChainFilter
           options={CHAIN_OPTIONS}
@@ -75,6 +76,7 @@ const Toolbar = ({ onChange, className }: ToolbarProps) => {
           value={selectedTargetChains}
           onChange={setSelectedTargetChains}
           title="Target"
+          contentClassName="w-[28rem]"
           limit={6}
         />
 

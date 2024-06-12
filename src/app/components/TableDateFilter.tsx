@@ -10,9 +10,16 @@ import { useCallback, useEffect, useState } from 'react';
 interface TableDateFilterProps {
   date?: DateRange;
   onChange?: (date: DateRange) => void;
+  buttonClassName?: string;
+  contentClassName?: string;
 }
 
-const TableDateFilter = ({ date, onChange }: TableDateFilterProps) => {
+const TableDateFilter = ({
+  date,
+  onChange,
+  buttonClassName,
+  contentClassName
+}: TableDateFilterProps) => {
   const [open, setOpen] = useState(false);
 
   const handleChange = useCallback<SelectRangeEventHandler>(
@@ -46,7 +53,10 @@ const TableDateFilter = ({ date, onChange }: TableDateFilterProps) => {
         <Button
           variant="outline"
           size="sm"
-          className="flex w-full items-center justify-between gap-[0.31rem] border-none text-sm font-normal lg:w-auto"
+          className={cn(
+            'flex items-center gap-[0.31rem] border-none text-sm font-normal',
+            buttonClassName
+          )}
         >
           <span className="text-secondary-foreground">Date:</span>
           <div className="flex items-center gap-[0.31rem]">
@@ -64,7 +74,7 @@ const TableDateFilter = ({ date, onChange }: TableDateFilterProps) => {
           </div>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="container p-0 lg:w-[35rem]" align="end">
+      <PopoverContent className={cn('p-0', contentClassName)} align="end">
         <Calendar
           initialFocus
           mode="range"

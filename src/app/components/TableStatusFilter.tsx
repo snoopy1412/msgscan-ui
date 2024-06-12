@@ -20,6 +20,8 @@ interface TableStatusFilterProps {
   onChange: (newValue: (string | number)[]) => void;
   title: React.ReactNode;
   onClearFilters?: () => void;
+  buttonClassName?: string;
+  contentClassName?: string;
 }
 
 const TableStatusFilter = ({
@@ -27,7 +29,9 @@ const TableStatusFilter = ({
   value,
   onChange,
   title,
-  onClearFilters
+  onClearFilters,
+  buttonClassName,
+  contentClassName
 }: TableStatusFilterProps) => {
   const [open, setOpen] = useState(false);
 
@@ -45,7 +49,10 @@ const TableStatusFilter = ({
         <Button
           variant="outline"
           size="sm"
-          className="flex w-full items-center justify-between gap-[0.31rem] border-none text-sm font-normal lg:w-auto"
+          className={cn(
+            'flex items-center gap-[0.31rem] border-none text-sm font-normal',
+            buttonClassName
+          )}
         >
           <span className="text-secondary-foreground">{title}:</span>
           <div className="flex items-center gap-[0.31rem]">
@@ -58,7 +65,7 @@ const TableStatusFilter = ({
           </div>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="container p-0 lg:w-[10rem]" align="end">
+      <PopoverContent className={cn('p-0', contentClassName)} align="end">
         <Command>
           <CommandList>
             <CommandGroup className="p-0">
