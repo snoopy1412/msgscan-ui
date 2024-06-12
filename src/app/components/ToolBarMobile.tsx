@@ -77,14 +77,14 @@ const ToolBarMobile = ({ onChange, className }: ToolbarProps) => {
               onChange={setSelectedStatuses}
               title="Status"
               onClearFilters={handleResetStatus}
-              contentClassName="w-full" // 存疑
+              contentClassName="w-full"
               buttonClassName="justify-between w-full"
             />
 
             <TableDateFilter
               onChange={setDate}
               date={date}
-              contentClassName="w-full" // 存疑
+              contentClassName="w-full"
               buttonClassName="justify-between w-full"
             />
 
@@ -94,7 +94,7 @@ const ToolBarMobile = ({ onChange, className }: ToolbarProps) => {
               onChange={setSelectedSourceChains}
               title="Source"
               limit={6}
-              contentClassName="w-full" // 存疑
+              contentClassName="w-full"
               buttonClassName="justify-between w-full"
             />
 
@@ -104,7 +104,7 @@ const ToolBarMobile = ({ onChange, className }: ToolbarProps) => {
               onChange={setSelectedTargetChains}
               title="Target"
               limit={6}
-              contentClassName="w-full" // 存疑
+              contentClassName="w-full"
               buttonClassName="justify-between w-full"
             />
             <Separator className="block lg:hidden" />
