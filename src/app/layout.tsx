@@ -12,11 +12,51 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: APP_NAME,
-  description: APP_NAME,
-  icons: {
-    icon: '/images/msgport512.png',
-    shortcut: '/images/msgport192.png'
-  }
+  // description: APP_NAME,
+  icons: [
+    {
+      url: '/images/msgport32.png',
+      sizes: '32x32',
+      type: 'image/png',
+      rel: 'icon'
+    },
+    {
+      url: '/images/msgport48.png',
+      sizes: '48x48',
+      type: 'image/png',
+      rel: 'icon'
+    },
+    {
+      url: '/images/msgport96.png',
+      sizes: '96x96',
+      type: 'image/png',
+      rel: 'icon'
+    },
+    {
+      url: '/images/msgport192.png',
+      sizes: '192x192',
+      type: 'image/png',
+      rel: 'icon'
+    },
+    {
+      url: '/images/msgport512.png',
+      sizes: '512x512',
+      type: 'image/png',
+      rel: 'icon'
+    },
+    {
+      url: '/images/msgport167.png',
+      sizes: '167x167',
+      type: 'image/png',
+      rel: 'apple-touch-icon'
+    },
+    {
+      url: '/images/msgport180.png',
+      sizes: '180x180',
+      type: 'image/png',
+      rel: 'apple-touch-icon'
+    }
+  ]
 };
 
 const fontSans = FontSans({
