@@ -42,7 +42,7 @@ const ChainTxDisplay = ({
       );
     } else {
       return (
-        <span className={className} title={value}>
+        <span className={cn('truncate', className)} title={value}>
           {isFullText ? value : toShortText(value, 6, 4)}
         </span>
       );

@@ -29,12 +29,13 @@ import ChainTxDisplay from '@/components/ChainTxDisplay';
 import { Separator } from '@/components/ui/separator';
 import ClipboardIconButton from '@/components/ClipboardIconButton';
 import ExplorerLinkButton from '@/components/ExplorerLinkButton';
+import { REFRESH_INTERVAL } from '@/config/site';
 
 function useMessage(id: string) {
   return useQuery({
     queryKey: ['message', id],
     queryFn: async () => fetchMessage(id),
-    refetchInterval: 5000
+    refetchInterval: REFRESH_INTERVAL
   });
 }
 
@@ -115,6 +116,7 @@ const TxDetail = () => {
             {data?.message?.sourceTransactionHash ? (
               <ChainTxDisplay
                 chain={sourceChain}
+                className="w-[90%] max-w-[calc(100vw-14rem)]"
                 rootClassName="gap-[0.62rem]"
                 isFullText
                 value={data?.message?.sourceTransactionHash}
@@ -141,6 +143,7 @@ const TxDetail = () => {
             {data?.message?.targetTransactionHash ? (
               <ChainTxDisplay
                 chain={targetChain}
+                className="w-[90%] max-w-[calc(100vw-14rem)]"
                 rootClassName="gap-[0.62rem]"
                 isFullText
                 value={data?.message?.targetTransactionHash}
@@ -197,7 +200,9 @@ const TxDetail = () => {
         >
           {data?.message?.sourceDappAddress ? (
             <div className="flex w-full items-center gap-[0.62rem]">
-              {data?.message?.sourceDappAddress}
+              <span className="max-w-[calc(100vw-10rem)] truncate">
+                {data?.message?.sourceDappAddress}
+              </span>
               <ClipboardIconButton text={data?.message?.sourceDappAddress} size={16} />
               {sourceChain ? (
                 <ExplorerLinkButton
@@ -215,7 +220,9 @@ const TxDetail = () => {
         >
           {data?.message?.sourcePortAddress ? (
             <div className="flex w-full items-center gap-[0.62rem]">
-              {data?.message?.sourcePortAddress}
+              <span className="max-w-[calc(100vw-10rem)] truncate">
+                {data?.message?.sourcePortAddress}
+              </span>
               <ClipboardIconButton text={data?.message?.sourcePortAddress} size={16} />
               {sourceChain ? (
                 <ExplorerLinkButton
@@ -233,7 +240,9 @@ const TxDetail = () => {
         >
           {data?.message?.targetDappAddress ? (
             <div className="flex w-full items-center gap-[0.62rem]">
-              {data?.message?.targetDappAddress}
+              <span className="max-w-[calc(100vw-10rem)] truncate">
+                {data?.message?.targetDappAddress}
+              </span>
               <ClipboardIconButton text={data?.message?.targetDappAddress} size={16} />
               {targetChain ? (
                 <ExplorerLinkButton
@@ -250,7 +259,9 @@ const TxDetail = () => {
         >
           {data?.message?.targetPortAddress ? (
             <div className="flex w-full items-center gap-[0.62rem]">
-              {data?.message?.targetPortAddress}
+              <span className="max-w-[calc(100vw-10rem)] truncate">
+                {data?.message?.targetPortAddress}
+              </span>
               <ClipboardIconButton text={data?.message?.targetPortAddress} size={16} />
               {targetChain ? (
                 <ExplorerLinkButton

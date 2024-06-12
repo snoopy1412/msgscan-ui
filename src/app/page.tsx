@@ -11,12 +11,13 @@ import DataTable from './components/Table';
 import { useCallback, useEffect, useState } from 'react';
 import { createTimestampQuery } from '@/utils';
 import useFilterStore from '@/store/filter';
+import { REFRESH_INTERVAL } from '@/config/site';
 
 function useMessages(variables: MessagesQueryVariables = {}) {
   return useQuery({
     queryKey: ['messages', variables],
     queryFn: async () => fetchMessages(variables),
-    refetchInterval: 5000,
+    refetchInterval: REFRESH_INTERVAL,
     placeholderData(prevData) {
       const hasRealData = prevData?.messages?.items.some((item) => item.status !== -1);
       return hasRealData
@@ -44,7 +45,7 @@ function useMessagesInfos(variables: MessagesQueryVariables = {}) {
   return useQuery({
     queryKey: ['messagesInfos', variables],
     queryFn: async () => fetchMessagesInfos(variables),
-    refetchInterval: 5000
+    refetchInterval: REFRESH_INTERVAL
   });
 }
 
