@@ -50,6 +50,8 @@ const TxDetail = () => {
   const params = useParams();
   const { data, isPending } = useMessage(params?.id as string);
 
+  console.log('data', data);
+
   const { data: ormpInfo } = useOrmpInfo(params?.id as string);
 
   const protocol = protocols?.find((protocol) => protocol.value === data?.message?.protocol);
