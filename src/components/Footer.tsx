@@ -3,17 +3,15 @@ import { socialConfig } from '@/config/social';
 
 const currentYear = new Date().getUTCFullYear();
 
-type SocialConfig = { url: string; name: string; iconPath: string };
-
 const Footer = () => {
   return (
     <footer className="container flex h-[var(--footer-height)] items-center">
-      <div className="flex w-full items-center justify-center md:justify-between">
-        <span className="text-sm font-light capitalize text-foreground">
+      <div className="flex w-full items-center justify-between">
+        <span className="text-[0.75rem] font-light capitalize text-secondary-foreground lg:text-sm lg:text-foreground">
           &copy; {currentYear} {APP_NAME}
         </span>
 
-        <div className="hidden items-center gap-5 md:flex">
+        <div className="flex items-center gap-5">
           {socialConfig.map(({ url, name, icon }) => {
             return (
               <a
@@ -21,7 +19,7 @@ const Footer = () => {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex size-[1.625rem] shrink-0 items-center justify-center transition hover:opacity-80 active:scale-95 active:opacity-60"
+                className="flex size-5 shrink-0 items-center justify-center transition hover:opacity-80 active:scale-95 active:opacity-60 lg:size-[1.625rem]"
                 title={name}
               >
                 {icon}

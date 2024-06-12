@@ -120,8 +120,10 @@ export default function Page() {
 
   return (
     <>
-      <StatsContainer data={messagesInfos?.messagesInfos?.items} />
-      <Separator />
+      <div className="py-[2.5rem] lg:py-0">
+        <StatsContainer data={messagesInfos?.messagesInfos?.items} />
+      </div>
+      <Separator className="hidden lg:block" />
       <DataTable
         loading={isFetching}
         dataSource={data?.messages?.items || []}
