@@ -31,6 +31,9 @@ import ClipboardIconButton from '@/components/ClipboardIconButton';
 import ExplorerLinkButton from '@/components/ExplorerLinkButton';
 import { REFRESH_INTERVAL } from '@/config/site';
 
+import useBreakpoint from '@/utils/breakpoint';
+import { useMemo } from 'react';
+
 function useMessage(id: string) {
   return useQuery({
     queryKey: ['message', id],
@@ -50,7 +53,14 @@ const TxDetail = () => {
   const params = useParams();
   const { data, isPending } = useMessage(params?.id as string);
 
-  console.log('data', data);
+  const breakpoint = useBreakpoint();
+
+  const iconSize = useMemo(() => {
+    if (breakpoint === 'default' || breakpoint === 'sm' || breakpoint === 'md') {
+      return 18;
+    }
+    return 22;
+  }, [breakpoint]);
 
   const { data: ormpInfo } = useOrmpInfo(params?.id as string);
 
@@ -91,19 +101,15 @@ const TxDetail = () => {
     </div>
   ) : (
     <div>
-      <header className="my-5 text-xl font-light leading-8 text-foreground">
+      <header className="my-5 text-base font-light leading-8 text-foreground lg:text-xl">
         <FlipWords words={words} />
       </header>
       <div className="flex flex-col gap-[0.12rem]">
-        <Card title="MsgId" icon={<SquareUser size={22} strokeWidth={1.25} />} loading={isPending}>
+        <Card title="MsgId" icon={<SquareUser size={iconSize} strokeWidth={1.25} />}>
           <div className="w-full break-words">{data?.message?.id}</div>
         </Card>
 
-        <Card
-          title="Status"
-          icon={<PackageSearch size={22} strokeWidth={1.25} />}
-          loading={isPending}
-        >
+        <Card title="Status" icon={<PackageSearch size={iconSize} strokeWidth={1.25} />}>
           {typeof data?.message?.status !== 'undefined' && (
             <MessageStatus status={data?.message?.status} />
           )}
@@ -111,8 +117,7 @@ const TxDetail = () => {
 
         <Card
           title="Source Transaction Hash"
-          icon={<ArrowRightFromLine size={22} strokeWidth={1.25} />}
-          loading={isPending}
+          icon={<ArrowRightFromLine size={iconSize} strokeWidth={1.25} />}
         >
           <div className="flex items-center">
             {data?.message?.sourceTransactionHash ? (
@@ -138,8 +143,7 @@ const TxDetail = () => {
 
         <Card
           title="Target Transaction Hash"
-          icon={<ArrowRightToLine size={22} strokeWidth={1.25} />}
-          loading={isPending}
+          icon={<ArrowRightToLine size={iconSize} strokeWidth={1.25} />}
         >
           <div className="flex items-center">
             {data?.message?.targetTransactionHash ? (
@@ -164,8 +168,7 @@ const TxDetail = () => {
 
         <Card
           title="Messaging Protocol"
-          icon={<MessageSquareCode size={22} strokeWidth={1.25} />}
-          loading={isPending}
+          icon={<MessageSquareCode size={iconSize} strokeWidth={1.25} />}
         >
           {protocol && ProtocolIcon ? (
             <div className="flex items-center gap-[0.31rem]">
@@ -177,8 +180,7 @@ const TxDetail = () => {
 
         <Card
           title="Message Payload"
-          icon={<MessageSquareWarning size={22} strokeWidth={1.25} />}
-          loading={isPending}
+          icon={<MessageSquareWarning size={iconSize} strokeWidth={1.25} />}
         >
           <div className="w-full break-words rounded bg-background p-5">
             {data?.message?.payload}
@@ -187,19 +189,14 @@ const TxDetail = () => {
 
         <Card
           title="Message Params"
-          icon={<MessageSquareQuote size={22} strokeWidth={1.25} />}
-          loading={isPending}
+          icon={<MessageSquareQuote size={iconSize} strokeWidth={1.25} />}
         >
           <div className="w-full break-words rounded bg-background p-5">
             {data?.message?.params}
           </div>
         </Card>
 
-        <Card
-          title="Source Dapp Address"
-          icon={<LayoutGrid size={22} strokeWidth={1.25} />}
-          loading={isPending}
-        >
+        <Card title="Source Dapp Address" icon={<LayoutGrid size={iconSize} strokeWidth={1.25} />}>
           {data?.message?.sourceDappAddress ? (
             <div className="flex w-full items-center gap-[0.62rem]">
               <span className="max-w-[calc(100vw-10rem)] truncate">
@@ -215,11 +212,7 @@ const TxDetail = () => {
           ) : null}
         </Card>
 
-        <Card
-          title="Source Port Address"
-          icon={<Unplug size={22} strokeWidth={1.25} />}
-          loading={isPending}
-        >
+        <Card title="Source Port Address" icon={<Unplug size={iconSize} strokeWidth={1.25} />}>
           {data?.message?.sourcePortAddress ? (
             <div className="flex w-full items-center gap-[0.62rem]">
               <span className="max-w-[calc(100vw-10rem)] truncate">
@@ -235,11 +228,7 @@ const TxDetail = () => {
           ) : null}
         </Card>
 
-        <Card
-          title="Target Dapp Address"
-          icon={<LayoutGrid size={22} strokeWidth={1.25} />}
-          loading={isPending}
-        >
+        <Card title="Target Dapp Address" icon={<LayoutGrid size={iconSize} strokeWidth={1.25} />}>
           {data?.message?.targetDappAddress ? (
             <div className="flex w-full items-center gap-[0.62rem]">
               <span className="max-w-[calc(100vw-10rem)] truncate">
@@ -254,11 +243,7 @@ const TxDetail = () => {
             </div>
           ) : null}
         </Card>
-        <Card
-          title="Target Port Address"
-          icon={<Unplug size={22} strokeWidth={1.25} />}
-          loading={isPending}
-        >
+        <Card title="Target Port Address" icon={<Unplug size={iconSize} strokeWidth={1.25} />}>
           {data?.message?.targetPortAddress ? (
             <div className="flex w-full items-center gap-[0.62rem]">
               <span className="max-w-[calc(100vw-10rem)] truncate">
@@ -274,7 +259,7 @@ const TxDetail = () => {
           ) : null}
         </Card>
 
-        <Card title="ORMP Info" icon={<OrmpIcon />} loading={isPending}>
+        <Card title="ORMP Info" icon={<OrmpIcon />}>
           <OrmpInfo />
         </Card>
       </div>
