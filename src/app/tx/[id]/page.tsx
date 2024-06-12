@@ -33,7 +33,8 @@ import ExplorerLinkButton from '@/components/ExplorerLinkButton';
 function useMessage(id: string) {
   return useQuery({
     queryKey: ['message', id],
-    queryFn: async () => fetchMessage(id)
+    queryFn: async () => fetchMessage(id),
+    refetchInterval: 5000
   });
 }
 
