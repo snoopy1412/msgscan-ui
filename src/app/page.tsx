@@ -5,11 +5,12 @@ import StatsContainer from '@/components/StatsContainer';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchMessages, fetchMessagesInfos } from '@/graphql/services';
 import { MessagesQueryVariables } from '@/graphql/type';
+import { useShallow } from 'zustand/react/shallow';
 
 import DataTable from './components/Table';
-import { useCallback, useState } from 'react';
-import { ToolbarProps } from './components/ToolBar';
+import { useCallback, useEffect, useState } from 'react';
 import { createTimestampQuery } from '@/utils';
+import useFilterStore from '@/store/filter';
 
 function useMessages(variables: MessagesQueryVariables = {}) {
   return useQuery({
@@ -48,48 +49,55 @@ function useMessagesInfos(variables: MessagesQueryVariables = {}) {
 }
 
 export default function Page() {
-  const queryClient = useQueryClient();
-
-  const handleChangeFilters = useCallback<ToolbarProps['onChange']>(
-    (filters) => {
-      const where: any = {};
-
-      where.status_in = filters.status && filters.status.length > 0 ? filters.status : undefined;
-
-      where.sourceChainId_in =
-        filters.sourceChains && filters.sourceChains.length > 0 ? filters.sourceChains : undefined;
-
-      where.targetChainId_in =
-        filters.targetChains && filters.targetChains.length > 0 ? filters.targetChains : undefined;
-
-      if (filters.date && (filters.date.from || filters.date.to)) {
-        Object.assign(where, createTimestampQuery(filters.date));
-      } else {
-        where.sourceBlockTimestamp_gte = undefined;
-        where.sourceBlockTimestamp_lte = undefined;
-      }
-
-      let params: MessagesQueryVariables = {
-        where: Object.keys(where).some((key) => where[key] !== undefined) ? where : undefined
-      };
-      if (params.where) {
-        params.after = undefined;
-        params.before = undefined;
-      }
-
-      updateQueryVariables(params);
-      queryClient.resetQueries({
-        queryKey: ['messages']
-      });
-    },
-    [queryClient]
-  );
-
   const [queryVariables, setQueryVariables] = useState<MessagesQueryVariables>({
     limit: 10,
     orderBy: 'sourceBlockTimestamp',
     orderDirection: 'desc'
   });
+  const { selectedStatuses, date, selectedSourceChains, selectedTargetChains } = useFilterStore(
+    useShallow((state) => {
+      return {
+        selectedStatuses: state.selectedStatuses,
+        date: state.date,
+        selectedSourceChains: state.selectedSourceChains,
+        selectedTargetChains: state.selectedTargetChains
+      };
+    })
+  );
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const where: any = {};
+
+    where.status_in =
+      selectedStatuses && selectedStatuses?.length > 0 ? selectedStatuses : undefined;
+
+    where.sourceChainId_in =
+      selectedSourceChains && selectedSourceChains?.length > 0 ? selectedSourceChains : undefined;
+
+    where.targetChainId_in =
+      selectedTargetChains && selectedTargetChains?.length > 0 ? selectedTargetChains : undefined;
+
+    if (date && (date?.from || date?.to)) {
+      Object.assign(where, createTimestampQuery(date));
+    } else {
+      where.sourceBlockTimestamp_gte = undefined;
+      where.sourceBlockTimestamp_lte = undefined;
+    }
+
+    let params: MessagesQueryVariables = {
+      where: Object.keys(where).some((key) => where[key] !== undefined) ? where : undefined
+    };
+    if (params.where) {
+      params.after = undefined;
+      params.before = undefined;
+    }
+
+    updateQueryVariables(params);
+    queryClient.resetQueries({
+      queryKey: ['messages']
+    });
+  }, [queryClient, selectedStatuses, date, selectedSourceChains, selectedTargetChains]);
 
   const updateQueryVariables = (updates: Partial<MessagesQueryVariables>) => {
     setQueryVariables((prev) => ({ ...prev, ...updates }));
@@ -115,7 +123,6 @@ export default function Page() {
       <Separator />
       <DataTable
         loading={isFetching}
-        onChangeFilter={handleChangeFilters}
         dataSource={data?.messages?.items || []}
         pageInfo={data?.messages?.pageInfo}
         onPreviousPageClick={handlePreviousPageClick}

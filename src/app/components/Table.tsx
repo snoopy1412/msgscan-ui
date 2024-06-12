@@ -1,4 +1,6 @@
 'use client';
+import { useCallback, useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import {
   Table,
   TableBody,
@@ -14,14 +16,12 @@ import {
   PaginationNext,
   PaginationPrevious
 } from '@/components/ui/pagination';
-import Toolbar, { ToolbarProps } from './ToolBar';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
 import { Message, PageInfo } from '@/graphql/type';
 import { columns } from '../data/columns';
-import { useCallback, useEffect, useState } from 'react';
-import ToolBarMobile from './ToolBarMobile';
+import TableFilterToolbar from './TableFilterToolbar';
+import MobileTableFilterToolbar from './MobileTableFilterToolbar';
 
 const fadeInOut = {
   hidden: { opacity: 0 },
@@ -35,7 +35,6 @@ interface TableProps {
 
 interface TableProps {
   loading: boolean;
-  onChangeFilter: ToolbarProps['onChange'];
   dataSource: Message[];
   pageInfo?: PageInfo;
   onPreviousPageClick: React.MouseEventHandler<HTMLLIElement>;
@@ -44,7 +43,6 @@ interface TableProps {
 
 const DataTable = ({
   loading,
-  onChangeFilter,
   dataSource,
   pageInfo,
   onPreviousPageClick,
@@ -76,8 +74,8 @@ const DataTable = ({
 
   return (
     <div className="relative">
-      <Toolbar onChange={onChangeFilter} className="hidden lg:flex" />
-      <ToolBarMobile onChange={onChangeFilter} className="flex lg:hidden" />
+      <TableFilterToolbar className="hidden lg:flex" />
+      <MobileTableFilterToolbar className="flex lg:hidden" />
       <Separator />
       <Table className="table-fixed">
         <TableHeader>
