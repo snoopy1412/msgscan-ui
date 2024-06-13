@@ -13,6 +13,7 @@ const ErrorComponent = () => {
       <ErrorDisplay
         title="500 Server error"
         svgPath="/images/common/500.svg"
+        svgPathLight="/images/common/500-light.svg"
         description="Sorry, something went wrong on our server. Please try again later."
       />
     </div>

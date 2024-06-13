@@ -13,6 +13,7 @@ const NotFound = () => {
       <ErrorDisplay
         title="404 Page not found"
         svgPath="/images/common/404.svg"
+        svgPathLight="/images/common/404-light.svg"
         description="The resource reguested could not be found on this server!"
       />
     </div>
