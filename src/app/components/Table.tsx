@@ -146,7 +146,7 @@ const DataTable = ({
         </TableBody>
       </Table>
       {dataSource?.length ? (
-        <Pagination className="justify-end gap-[0.31rem] py-5">
+        <Pagination className="justify-center gap-[0.31rem] py-5 lg:justify-end">
           <PaginationContent>
             <PaginationItem
               className="rounded bg-card"
