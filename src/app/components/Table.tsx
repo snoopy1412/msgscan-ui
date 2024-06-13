@@ -20,8 +20,9 @@ import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { Message, PageInfo } from '@/graphql/type';
 import { columns } from '../data/columns';
-import TableFilterToolbar from './TableFilterToolbar';
-import MobileTableFilterToolbar from './MobileTableFilterToolbar';
+import DesktopFilterToolbar from './DesktopFilterToolbar';
+import MobileFilterToolbar from './MobileFilterToolbar';
+import useBreakpoint from '@/utils/breakpoint';
 
 const fadeInOut = {
   hidden: { opacity: 0 },
@@ -48,6 +49,7 @@ const DataTable = ({
   onPreviousPageClick,
   onNextPageClick
 }: TableProps) => {
+  const breakpoint = useBreakpoint();
   const [activePageType, setActivePageType] = useState<'previous' | 'next' | ''>('');
 
   const handlePreviousPageClick = useCallback<React.MouseEventHandler<HTMLLIElement>>(
@@ -74,8 +76,12 @@ const DataTable = ({
 
   return (
     <div className="relative">
-      <TableFilterToolbar className="hidden lg:flex" />
-      <MobileTableFilterToolbar className="flex lg:hidden" />
+      {breakpoint === 'default' || breakpoint === 'sm' || breakpoint === 'md' ? (
+        <MobileFilterToolbar className="flex lg:hidden" />
+      ) : (
+        <DesktopFilterToolbar className="hidden lg:flex" />
+      )}
+
       <Separator />
       <Table className="table-fixed">
         <TableHeader>

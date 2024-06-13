@@ -118,7 +118,6 @@ export default function Page() {
     const pageInfo = data?.messages?.pageInfo;
     updateQueryVariables({ after: pageInfo?.endCursor, before: undefined });
   }, [data?.messages?.pageInfo]);
-
   return (
     <>
       <div className="block lg:hidden">
