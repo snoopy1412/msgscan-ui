@@ -2,19 +2,17 @@ import { Button } from '@/components/ui/button';
 
 import { MESSAGE_STATUS_LIST } from '@/config/status';
 import { useCallback, useMemo, useState } from 'react';
-import { useShallow } from 'zustand/react/shallow';
 import { CHAIN_OPTIONS } from '@/config/chains';
 import MobileTableStatusFilter from './TableStatusFilter';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
-import { DateRange } from 'react-day-picker';
 import { SlidersHorizontal } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import useFilterStore from '@/store/filter';
 import DropdownButton from './DropdownButton';
 import MobileFilterBack from './FilterBack';
 import MobileTableChainFilter from './TableChainFilter';
 import MobileTableDateFilter from './TableDateFilter';
+import useFilter from '../hooks/useFilter';
 import { CURRENT_FILTERS, CURRENT_FILTERS_LIST, CURRENT_FILTERS_STATE } from '@/types/filter';
 
 export interface TableFilterToolbarProps {
@@ -33,24 +31,13 @@ const TableFilterToolbar = ({ className }: TableFilterToolbarProps) => {
     date,
     selectedSourceChains,
     selectedTargetChains,
-    setSelectedStatuses,
-    setDate,
-    setSelectedSourceChains,
-    setSelectedTargetChains
-  } = useFilterStore(
-    useShallow((state) => {
-      return {
-        selectedStatuses: state.selectedStatuses,
-        date: state.date,
-        selectedSourceChains: state.selectedSourceChains,
-        selectedTargetChains: state.selectedTargetChains,
-        setSelectedStatuses: state.setSelectedStatuses,
-        setDate: state.setDate,
-        setSelectedSourceChains: state.setSelectedSourceChains,
-        setSelectedTargetChains: state.setSelectedTargetChains
-      };
-    })
-  );
+    handleStatusChange,
+    handleDateChange,
+    handleSourceChainChange,
+    handleTargetChainChange,
+    handleReset,
+    handleResetStatus
+  } = useFilter();
 
   const handleStatusOpen = useCallback(() => {
     setCurrentFilterInfo({
@@ -80,45 +67,6 @@ const TableFilterToolbar = ({ className }: TableFilterToolbarProps) => {
     });
   }, []);
 
-  const handleStatusChange = useCallback(
-    (newStatuses: (string | number)[]) => {
-      setSelectedStatuses(newStatuses);
-    },
-    [setSelectedStatuses]
-  );
-
-  const handleDateChange = useCallback(
-    (newDate: DateRange) => {
-      setDate(newDate);
-    },
-    [setDate]
-  );
-
-  const handleSourceChainChange = useCallback(
-    (newSourceChains: (string | number)[]) => {
-      setSelectedSourceChains(newSourceChains);
-    },
-    [setSelectedSourceChains]
-  );
-
-  const handleTargetChainChange = useCallback(
-    (newTargetChains: (string | number)[]) => {
-      setSelectedTargetChains(newTargetChains);
-    },
-    [setSelectedTargetChains]
-  );
-
-  const handleResetStatus = useCallback(() => {
-    setSelectedStatuses([]);
-  }, [setSelectedStatuses]);
-
-  const handleReset = useCallback(() => {
-    setSelectedStatuses([]);
-    setSelectedSourceChains([]);
-    setSelectedTargetChains([]);
-    setDate({ from: undefined, to: undefined });
-  }, [setDate, setSelectedSourceChains, setSelectedStatuses, setSelectedTargetChains]);
-
   const handleFilterBack = useCallback(() => {
     setCurrentFilterInfo({
       title: CURRENT_FILTERS_LIST[CURRENT_FILTERS.DEFAULT],
@@ -127,7 +75,7 @@ const TableFilterToolbar = ({ className }: TableFilterToolbarProps) => {
   }, []);
 
   const selectedNumber = useMemo(() => {
-    const dateNumber = date?.from && date?.to ? 1 : 0;
+    const dateNumber = date?.from || date?.to ? 1 : 0;
     const selectedStatusesNumber = selectedStatuses?.length ? 1 : 0;
     const selectedSourceChainsNumber = selectedSourceChains?.length ? 1 : 0;
     const selectedTargetChainsNumber = selectedTargetChains?.length ? 1 : 0;

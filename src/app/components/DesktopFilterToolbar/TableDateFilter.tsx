@@ -5,7 +5,7 @@ import { DateRange, SelectRangeEventHandler } from 'react-day-picker';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { ChevronDown } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 interface TableDateFilterProps {
   date?: DateRange;
@@ -35,17 +35,6 @@ const TableDateFilter = ({
     },
     [onChange]
   );
-
-  useEffect(() => {
-    if (!open && (!date?.from || !date?.to)) {
-      if (onChange) {
-        onChange({
-          from: undefined,
-          to: undefined
-        });
-      }
-    }
-  }, [open, onChange, date?.from, date?.to]);
 
   return (
     <Popover onOpenChange={setOpen}>

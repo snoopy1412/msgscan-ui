@@ -1,16 +1,13 @@
 import { Button } from '@/components/ui/button';
 
 import { MESSAGE_STATUS_LIST } from '@/config/status';
-import { useCallback } from 'react';
-import { useShallow } from 'zustand/react/shallow';
 import { CHAIN_OPTIONS } from '@/config/chains';
 import TableChainFilter from './TableChainFilter';
 import TableStatusFilter from './TableStatusFilter';
 import TableDateFilter from './TableDateFilter';
 
-import { DateRange } from 'react-day-picker';
+import useFilter from '../hooks/useFilter';
 import { cn } from '@/lib/utils';
-import useFilterStore from '@/store/filter';
 
 export interface TableFilterToolbarProps {
   className?: string;
@@ -21,63 +18,13 @@ const TableFilterToolbar = ({ className }: TableFilterToolbarProps) => {
     date,
     selectedSourceChains,
     selectedTargetChains,
-    setSelectedStatuses,
-    setDate,
-    setSelectedSourceChains,
-    setSelectedTargetChains
-  } = useFilterStore(
-    useShallow((state) => {
-      return {
-        selectedStatuses: state.selectedStatuses,
-        date: state.date,
-        selectedSourceChains: state.selectedSourceChains,
-        selectedTargetChains: state.selectedTargetChains,
-        setSelectedStatuses: state.setSelectedStatuses,
-        setDate: state.setDate,
-        setSelectedSourceChains: state.setSelectedSourceChains,
-        setSelectedTargetChains: state.setSelectedTargetChains
-      };
-    })
-  );
-
-  const handleStatusChange = useCallback(
-    (newStatuses: (string | number)[]) => {
-      setSelectedStatuses(newStatuses);
-    },
-    [setSelectedStatuses]
-  );
-
-  const handleDateChange = useCallback(
-    (newDate: DateRange) => {
-      setDate(newDate);
-    },
-    [setDate]
-  );
-
-  const handleSourceChainChange = useCallback(
-    (newSourceChains: (string | number)[]) => {
-      setSelectedSourceChains(newSourceChains);
-    },
-    [setSelectedSourceChains]
-  );
-
-  const handleTargetChainChange = useCallback(
-    (newTargetChains: (string | number)[]) => {
-      setSelectedTargetChains(newTargetChains);
-    },
-    [setSelectedTargetChains]
-  );
-
-  const handleResetStatus = useCallback(() => {
-    setSelectedStatuses([]);
-  }, [setSelectedStatuses]);
-
-  const handleReset = useCallback(() => {
-    setSelectedStatuses([]);
-    setSelectedSourceChains([]);
-    setSelectedTargetChains([]);
-    setDate({ from: undefined, to: undefined });
-  }, [setDate, setSelectedSourceChains, setSelectedStatuses, setSelectedTargetChains]);
+    handleStatusChange,
+    handleDateChange,
+    handleSourceChainChange,
+    handleTargetChainChange,
+    handleReset,
+    handleResetStatus
+  } = useFilter();
 
   return (
     <div className={cn('flex items-center justify-between py-5', className)}>

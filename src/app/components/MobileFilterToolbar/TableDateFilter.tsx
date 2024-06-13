@@ -1,7 +1,7 @@
 import { Calendar } from '@/components/ui/calendar';
 import { DateRange, SelectRangeEventHandler } from 'react-day-picker';
 
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 
 interface TableDateFilterProps {
   date?: DateRange;
@@ -22,18 +22,6 @@ const TableDateFilter = ({ date, onChange }: TableDateFilterProps) => {
     },
     [onChange]
   );
-
-  // useEffect(() => {
-  //   if (!date?.from || !date?.to) {
-  //     if (onChange) {
-  //       onChange({
-  //         from: undefined,
-  //         to: undefined
-  //       });
-  //     }
-  //   }
-  // }, [onChange, date?.from, date?.to]);
-  console.log('selectedDate', date);
 
   return (
     <div className="absolute left-0 top-0 w-[calc(100vw-3rem)] bg-background">

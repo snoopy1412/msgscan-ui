@@ -58,6 +58,10 @@ function useFilter() {
     setDate({ from: undefined, to: undefined });
   }, [setDate, setSelectedSourceChains, setSelectedStatuses, setSelectedTargetChains]);
 
+  const handleResetStatus = useCallback(() => {
+    setSelectedStatuses([]);
+  }, [setSelectedStatuses]);
+
   return {
     selectedStatuses,
     date,
@@ -67,7 +71,9 @@ function useFilter() {
     handleDateChange,
     handleSourceChainChange,
     handleTargetChainChange,
-    handleReset
+    handleReset,
+    handleResetStatus,
+    setDate
   };
 }
 

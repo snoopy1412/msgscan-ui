@@ -76,12 +76,8 @@ const DataTable = ({
 
   return (
     <div className="relative">
-      {breakpoint === 'default' || breakpoint === 'sm' || breakpoint === 'md' ? (
-        <MobileFilterToolbar className="flex lg:hidden" />
-      ) : (
-        <DesktopFilterToolbar className="hidden lg:flex" />
-      )}
-
+      <MobileFilterToolbar className="flex lg:hidden" />
+      <DesktopFilterToolbar className="hidden lg:flex" />
       <Separator />
       <Table className="table-fixed">
         <TableHeader>

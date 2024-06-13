@@ -1,8 +1,8 @@
 import { cn } from '@/lib/utils';
 import { TableFilterOption } from '@/types/helper';
-import { useMemo } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
+import useChainFilterLogic from '../hooks/useChainFilterLogic';
 
 interface TableChainFilterProps {
   options: TableFilterOption[];
@@ -12,39 +12,12 @@ interface TableChainFilterProps {
 }
 
 const TableChainFilter = ({ options, value, onChange, limit }: TableChainFilterProps) => {
-  const sortedOptions = useMemo(() => {
-    return [...options].sort((a, b) => (a?.label as string)?.localeCompare(b.label as string));
-  }, [options]);
-
-  const toggleItem = (itemValue: string | number) => {
-    if (value.length >= limit && !value.includes(itemValue)) {
-      return;
-    }
-    if (value.includes(itemValue)) {
-      onChange(value.filter((s) => s !== itemValue));
-    } else {
-      onChange([...value, itemValue]);
-    }
-  };
-
-  const handleSelectAll = () => {
-    if (value.length === limit) {
-      onChange([]);
-    } else {
-      const newValue = new Set(value);
-      for (const option of sortedOptions) {
-        if (newValue.size >= limit) break;
-        newValue.add(option.value);
-      }
-      onChange(Array.from(newValue));
-    }
-  };
-
-  const checkedAll = useMemo(() => {
-    if (value.length === limit) return true;
-    if (value.length !== 0) return 'indeterminate';
-    return false;
-  }, [value, limit]);
+  const { sortedOptions, toggleItem, handleSelectAll, checkedAll } = useChainFilterLogic({
+    options,
+    value,
+    onChange,
+    limit
+  });
 
   return (
     <div className="absolute left-0 top-0 w-[calc(100vw-3rem)] bg-background">
