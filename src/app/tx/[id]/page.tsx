@@ -1,5 +1,4 @@
 'use client';
-import Link from 'next/link';
 import {
   ArrowRightFromLine,
   ArrowRightToLine,
@@ -12,7 +11,6 @@ import {
   Unplug
 } from 'lucide-react';
 import Card from './components/Card';
-import { Button } from '@/components/ui/button';
 import { FlipWords } from '@/components/ui/flip-words';
 
 import OrmpIcon from '@/components/icon/ormp';
@@ -26,13 +24,15 @@ import { ChAIN_ID } from '@/types/chains';
 import { protocols } from '@/config/protocols';
 import ChainTxDisplay from '@/components/ChainTxDisplay';
 
-import { Separator } from '@/components/ui/separator';
 import ClipboardIconButton from '@/components/ClipboardIconButton';
 import ExplorerLinkButton from '@/components/ExplorerLinkButton';
 import { REFRESH_INTERVAL } from '@/config/site';
 
 import useBreakpoint from '@/utils/breakpoint';
 import { useMemo } from 'react';
+import FadeInDown from '@/components/ui/fade-in-down';
+import Pending from './components/pending';
+import BackToTop from '@/components/ui/back-to-top';
 
 function useMessage(id: string) {
   return useQuery({
@@ -77,193 +77,183 @@ const TxDetail = () => {
   const words = ['Transaction Details'];
 
   return isPending ? (
-    <div
-      className="flex w-full items-center justify-center"
-      style={{ minHeight: 'calc(100vh - var(--header-height) - var(--footer-height))' }}
-    >
-      <div>
-        <h3 className="animate-ellipsis text-center text-xl text-foreground">Search</h3>
-        <Separator className="my-2" />
-        <div className="flex flex-col items-center">
-          <p className="text-center text-sm text-secondary-foreground">
-            Messages sometimes take up to a minute to be indexed.
-          </p>
-          <p className="text-center text-sm text-secondary-foreground">
-            please wait or try again later.
-          </p>
-          <Button className="mt-4 p-0">
-            <Link href="/" className="block w-full px-4 py-2">
-              Back Home
-            </Link>
-          </Button>
-        </div>
-      </div>
-    </div>
+    <Pending />
   ) : (
-    <div>
-      <header className="my-5 text-base font-light leading-8 text-foreground lg:text-xl">
-        <FlipWords words={words} />
-      </header>
-      <div className="flex flex-col gap-[0.12rem]">
-        <Card title="MsgId" icon={<SquareUser size={iconSize} strokeWidth={1.25} />}>
-          <div className="w-full break-words">{data?.message?.id}</div>
-        </Card>
+    <FadeInDown duration={0.2}>
+      <div>
+        <header className="my-5 text-base font-light leading-8 text-foreground lg:text-xl">
+          <FlipWords words={words} />
+        </header>
+        <div className="flex flex-col gap-[0.12rem]">
+          <Card title="MsgId" icon={<SquareUser size={iconSize} strokeWidth={1.25} />}>
+            <div className="w-full break-words">{data?.message?.id}</div>
+          </Card>
 
-        <Card title="Status" icon={<PackageSearch size={iconSize} strokeWidth={1.25} />}>
-          {typeof data?.message?.status !== 'undefined' && (
-            <MessageStatus status={data?.message?.status} />
-          )}
-        </Card>
+          <Card title="Status" icon={<PackageSearch size={iconSize} strokeWidth={1.25} />}>
+            {typeof data?.message?.status !== 'undefined' && (
+              <MessageStatus status={data?.message?.status} />
+            )}
+          </Card>
 
-        <Card
-          title="Source Transaction Hash"
-          icon={<ArrowRightFromLine size={iconSize} strokeWidth={1.25} />}
-        >
-          <div className="flex items-center">
-            {data?.message?.sourceTransactionHash ? (
-              <ChainTxDisplay
-                chain={sourceChain}
-                className="w-[90%] max-w-[calc(100vw-14rem)]"
-                rootClassName="gap-[0.62rem]"
-                isFullText
-                value={data?.message?.sourceTransactionHash}
-                isLink={false}
-              >
-                <ClipboardIconButton text={data?.message?.sourceTransactionHash} size={16} />
+          <Card
+            title="Source Transaction Hash"
+            icon={<ArrowRightFromLine size={iconSize} strokeWidth={1.25} />}
+          >
+            <div className="flex items-center">
+              {data?.message?.sourceTransactionHash ? (
+                <ChainTxDisplay
+                  chain={sourceChain}
+                  className="w-[90%] max-w-[calc(100vw-14rem)]"
+                  rootClassName="gap-[0.62rem]"
+                  isFullText
+                  value={data?.message?.sourceTransactionHash}
+                  isLink={false}
+                >
+                  <ClipboardIconButton text={data?.message?.sourceTransactionHash} size={16} />
 
+                  {sourceChain ? (
+                    <ExplorerLinkButton
+                      url={`${sourceChain?.blockExplorers?.default?.url}/tx/${data?.message?.sourceTransactionHash}`}
+                    />
+                  ) : null}
+                </ChainTxDisplay>
+              ) : null}
+            </div>
+          </Card>
+
+          <Card
+            title="Target Transaction Hash"
+            icon={<ArrowRightToLine size={iconSize} strokeWidth={1.25} />}
+          >
+            <div className="flex items-center">
+              {data?.message?.targetTransactionHash ? (
+                <ChainTxDisplay
+                  chain={targetChain}
+                  className="w-[90%] max-w-[calc(100vw-14rem)]"
+                  rootClassName="gap-[0.62rem]"
+                  isFullText
+                  value={data?.message?.targetTransactionHash}
+                  isLink={false}
+                >
+                  <ClipboardIconButton text={data?.message?.targetTransactionHash} size={16} />
+                  {targetChain ? (
+                    <ExplorerLinkButton
+                      url={`${sourceChain?.blockExplorers?.default?.url}/tx/${data?.message?.targetTransactionHash}`}
+                    />
+                  ) : null}
+                </ChainTxDisplay>
+              ) : null}
+            </div>
+          </Card>
+
+          <Card
+            title="Messaging Protocol"
+            icon={<MessageSquareCode size={iconSize} strokeWidth={1.25} />}
+          >
+            {protocol && ProtocolIcon ? (
+              <div className="flex items-center gap-[0.31rem]">
+                <ProtocolIcon />
+                <span className="text-sm">{protocol.title}</span>
+              </div>
+            ) : null}
+          </Card>
+
+          <Card
+            title="Message Payload"
+            icon={<MessageSquareWarning size={iconSize} strokeWidth={1.25} />}
+          >
+            <div className="w-full break-words rounded bg-background p-5">
+              {data?.message?.payload}
+            </div>
+          </Card>
+
+          <Card
+            title="Message Params"
+            icon={<MessageSquareQuote size={iconSize} strokeWidth={1.25} />}
+          >
+            <div className="w-full break-words rounded bg-background p-5">
+              {data?.message?.params}
+            </div>
+          </Card>
+
+          <Card
+            title="Source Dapp Address"
+            icon={<LayoutGrid size={iconSize} strokeWidth={1.25} />}
+          >
+            {data?.message?.sourceDappAddress ? (
+              <div className="flex w-full items-center gap-[0.62rem]">
+                <span className="max-w-[calc(100vw-10rem)] truncate">
+                  {data?.message?.sourceDappAddress}
+                </span>
+                <ClipboardIconButton text={data?.message?.sourceDappAddress} size={16} />
                 {sourceChain ? (
                   <ExplorerLinkButton
-                    url={`${sourceChain?.blockExplorers?.default?.url}/tx/${data?.message?.sourceTransactionHash}`}
+                    url={`${sourceChain?.blockExplorers?.default?.url}/address/${data?.message?.sourceDappAddress}`}
                   />
                 ) : null}
-              </ChainTxDisplay>
+              </div>
             ) : null}
-          </div>
-        </Card>
+          </Card>
 
-        <Card
-          title="Target Transaction Hash"
-          icon={<ArrowRightToLine size={iconSize} strokeWidth={1.25} />}
-        >
-          <div className="flex items-center">
-            {data?.message?.targetTransactionHash ? (
-              <ChainTxDisplay
-                chain={targetChain}
-                className="w-[90%] max-w-[calc(100vw-14rem)]"
-                rootClassName="gap-[0.62rem]"
-                isFullText
-                value={data?.message?.targetTransactionHash}
-                isLink={false}
-              >
-                <ClipboardIconButton text={data?.message?.targetTransactionHash} size={16} />
+          <Card title="Source Port Address" icon={<Unplug size={iconSize} strokeWidth={1.25} />}>
+            {data?.message?.sourcePortAddress ? (
+              <div className="flex w-full items-center gap-[0.62rem]">
+                <span className="max-w-[calc(100vw-10rem)] truncate">
+                  {data?.message?.sourcePortAddress}
+                </span>
+                <ClipboardIconButton text={data?.message?.sourcePortAddress} size={16} />
+                {sourceChain ? (
+                  <ExplorerLinkButton
+                    url={`${sourceChain?.blockExplorers?.default?.url}/address/${data?.message?.sourcePortAddress}`}
+                  />
+                ) : null}
+              </div>
+            ) : null}
+          </Card>
+
+          <Card
+            title="Target Dapp Address"
+            icon={<LayoutGrid size={iconSize} strokeWidth={1.25} />}
+          >
+            {data?.message?.targetDappAddress ? (
+              <div className="flex w-full items-center gap-[0.62rem]">
+                <span className="max-w-[calc(100vw-10rem)] truncate">
+                  {data?.message?.targetDappAddress}
+                </span>
+                <ClipboardIconButton text={data?.message?.targetDappAddress} size={16} />
                 {targetChain ? (
                   <ExplorerLinkButton
-                    url={`${sourceChain?.blockExplorers?.default?.url}/tx/${data?.message?.targetTransactionHash}`}
+                    url={`${sourceChain?.blockExplorers?.default?.url}/address/${data?.message?.targetDappAddress}`}
                   />
                 ) : null}
-              </ChainTxDisplay>
+              </div>
             ) : null}
-          </div>
-        </Card>
+          </Card>
+          <Card title="Target Port Address" icon={<Unplug size={iconSize} strokeWidth={1.25} />}>
+            {data?.message?.targetPortAddress ? (
+              <div className="flex w-full items-center gap-[0.62rem]">
+                <span className="max-w-[calc(100vw-10rem)] truncate">
+                  {data?.message?.targetPortAddress}
+                </span>
+                <ClipboardIconButton text={data?.message?.targetPortAddress} size={16} />
+                {targetChain ? (
+                  <ExplorerLinkButton
+                    url={`${sourceChain?.blockExplorers?.default?.url}/address/${data?.message?.targetPortAddress}`}
+                  />
+                ) : null}
+              </div>
+            ) : null}
+          </Card>
 
-        <Card
-          title="Messaging Protocol"
-          icon={<MessageSquareCode size={iconSize} strokeWidth={1.25} />}
-        >
-          {protocol && ProtocolIcon ? (
-            <div className="flex items-center gap-[0.31rem]">
-              <ProtocolIcon />
-              <span className="text-sm">{protocol.title}</span>
-            </div>
-          ) : null}
-        </Card>
-
-        <Card
-          title="Message Payload"
-          icon={<MessageSquareWarning size={iconSize} strokeWidth={1.25} />}
-        >
-          <div className="w-full break-words rounded bg-background p-5">
-            {data?.message?.payload}
-          </div>
-        </Card>
-
-        <Card
-          title="Message Params"
-          icon={<MessageSquareQuote size={iconSize} strokeWidth={1.25} />}
-        >
-          <div className="w-full break-words rounded bg-background p-5">
-            {data?.message?.params}
-          </div>
-        </Card>
-
-        <Card title="Source Dapp Address" icon={<LayoutGrid size={iconSize} strokeWidth={1.25} />}>
-          {data?.message?.sourceDappAddress ? (
-            <div className="flex w-full items-center gap-[0.62rem]">
-              <span className="max-w-[calc(100vw-10rem)] truncate">
-                {data?.message?.sourceDappAddress}
-              </span>
-              <ClipboardIconButton text={data?.message?.sourceDappAddress} size={16} />
-              {sourceChain ? (
-                <ExplorerLinkButton
-                  url={`${sourceChain?.blockExplorers?.default?.url}/address/${data?.message?.sourceDappAddress}`}
-                />
-              ) : null}
-            </div>
-          ) : null}
-        </Card>
-
-        <Card title="Source Port Address" icon={<Unplug size={iconSize} strokeWidth={1.25} />}>
-          {data?.message?.sourcePortAddress ? (
-            <div className="flex w-full items-center gap-[0.62rem]">
-              <span className="max-w-[calc(100vw-10rem)] truncate">
-                {data?.message?.sourcePortAddress}
-              </span>
-              <ClipboardIconButton text={data?.message?.sourcePortAddress} size={16} />
-              {sourceChain ? (
-                <ExplorerLinkButton
-                  url={`${sourceChain?.blockExplorers?.default?.url}/address/${data?.message?.sourcePortAddress}`}
-                />
-              ) : null}
-            </div>
-          ) : null}
-        </Card>
-
-        <Card title="Target Dapp Address" icon={<LayoutGrid size={iconSize} strokeWidth={1.25} />}>
-          {data?.message?.targetDappAddress ? (
-            <div className="flex w-full items-center gap-[0.62rem]">
-              <span className="max-w-[calc(100vw-10rem)] truncate">
-                {data?.message?.targetDappAddress}
-              </span>
-              <ClipboardIconButton text={data?.message?.targetDappAddress} size={16} />
-              {targetChain ? (
-                <ExplorerLinkButton
-                  url={`${sourceChain?.blockExplorers?.default?.url}/address/${data?.message?.targetDappAddress}`}
-                />
-              ) : null}
-            </div>
-          ) : null}
-        </Card>
-        <Card title="Target Port Address" icon={<Unplug size={iconSize} strokeWidth={1.25} />}>
-          {data?.message?.targetPortAddress ? (
-            <div className="flex w-full items-center gap-[0.62rem]">
-              <span className="max-w-[calc(100vw-10rem)] truncate">
-                {data?.message?.targetPortAddress}
-              </span>
-              <ClipboardIconButton text={data?.message?.targetPortAddress} size={16} />
-              {targetChain ? (
-                <ExplorerLinkButton
-                  url={`${sourceChain?.blockExplorers?.default?.url}/address/${data?.message?.targetPortAddress}`}
-                />
-              ) : null}
-            </div>
-          ) : null}
-        </Card>
-
-        <Card title="ORMP Info" icon={<OrmpIcon />}>
-          <OrmpInfo />
-        </Card>
+          <Card title="ORMP Info" icon={<OrmpIcon />}>
+            <OrmpInfo />
+          </Card>
+        </div>
+        <div className="flex items-center justify-end pt-4">
+          <BackToTop />
+        </div>
       </div>
-    </div>
+    </FadeInDown>
   );
 };
 
