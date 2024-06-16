@@ -1,6 +1,14 @@
+'use client';
+import { useOrmpInfo } from '@/hooks/services';
 import { cn } from '@/lib/utils';
 
-const OrmpInfo = () => {
+interface OrmpInfoProps {
+  id: string;
+}
+
+const OrmpInfo = ({ id }: OrmpInfoProps) => {
+  const { data: ormpInfo } = useOrmpInfo(id as string);
+
   const data = [
     {
       title: 'msgHash',
