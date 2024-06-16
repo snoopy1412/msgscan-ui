@@ -30,7 +30,7 @@ import TransactionHashInfo from './components/TransactionHashInfo';
 import AddressInfo from './components/AddressInfo';
 import { useMessage, useOrmpInfo } from '@/hooks/services';
 
-const TxDetail = () => {
+export default function Page() {
   const breakpoint = useBreakpoint();
   const params = useParams();
   const { data, isPending } = useMessage(params?.id as string);
@@ -150,6 +150,4 @@ const TxDetail = () => {
       </div>
     </FadeInDown>
   );
-};
-
-export default TxDetail;
+}
