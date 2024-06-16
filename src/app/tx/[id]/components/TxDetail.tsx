@@ -28,7 +28,7 @@ const words = ['Transaction Details'];
 
 interface TxDetailProps {
   id: string;
-  iconSize: number;
+  iconSize?: number;
   message: MessageResponse['message'];
   sourceChain?: CHAIN;
   targetChain?: CHAIN;

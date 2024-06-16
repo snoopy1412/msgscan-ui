@@ -2,6 +2,7 @@ import React from 'react';
 import { useWindowScroll } from 'react-use';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const animationVariants = {
   initial: { opacity: 0, scale: 0.8 },
@@ -14,7 +15,7 @@ interface BackToTopButtonProps {
 }
 const BackToTopButton = ({ className }: BackToTopButtonProps) => {
   const { y: pageYOffset } = useWindowScroll();
-  const isVisible = pageYOffset > 300;
+  const isVisible = pageYOffset > 200;
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -29,7 +30,10 @@ const BackToTopButton = ({ className }: BackToTopButtonProps) => {
           exit={animationVariants.exit}
           transition={{ duration: 0.3 }}
           onClick={scrollToTop}
-          className="group z-[1000] flex cursor-pointer items-center justify-center rounded border-none bg-card p-1 text-sm"
+          className={cn(
+            'group z-[1000] flex cursor-pointer items-center justify-center rounded border-none bg-card p-1 text-sm',
+            className
+          )}
         >
           <ArrowUp
             size={18}

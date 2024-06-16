@@ -6,22 +6,17 @@ import { useMessage } from '@/hooks/services';
 import Pending from './Pending';
 import TxDetail from './TxDetail';
 import NotFound from './NotFound';
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import useBreakpoint from '@/hooks/breakpoint';
 
 interface ClientPageProps {
   id: string;
 }
 export default function ClientPage({ id }: ClientPageProps) {
-  const { data, isPending } = useMessage(id as string);
   const breakpoint = useBreakpoint();
+  const [iconSize, setIconSize] = useState(22);
+  const { data, isPending, isSuccess, isError } = useMessage(id as string);
 
-  const iconSize = useMemo(() => {
-    if (breakpoint === 'desktop') {
-      return 22;
-    }
-    return 18;
-  }, [breakpoint]);
   const sourceChain = chains?.find(
     (chain) => chain.id === (Number(data?.message?.sourceChainId) as unknown as ChAIN_ID)
   );
@@ -30,9 +25,21 @@ export default function ClientPage({ id }: ClientPageProps) {
     (chain) => chain.id === (Number(data?.message?.targetChainId) as unknown as ChAIN_ID)
   );
 
-  return isPending ? (
-    <Pending />
-  ) : data?.message ? (
+  useEffect(() => {
+    if (breakpoint === 'desktop') {
+      setIconSize(22);
+    } else {
+      setIconSize(18);
+    }
+  }, [breakpoint]);
+
+  if ((isSuccess || isError) && !data?.message) {
+    return <NotFound />;
+  }
+  if (isPending) {
+    return <Pending />;
+  }
+  return data?.message ? (
     <TxDetail
       id={id}
       sourceChain={sourceChain}
@@ -40,7 +47,5 @@ export default function ClientPage({ id }: ClientPageProps) {
       message={data?.message}
       iconSize={iconSize}
     />
-  ) : (
-    <NotFound />
-  );
+  ) : null;
 }
