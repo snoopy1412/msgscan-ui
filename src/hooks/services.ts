@@ -1,6 +1,7 @@
 import { REFRESH_INTERVAL } from '@/config/site';
 import { fetchMessage, fetchMessages, fetchMessagesInfos, fetchOrmpInfo } from '@/graphql/services';
 import { MessagesQueryVariables } from '@/graphql/type';
+import { MESSAGE_STATUS } from '@/types/message';
 import { useQuery } from '@tanstack/react-query';
 
 export function useMessages(variables: MessagesQueryVariables = {}) {
@@ -42,7 +43,10 @@ export function useMessage(id: string) {
   return useQuery({
     queryKey: ['message', id],
     queryFn: async () => fetchMessage(id),
-    refetchInterval: REFRESH_INTERVAL
+    refetchInterval(query) {
+      const status = query?.state?.data?.message?.status;
+      return status === MESSAGE_STATUS.PENDING ? REFRESH_INTERVAL : undefined;
+    }
   });
 }
 
