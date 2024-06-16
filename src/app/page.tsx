@@ -14,6 +14,8 @@ import SearchBar from '@/components/SearchBar';
 import { useMessages, useMessagesInfos } from '@/hooks/services';
 
 export default function Page() {
+  const queryClient = useQueryClient();
+
   const [queryVariables, setQueryVariables] = useState<MessagesQueryVariables>({
     limit: 10,
     orderBy: 'sourceBlockTimestamp',
@@ -29,7 +31,6 @@ export default function Page() {
       };
     })
   );
-  const queryClient = useQueryClient();
 
   useEffect(() => {
     const where: any = {};

@@ -22,7 +22,6 @@ import { Message, PageInfo } from '@/graphql/type';
 import { columns } from '../data/columns';
 import DesktopFilterToolbar from './DesktopFilterToolbar';
 import MobileFilterToolbar from './MobileFilterToolbar';
-import useBreakpoint from '@/utils/breakpoint';
 
 const fadeInOut = {
   hidden: { opacity: 0 },
@@ -49,7 +48,6 @@ const DataTable = ({
   onPreviousPageClick,
   onNextPageClick
 }: TableProps) => {
-  const breakpoint = useBreakpoint();
   const [activePageType, setActivePageType] = useState<'previous' | 'next' | ''>('');
 
   const handlePreviousPageClick = useCallback<React.MouseEventHandler<HTMLLIElement>>(

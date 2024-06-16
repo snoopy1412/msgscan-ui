@@ -21,7 +21,7 @@ import { chains } from '@/config/chains';
 import { ChAIN_ID } from '@/types/chains';
 import { protocols } from '@/config/protocols';
 
-import useBreakpoint from '@/utils/breakpoint';
+import useBreakpoint from '@/hooks/breakpoint';
 import { useMemo } from 'react';
 import FadeInDown from '@/components/ui/fade-in-down';
 import Pending from './components/Pending';
@@ -31,16 +31,15 @@ import AddressInfo from './components/AddressInfo';
 import { useMessage, useOrmpInfo } from '@/hooks/services';
 
 const TxDetail = () => {
+  const breakpoint = useBreakpoint();
   const params = useParams();
   const { data, isPending } = useMessage(params?.id as string);
 
-  const breakpoint = useBreakpoint();
-
   const iconSize = useMemo(() => {
-    if (breakpoint === 'default' || breakpoint === 'sm' || breakpoint === 'md') {
-      return 18;
+    if (breakpoint === 'desktop') {
+      return 22;
     }
-    return 22;
+    return 18;
   }, [breakpoint]);
 
   const { data: ormpInfo } = useOrmpInfo(params?.id as string);
