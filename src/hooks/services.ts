@@ -45,7 +45,9 @@ export function useMessage(id: string) {
     queryFn: async () => fetchMessage(id),
     refetchInterval(query) {
       const status = query?.state?.data?.message?.status;
-      return status === MESSAGE_STATUS.PENDING ? REFRESH_INTERVAL : undefined;
+      return status !== MESSAGE_STATUS.FAILED && status !== MESSAGE_STATUS.SUCCESS
+        ? REFRESH_INTERVAL
+        : undefined;
     }
   });
 }
