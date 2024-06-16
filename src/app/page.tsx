@@ -2,8 +2,7 @@
 import { Separator } from '@/components/ui/separator';
 
 import StatsContainer from '@/components/StatsContainer';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { fetchMessages, fetchMessagesInfos } from '@/graphql/services';
+import { useQueryClient } from '@tanstack/react-query';
 import { MessagesQueryVariables } from '@/graphql/type';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -11,44 +10,8 @@ import DataTable from './components/Table';
 import { useCallback, useEffect, useState } from 'react';
 import { createTimestampQuery } from '@/utils';
 import useFilterStore from '@/store/filter';
-import { REFRESH_INTERVAL } from '@/config/site';
 import SearchBar from '@/components/SearchBar';
-
-function useMessages(variables: MessagesQueryVariables = {}) {
-  return useQuery({
-    queryKey: ['messages', variables],
-    queryFn: async () => fetchMessages(variables),
-    refetchInterval: REFRESH_INTERVAL,
-    placeholderData(prevData) {
-      const hasRealData = prevData?.messages?.items.some((item) => item.status !== -1);
-      return hasRealData
-        ? prevData
-        : {
-            messages: {
-              items: Array.from({ length: variables.limit || 10 }).map((_, index) => ({
-                id: index.toString(),
-                protocol: 'eth',
-                status: -1
-              })),
-              pageInfo: {
-                hasNextPage: false,
-                hasPreviousPage: false,
-                startCursor: undefined,
-                endCursor: undefined
-              }
-            }
-          };
-    }
-  });
-}
-
-function useMessagesInfos(variables: MessagesQueryVariables = {}) {
-  return useQuery({
-    queryKey: ['messagesInfos', variables],
-    queryFn: async () => fetchMessagesInfos(variables),
-    refetchInterval: REFRESH_INTERVAL
-  });
-}
+import { useMessages, useMessagesInfos } from '@/hooks/services';
 
 export default function Page() {
   const [queryVariables, setQueryVariables] = useState<MessagesQueryVariables>({
