@@ -7,16 +7,30 @@ import { formatNumber } from '@/utils';
 interface CounterProps {
   target: number;
 }
+
 function Counter({ target }: CounterProps) {
   const [displayValue, setDisplayValue] = useState(0);
+  const controls = useRef<any>(null);
   const prevTargetRef = useRef(0);
 
   useEffect(() => {
+    const targetInt = Math.floor(target);
     const prevTarget = prevTargetRef.current;
-    animate(prevTarget, target, {
+    const prevTargetInt = Math.floor(prevTarget);
+
+    if (controls.current) {
+      controls.current.stop();
+    }
+
+    controls.current = animate(prevTargetInt, targetInt, {
       duration: 1,
       ease: 'easeInOut',
-      onUpdate: (latest) => setDisplayValue(parseFloat(latest.toFixed(2)))
+      onUpdate: (latest) => {
+        setDisplayValue(Math.floor(latest));
+      },
+      onComplete: () => {
+        setDisplayValue(target);
+      }
     });
 
     prevTargetRef.current = target;

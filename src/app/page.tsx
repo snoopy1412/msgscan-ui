@@ -1,17 +1,18 @@
 'use client';
-import { Separator } from '@/components/ui/separator';
-
-import StatsContainer from '@/components/StatsContainer';
+import { useCallback, useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { MessagesQueryVariables } from '@/graphql/type';
 import { useShallow } from 'zustand/react/shallow';
+import { produce } from 'immer';
 
 import DataTable from './components/Table';
-import { useCallback, useEffect, useState } from 'react';
 import { createTimestampQuery } from '@/utils';
 import useFilterStore from '@/store/filter';
 import SearchBar from '@/components/SearchBar';
 import { useMessages, useMessagesInfos } from '@/hooks/services';
+
+import { Separator } from '@/components/ui/separator';
+import StatsContainer from '@/components/StatsContainer';
 
 export default function Page() {
   const queryClient = useQueryClient();
@@ -21,6 +22,13 @@ export default function Page() {
     orderBy: 'sourceBlockTimestamp',
     orderDirection: 'desc'
   });
+  const updateQueryVariables = (updates: Partial<MessagesQueryVariables>) => {
+    setQueryVariables((prev) =>
+      produce(prev, (draft) => {
+        Object.assign(draft, updates);
+      })
+    );
+  };
   const { selectedStatuses, date, selectedSourceChains, selectedTargetChains } = useFilterStore(
     useShallow((state) => {
       return {
@@ -65,10 +73,6 @@ export default function Page() {
     });
   }, [queryClient, selectedStatuses, date, selectedSourceChains, selectedTargetChains]);
 
-  const updateQueryVariables = (updates: Partial<MessagesQueryVariables>) => {
-    setQueryVariables((prev) => ({ ...prev, ...updates }));
-  };
-
   const { data, isFetching } = useMessages(queryVariables);
 
   const { data: messagesInfos } = useMessagesInfos();
@@ -82,6 +86,7 @@ export default function Page() {
     const pageInfo = data?.messages?.pageInfo;
     updateQueryVariables({ after: pageInfo?.endCursor, before: undefined });
   }, [data?.messages?.pageInfo]);
+
   return (
     <>
       <div className="block lg:hidden">

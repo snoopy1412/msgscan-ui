@@ -1,5 +1,3 @@
-'use client';
-
 import ErrorDisplay from '@/components/ErrorDisplay';
 
 const NotFound = () => {
