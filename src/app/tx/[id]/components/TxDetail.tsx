@@ -1,4 +1,3 @@
-'use client';
 import {
   ArrowRightFromLine,
   ArrowRightToLine,
@@ -18,8 +17,6 @@ import MessageStatus from '@/components/MessageStatus';
 import OrmpInfo from './OrmpInfo';
 import { CHAIN } from '@/types/chains';
 
-import useBreakpoint from '@/hooks/breakpoint';
-import { useMemo } from 'react';
 import FadeInDown from '@/components/ui/fade-in-down';
 import BackToTop from '@/components/ui/back-to-top';
 import TransactionHashInfo from './TransactionHashInfo';
@@ -31,20 +28,18 @@ const words = ['Transaction Details'];
 
 interface TxDetailProps {
   id: string;
+  iconSize: number;
   message: MessageResponse['message'];
   sourceChain?: CHAIN;
   targetChain?: CHAIN;
 }
-export default function TxDetail({ id, sourceChain, targetChain, message }: TxDetailProps) {
-  const breakpoint = useBreakpoint();
-
-  const iconSize = useMemo(() => {
-    if (breakpoint === 'desktop') {
-      return 22;
-    }
-    return 18;
-  }, [breakpoint]);
-
+export default function TxDetail({
+  id,
+  iconSize,
+  sourceChain,
+  targetChain,
+  message
+}: TxDetailProps) {
   return (
     <FadeInDown duration={0.2}>
       <div>
