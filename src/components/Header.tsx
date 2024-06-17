@@ -18,7 +18,7 @@ import SearchBar from './SearchBar';
 
 const Header = () => {
   return (
-    <header className="bg-background">
+    <header className="fixed left-0 top-0 z-50 w-screen bg-background/50 backdrop-blur-sm">
       <div className="container flex h-[var(--header-height)] items-center justify-between gap-4">
         <Link href="/">
           <Image

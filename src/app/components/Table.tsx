@@ -122,7 +122,7 @@ const DataTable = ({
                       initial="hidden"
                       animate="visible"
                       variants={fadeInOut}
-                      className="truncate"
+                      className="truncate text-sm"
                     >
                       {column.render((message as unknown as any)[column.dataIndex], message, index)}
                     </motion.div>

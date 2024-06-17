@@ -76,7 +76,7 @@ export default function RootLayout({
           <div>
             <Header />
             <div
-              className="container"
+              className="container pt-[var(--header-height)]"
               style={{
                 minHeight: 'calc(100vh - var(--header-height) - var(--footer-height))'
               }}
