@@ -46,6 +46,7 @@ const TableFilterToolbar = ({ className }: TableFilterToolbarProps) => {
           value={selectedSourceChains}
           onChange={handleSourceChainChange}
           title="Source"
+          contentClassName="w-[28rem]"
           limit={6}
         />
 
