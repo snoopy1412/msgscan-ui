@@ -40,7 +40,7 @@ export const columns: Column[] = [
         return <Skeleton className="h-[22px] w-full rounded-full" />;
       }
       return (
-        <Link href={`/tx/${value}`} className="hover:underline" title={value}>
+        <Link href={`/message/${value}`} className="hover:underline" title={value}>
           {value}
         </Link>
       );
