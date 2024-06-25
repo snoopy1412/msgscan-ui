@@ -16,8 +16,8 @@ import { useState } from 'react';
 
 interface TableStatusFilterProps {
   options: TableFilterOption[];
-  value: (string | number)[];
-  onChange: (newValue: (string | number)[]) => void;
+  value: number[];
+  onChange: (newValue: number[]) => void;
   title: React.ReactNode;
   onClearFilters?: () => void;
   buttonClassName?: string;
@@ -35,7 +35,7 @@ const TableStatusFilter = ({
 }: TableStatusFilterProps) => {
   const [open, setOpen] = useState(false);
 
-  const toggleItem = (itemValue: string | number) => {
+  const toggleItem = (itemValue: number) => {
     if (value.includes(itemValue)) {
       onChange(value.filter((s) => s !== itemValue));
     } else {

@@ -1,8 +1,8 @@
 import { DEPLOY_ENV } from '@/types/env';
 
 export const APP_BASE_API_URL_MAP = {
-  [DEPLOY_ENV.MAINNET]: 'http://g2.generic.darwinia.network:42049',
-  [DEPLOY_ENV.TESTNET]: 'http://g2.generic.darwinia.network:42049'
+  [DEPLOY_ENV.MAINNET]: 'https://indexer.bigdevenergy.link/ed7db02/v1/graphql',
+  [DEPLOY_ENV.TESTNET]: 'https://indexer.bigdevenergy.link/ed7db02/v1/graphql'
 };
 
 export const APP_BASE_API_URL =

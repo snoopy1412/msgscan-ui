@@ -24,7 +24,7 @@ function useFilter() {
   }));
 
   const handleStatusChange = useCallback(
-    (newStatuses: (string | number)[]) => {
+    (newStatuses: number[]) => {
       setSelectedStatuses(newStatuses);
     },
     [setSelectedStatuses]
@@ -38,14 +38,14 @@ function useFilter() {
   );
 
   const handleSourceChainChange = useCallback(
-    (newSourceChains: (string | number)[]) => {
+    (newSourceChains: number[]) => {
       setSelectedSourceChains(newSourceChains);
     },
     [setSelectedSourceChains]
   );
 
   const handleTargetChainChange = useCallback(
-    (newTargetChains: (string | number)[]) => {
+    (newTargetChains: number[]) => {
       setSelectedTargetChains(newTargetChains);
     },
     [setSelectedTargetChains]

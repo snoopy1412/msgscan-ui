@@ -1,4 +1,4 @@
 export type TableFilterOption = {
   label: React.ReactNode;
-  value: string | number;
+  value: number;
 };

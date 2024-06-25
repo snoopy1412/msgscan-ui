@@ -1,7 +1,7 @@
 'use client';
 import { useCallback, useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { MessagesQueryVariables } from '@/graphql/type';
+import { MessageFullBoolExp, MessageFullQueryParams, OrderBy } from '@/graphql/type';
 import { useShallow } from 'zustand/react/shallow';
 import { produce } from 'immer';
 
@@ -9,7 +9,7 @@ import DataTable from './components/Table';
 import { createTimestampQuery } from '@/utils';
 import useFilterStore from '@/store/filter';
 import SearchBar from '@/components/SearchBar';
-import { useMessages, useMessagesInfos } from '@/hooks/services';
+import { useMessageFull, useMessageProgress } from '@/hooks/services';
 
 import { Separator } from '@/components/ui/separator';
 import StatsContainer from '@/components/StatsContainer';
@@ -17,12 +17,17 @@ import StatsContainer from '@/components/StatsContainer';
 export default function Page() {
   const queryClient = useQueryClient();
 
-  const [queryVariables, setQueryVariables] = useState<MessagesQueryVariables>({
+  const [queryVariables, setQueryVariables] = useState<MessageFullQueryParams>({
+    offset: 0,
     limit: 10,
-    orderBy: 'sourceBlockTimestamp',
-    orderDirection: 'desc'
+    orderBy: [
+      {
+        sourceBlockTimestamp: OrderBy.Desc
+      }
+    ]
   });
-  const updateQueryVariables = (updates: Partial<MessagesQueryVariables>) => {
+
+  const updateQueryVariables = (updates: Partial<MessageFullQueryParams>) => {
     setQueryVariables((prev) =>
       produce(prev, (draft) => {
         Object.assign(draft, updates);
@@ -41,51 +46,67 @@ export default function Page() {
   );
 
   useEffect(() => {
-    const where: any = {};
+    const where: Partial<MessageFullBoolExp> = {};
 
-    where.status_in =
-      selectedStatuses && selectedStatuses?.length > 0 ? selectedStatuses : undefined;
+    where.status =
+      selectedStatuses && selectedStatuses?.length > 0
+        ? {
+            _in: selectedStatuses
+          }
+        : undefined;
 
-    where.sourceChainId_in =
-      selectedSourceChains && selectedSourceChains?.length > 0 ? selectedSourceChains : undefined;
+    where.sourceChainId =
+      selectedSourceChains && selectedSourceChains?.length > 0
+        ? {
+            _in: selectedSourceChains
+          }
+        : undefined;
 
-    where.targetChainId_in =
-      selectedTargetChains && selectedTargetChains?.length > 0 ? selectedTargetChains : undefined;
+    where.targetChainId =
+      selectedTargetChains && selectedTargetChains?.length > 0
+        ? {
+            _in: selectedTargetChains
+          }
+        : undefined;
 
     if (date && (date?.from || date?.to)) {
-      Object.assign(where, createTimestampQuery(date));
+      Object.assign(where, {
+        sourceBlockTimestamp: createTimestampQuery(date)
+      });
     } else {
-      where.sourceBlockTimestamp_gte = undefined;
-      where.sourceBlockTimestamp_lte = undefined;
+      where.sourceBlockTimestamp = undefined;
     }
 
-    let params: MessagesQueryVariables = {
-      where: Object.keys(where).some((key) => where[key] !== undefined) ? where : undefined
+    let params: MessageFullQueryParams = {
+      where: Object.values(where).some((value) => value !== undefined) ? where : undefined
     };
     if (params.where) {
-      params.after = undefined;
-      params.before = undefined;
+      params.offset = 0;
     }
 
     updateQueryVariables(params);
     queryClient.resetQueries({
-      queryKey: ['messages']
+      queryKey: ['messageFull']
     });
   }, [queryClient, selectedStatuses, date, selectedSourceChains, selectedTargetChains]);
 
-  const { data, isFetching } = useMessages(queryVariables);
+  const { data, isFetching } = useMessageFull(queryVariables);
 
-  const { data: messagesInfos } = useMessagesInfos();
+  const { data: messageProgress } = useMessageProgress();
 
   const handlePreviousPageClick = useCallback(() => {
-    const pageInfo = data?.messages?.pageInfo;
-    updateQueryVariables({ before: pageInfo?.startCursor, after: undefined });
-  }, [data?.messages?.pageInfo]);
+    const offset = queryVariables?.offset;
+
+    if (offset === undefined || offset < 1) return;
+
+    updateQueryVariables({ offset: offset - 1 });
+  }, [queryVariables]);
 
   const handleNextPageClick = useCallback(() => {
-    const pageInfo = data?.messages?.pageInfo;
-    updateQueryVariables({ after: pageInfo?.endCursor, before: undefined });
-  }, [data?.messages?.pageInfo]);
+    const offset = queryVariables?.offset;
+    if (offset === undefined) return;
+    updateQueryVariables({ offset: offset + 1 });
+  }, [queryVariables]);
 
   return (
     <>
@@ -93,13 +114,17 @@ export default function Page() {
         <SearchBar />
       </div>
       <div className="py-[2.5rem] lg:py-0">
-        <StatsContainer data={messagesInfos?.messagesInfos?.items} />
+        <StatsContainer
+          data={
+            Array.isArray(messageProgress?.MessageProgress) ? messageProgress?.MessageProgress : []
+          }
+        />
       </div>
       <Separator className="hidden lg:block" />
       <DataTable
         loading={isFetching}
-        dataSource={data?.messages?.items || []}
-        pageInfo={data?.messages?.pageInfo}
+        dataSource={Array.isArray(data?.MessageFull) ? data?.MessageFull : []}
+        offset={queryVariables?.offset}
         onPreviousPageClick={handlePreviousPageClick}
         onNextPageClick={handleNextPageClick}
       />

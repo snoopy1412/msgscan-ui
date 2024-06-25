@@ -18,11 +18,11 @@ export default function ClientPage({ id }: ClientPageProps) {
   const { data, isPending, isSuccess, isError } = useMessage(id as string);
 
   const sourceChain = chains?.find(
-    (chain) => chain.id === (Number(data?.message?.sourceChainId) as unknown as ChAIN_ID)
+    (chain) => chain.id === (Number(data?.sourceChainId) as unknown as ChAIN_ID)
   );
 
   const targetChain = chains?.find(
-    (chain) => chain.id === (Number(data?.message?.targetChainId) as unknown as ChAIN_ID)
+    (chain) => chain.id === (Number(data?.targetChainId) as unknown as ChAIN_ID)
   );
 
   useEffect(() => {
@@ -33,18 +33,18 @@ export default function ClientPage({ id }: ClientPageProps) {
     }
   }, [breakpoint]);
 
-  if ((isSuccess || isError) && !data?.message) {
+  if ((isSuccess || isError) && !data) {
     return <NotFound />;
   }
   if (isPending) {
     return <Pending />;
   }
-  return data?.message ? (
+  return data ? (
     <TxDetail
       id={id}
       sourceChain={sourceChain}
       targetChain={targetChain}
-      message={data?.message}
+      message={data}
       iconSize={iconSize}
     />
   ) : null;

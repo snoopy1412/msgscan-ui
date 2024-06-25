@@ -21,7 +21,7 @@ import FadeInDown from '@/components/ui/fade-in-down';
 import BackToTop from '@/components/ui/back-to-top';
 import TransactionHashInfo from './TransactionHashInfo';
 import AddressInfo from './AddressInfo';
-import { MessageResponse } from '@/graphql/type';
+import { MessageFull } from '@/graphql/type';
 import ProtocolInfo from './ProtocolInfo';
 
 const words = ['Transaction Details'];
@@ -29,7 +29,7 @@ const words = ['Transaction Details'];
 interface TxDetailProps {
   id: string;
   iconSize?: number;
-  message: MessageResponse['message'];
+  message: MessageFull;
   sourceChain?: CHAIN;
   targetChain?: CHAIN;
 }
@@ -80,14 +80,18 @@ export default function TxDetail({
             title="Message Payload"
             icon={<MessageSquareWarning size={iconSize} strokeWidth={1.25} />}
           >
-            <div className="w-full break-words rounded bg-background p-5">{message?.payload}</div>
+            {message?.payload ? (
+              <div className="w-full break-words rounded bg-background p-5">{message?.payload}</div>
+            ) : null}
           </Card>
 
           <Card
             title="Message Params"
             icon={<MessageSquareQuote size={iconSize} strokeWidth={1.25} />}
           >
-            <div className="w-full break-words rounded bg-background p-5">{message?.params}</div>
+            {message?.params ? (
+              <div className="w-full break-words rounded bg-background p-5">{message?.params}</div>
+            ) : null}
           </Card>
 
           <Card

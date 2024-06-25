@@ -4,8 +4,8 @@ import { useMemo, useCallback } from 'react';
 
 type UseChainFilterLogicType = {
   options: TableFilterOption[];
-  value: (string | number)[];
-  onChange: (newValue: (string | number)[]) => void;
+  value: number[];
+  onChange: (newValue: number[]) => void;
   limit: number;
 };
 function useChainFilterLogic({ options, value, onChange, limit }: UseChainFilterLogicType) {
@@ -14,7 +14,7 @@ function useChainFilterLogic({ options, value, onChange, limit }: UseChainFilter
   }, [options]);
 
   const toggleItem = useCallback(
-    (itemValue: string | number) => {
+    (itemValue: number) => {
       if (value.length >= limit && !value.includes(itemValue)) {
         return;
       }

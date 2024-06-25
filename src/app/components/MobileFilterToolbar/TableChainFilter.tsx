@@ -6,8 +6,8 @@ import useChainFilterLogic from '../hooks/useChainFilterLogic';
 
 interface TableChainFilterProps {
   options: TableFilterOption[];
-  value: (string | number)[];
-  onChange: (newValue: (string | number)[]) => void;
+  value: number[];
+  onChange: (newValue: number[]) => void;
   limit: number;
 }
 

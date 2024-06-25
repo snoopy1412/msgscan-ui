@@ -25,9 +25,9 @@ const SearchBar = () => {
         return;
       }
       setLoading(true);
-      const response = await fetchMessage(keyword); // 假设 fetchMessage 返回 IMessageResponse 或 null
-      if (response?.message?.id) {
-        router.push(`/message/${response.message.id}`);
+      const response = await fetchMessage(keyword);
+      if (response?.id) {
+        router.push(`/message/${keyword}`);
         setKeyword('');
       }
       setLoading(false);

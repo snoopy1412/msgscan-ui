@@ -2,7 +2,7 @@
 
 import MessageStatus from '@/components/MessageStatus';
 import Link from 'next/link';
-import { Message } from '@/graphql/type';
+import { MessageFull } from '@/graphql/type';
 import { chains } from '@/config/chains';
 import { ChAIN_ID } from '@/types/chains';
 import { protocols } from '@/config/protocols';
@@ -16,7 +16,7 @@ export type Column = {
   dataIndex: string;
   title: string;
   width?: string;
-  render: (value: any, record: Message, index: number) => any;
+  render: (value: any, record: MessageFull, index: number) => any;
 };
 
 export const columns: Column[] = [
@@ -78,7 +78,11 @@ export const columns: Column[] = [
       const chain = chains?.find(
         (chain) => chain.id === (Number(record?.sourceChainId) as unknown as ChAIN_ID)
       );
-      return <ChainTxDisplay chain={chain} value={value} isLink />;
+      return (
+        <Link href={`/message/${value}`} className="hover:underline" title={value}>
+          <ChainTxDisplay chain={chain} value={value} isLink />
+        </Link>
+      );
     }
   },
   {
@@ -134,7 +138,9 @@ export const columns: Column[] = [
       if (record?.status === -1) {
         return <Skeleton className="h-[22px] w-full rounded-full" />;
       }
-      return record?.sourceBlockTimestamp ? formatTimeAgo(record?.sourceBlockTimestamp) : '';
+      return record?.sourceBlockTimestamp
+        ? formatTimeAgo(String(record?.sourceBlockTimestamp))
+        : '';
     }
   },
   {
@@ -147,7 +153,10 @@ export const columns: Column[] = [
         return <Skeleton className="h-[22px] w-full rounded-full" />;
       }
       return record.sourceBlockTimestamp && record?.targetBlockTimestamp
-        ? formatTimeDifference(record.sourceBlockTimestamp, record?.targetBlockTimestamp)
+        ? formatTimeDifference(
+            String(record.sourceBlockTimestamp),
+            String(record?.targetBlockTimestamp)
+          )
         : '';
     }
   }

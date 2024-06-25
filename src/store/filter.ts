@@ -2,16 +2,16 @@ import { DateRange } from 'react-day-picker';
 import { create } from 'zustand';
 
 export type State = {
-  selectedStatuses: (string | number)[];
+  selectedStatuses: number[];
   date: DateRange | undefined;
-  selectedSourceChains: (string | number)[];
-  selectedTargetChains: (string | number)[];
+  selectedSourceChains: number[];
+  selectedTargetChains: number[];
 };
 export type Action = {
-  setSelectedStatuses: (status: (string | number)[]) => void;
+  setSelectedStatuses: (status: number[]) => void;
   setDate: (date: DateRange | undefined) => void;
-  setSelectedSourceChains: (chains: (string | number)[]) => void;
-  setSelectedTargetChains: (chains: (string | number)[]) => void;
+  setSelectedSourceChains: (chains: number[]) => void;
+  setSelectedTargetChains: (chains: number[]) => void;
 };
 
 const useFilterStore = create<State & Action>((set) => ({

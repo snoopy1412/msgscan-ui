@@ -5,8 +5,8 @@ import { CheckIcon } from '@radix-ui/react-icons';
 
 interface TableStatusFilterProps {
   options: TableFilterOption[];
-  value: (string | number)[];
-  onChange: (newValue: (string | number)[]) => void;
+  value: number[];
+  onChange: (newValue: number[]) => void;
   onClearFilters?: () => void;
 }
 
@@ -16,7 +16,7 @@ const TableStatusFilter = ({
   onChange,
   onClearFilters
 }: TableStatusFilterProps) => {
-  const toggleItem = (itemValue: string | number) => {
+  const toggleItem = (itemValue: number) => {
     if (value.includes(itemValue)) {
       onChange(value.filter((s) => s !== itemValue));
     } else {

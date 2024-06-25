@@ -25,6 +25,7 @@ const Header = () => {
             src="/images/logo.svg"
             alt={APP_NAME}
             width={147}
+            priority
             height={26}
             className="hidden lg:block"
           />

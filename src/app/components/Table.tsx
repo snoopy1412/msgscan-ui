@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/pagination';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import { Message, PageInfo } from '@/graphql/type';
+import { MessageFull, MessageFullQueryParams } from '@/graphql/type';
 import { columns } from '../data/columns';
 import DesktopFilterToolbar from './DesktopFilterToolbar';
 import MobileFilterToolbar from './MobileFilterToolbar';
@@ -30,13 +30,13 @@ const fadeInOut = {
 
 interface TableProps {
   loading: boolean;
-  dataSource: Message[];
+  dataSource: MessageFull[];
 }
 
 interface TableProps {
   loading: boolean;
-  dataSource: Message[];
-  pageInfo?: PageInfo;
+  dataSource: MessageFull[];
+  offset: MessageFullQueryParams['offset'];
   onPreviousPageClick: React.MouseEventHandler<HTMLLIElement>;
   onNextPageClick: React.MouseEventHandler<HTMLLIElement>;
 }
@@ -44,7 +44,7 @@ interface TableProps {
 const DataTable = ({
   loading,
   dataSource,
-  pageInfo,
+  offset,
   onPreviousPageClick,
   onNextPageClick
 }: TableProps) => {
@@ -148,28 +148,21 @@ const DataTable = ({
           <PaginationContent>
             <PaginationItem
               className="rounded bg-card"
-              onClick={pageInfo?.hasPreviousPage ? handlePreviousPageClick : undefined}
+              onClick={offset !== 0 ? handlePreviousPageClick : undefined}
             >
               <PaginationPrevious
                 loading={loading && activePageType === 'previous'}
                 className={cn(
-                  pageInfo?.hasPreviousPage
+                  offset !== 0
                     ? 'cursor-pointer'
                     : 'cursor-not-allowed text-secondary-foreground hover:bg-transparent hover:text-secondary-foreground'
                 )}
               />
             </PaginationItem>
-            <PaginationItem
-              className="rounded bg-card"
-              onClick={pageInfo?.hasNextPage ? handleNextPageClick : undefined}
-            >
+            <PaginationItem className="rounded bg-card" onClick={handleNextPageClick}>
               <PaginationNext
                 loading={loading && activePageType === 'next'}
-                className={cn(
-                  pageInfo?.hasNextPage
-                    ? 'cursor-pointer'
-                    : 'cursor-not-allowed text-secondary-foreground hover:bg-transparent hover:text-secondary-foreground'
-                )}
+                className={cn('cursor-pointer')}
               />
             </PaginationItem>
           </PaginationContent>

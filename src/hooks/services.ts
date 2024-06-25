@@ -1,50 +1,47 @@
 import { REFRESH_INTERVAL } from '@/config/site';
-import { fetchMessage, fetchMessages, fetchMessagesInfos, fetchOrmpInfo } from '@/graphql/services';
-import { MessagesQueryVariables } from '@/graphql/type';
+import {
+  fetchMessage,
+  fetchOrmpInfo,
+  fetchMessageFull,
+  fetchMessageProgress
+} from '@/graphql/services';
+import { MessageFullQueryParams } from '@/graphql/type';
 import { MESSAGE_STATUS } from '@/types/message';
 import { useQuery } from '@tanstack/react-query';
 
-export function useMessages(variables: MessagesQueryVariables = {}) {
+export function useOrmpInfo(id: string) {
   return useQuery({
-    queryKey: ['messages', variables],
-    queryFn: async () => fetchMessages(variables),
+    queryKey: ['ormpInfo', id],
+    queryFn: async () => fetchOrmpInfo(id)
+  });
+}
+
+export function useMessageFull(variables: MessageFullQueryParams = {}) {
+  return useQuery({
+    queryKey: ['messageFull', variables],
+    queryFn: async () => fetchMessageFull(variables),
     refetchInterval: REFRESH_INTERVAL,
     placeholderData(prevData) {
-      const hasRealData = prevData?.messages?.items.some((item) => item.status !== -1);
+      const hasRealData = prevData?.MessageFull?.some((item) => item.status !== -1);
       return hasRealData
         ? prevData
         : {
-            messages: {
-              items: Array.from({ length: variables.limit || 10 }).map((_, index) => ({
-                id: index.toString(),
-                protocol: 'eth',
-                status: -1
-              })),
-              pageInfo: {
-                hasNextPage: false,
-                hasPreviousPage: false,
-                startCursor: undefined,
-                endCursor: undefined
-              }
-            }
+            MessageFull: Array.from({ length: variables.limit || 10 }).map((_, index) => ({
+              id: index.toString(),
+              protocol: 'eth',
+              status: -1
+            }))
           };
     }
   });
 }
 
-export function useMessagesInfos(variables: MessagesQueryVariables = {}) {
-  return useQuery({
-    queryKey: ['messagesInfos', variables],
-    queryFn: async () => fetchMessagesInfos(variables),
-    refetchInterval: REFRESH_INTERVAL
-  });
-}
 export function useMessage(id: string) {
   return useQuery({
     queryKey: ['message', id],
     queryFn: async () => fetchMessage(id),
     refetchInterval(query) {
-      const status = query?.state?.data?.message?.status;
+      const status = query?.state?.data?.status;
       return status !== MESSAGE_STATUS.FAILED && status !== MESSAGE_STATUS.SUCCESS
         ? REFRESH_INTERVAL
         : undefined;
@@ -52,9 +49,10 @@ export function useMessage(id: string) {
   });
 }
 
-export function useOrmpInfo(id: string) {
+export function useMessageProgress() {
   return useQuery({
-    queryKey: ['ormpInfo', id],
-    queryFn: async () => fetchOrmpInfo(id)
+    queryKey: ['messageProgress'],
+    queryFn: async () => fetchMessageProgress(),
+    refetchInterval: REFRESH_INTERVAL
   });
 }

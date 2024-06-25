@@ -1,45 +1,4 @@
 import { gql } from 'graphql-request';
-import { MESSAGE_FIELDS } from './fragments';
-
-export const GET_MESSAGES = gql`
-  ${MESSAGE_FIELDS}
-  query GetMessages(
-    $where: MessageFilter
-    $orderBy: String
-    $orderDirection: String
-    $before: String
-    $after: String
-    $limit: Int
-  ) {
-    messages(
-      where: $where
-      orderBy: $orderBy
-      orderDirection: $orderDirection
-      before: $before
-      after: $after
-      limit: $limit
-    ) {
-      items {
-        ...MessageFields
-      }
-      pageInfo {
-        endCursor
-        hasNextPage
-        hasPreviousPage
-        startCursor
-      }
-    }
-  }
-`;
-
-export const GET_MESSAGE = gql`
-  ${MESSAGE_FIELDS}
-  query GetMessage($id: String!) {
-    message(id: $id) {
-      ...MessageFields
-    }
-  }
-`;
 
 export const GET_ORMP_INFO = gql`
   query GetOrmpInfo($id: String!) {
@@ -65,33 +24,54 @@ export const GET_ORMP_INFO = gql`
   }
 `;
 
-export const GET_MESSAGES_INFOS = gql`
-  query GetMessagesInfos(
-    $where: MessagesInfoFilter
-    $orderBy: String
-    $orderDirection: String
-    $before: String
-    $after: String
+export const GET_MESSAGE_FULL = gql`
+  query GetMessageFull(
+    $distinctOn: [MessageFull_select_column!]
     $limit: Int
+    $offset: Int
+    $orderBy: [MessageFull_order_by!]
+    $where: MessageFull_bool_exp
   ) {
-    messagesInfos(
-      where: $where
-      orderBy: $orderBy
-      orderDirection: $orderDirection
-      before: $before
-      after: $after
+    MessageFull(
+      distinct_on: $distinctOn
       limit: $limit
+      offset: $offset
+      order_by: $orderBy
+      where: $where
     ) {
-      items {
-        id
-        value
-      }
-      pageInfo {
-        endCursor
-        hasNextPage
-        hasPreviousPage
-        startCursor
-      }
+      id
+      db_write_timestamp
+      params
+      payload
+      protocol
+      sourceBlockNumber
+      sourceBlockTimestamp
+      sourceChainId
+      sourceDappAddress
+      sourceLogIndex
+      sourcePortAddress
+      sourceTransactionHash
+      sourceTransactionIndex
+      status
+      targetBlockNumber
+      targetBlockTimestamp
+      targetChainId
+      targetDappAddress
+      targetLogIndex
+      targetPortAddress
+      targetTransactionHash
+      targetTransactionIndex
+    }
+  }
+`;
+
+export const GET_MESSAGE_PROGRESS = gql`
+  query GetMessageProgress {
+    MessageProgress {
+      db_write_timestamp
+      id
+      inflight
+      total
     }
   }
 `;
