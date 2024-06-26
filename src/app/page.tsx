@@ -14,18 +14,20 @@ import { useMessagePort, useMessageProgress } from '@/hooks/services';
 import { Separator } from '@/components/ui/separator';
 import StatsContainer from '@/components/StatsContainer';
 
+const defaultQueryVariables: MessagePortQueryParams = {
+  offset: 0,
+  limit: 10,
+  orderBy: [
+    {
+      sourceBlockTimestamp: OrderBy.Desc
+    }
+  ]
+};
 export default function Page() {
   const queryClient = useQueryClient();
 
-  const [queryVariables, setQueryVariables] = useState<MessagePortQueryParams>({
-    offset: 0,
-    limit: 10,
-    orderBy: [
-      {
-        sourceBlockTimestamp: OrderBy.Desc
-      }
-    ]
-  });
+  const [queryVariables, setQueryVariables] =
+    useState<MessagePortQueryParams>(defaultQueryVariables);
 
   const updateQueryVariables = (updates: Partial<MessagePortQueryParams>) => {
     setQueryVariables((prev) =>
@@ -96,16 +98,16 @@ export default function Page() {
 
   const handlePreviousPageClick = useCallback(() => {
     const offset = queryVariables?.offset;
-
-    if (offset === undefined || offset < 1) return;
-
-    updateQueryVariables({ offset: offset - 1 });
+    const limit = queryVariables?.limit || 10;
+    if (offset === undefined) return;
+    updateQueryVariables({ offset: Math.max(0, offset - limit) });
   }, [queryVariables]);
 
   const handleNextPageClick = useCallback(() => {
     const offset = queryVariables?.offset;
+    const limit = queryVariables?.limit || 10;
     if (offset === undefined) return;
-    updateQueryVariables({ offset: offset + 1 });
+    updateQueryVariables({ offset: offset + limit });
   }, [queryVariables]);
 
   return (
