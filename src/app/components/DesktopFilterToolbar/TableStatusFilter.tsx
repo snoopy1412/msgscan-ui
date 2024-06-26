@@ -75,7 +75,7 @@ const TableStatusFilter = ({
                   <CommandItem
                     key={optionValue}
                     onSelect={() => toggleItem(optionValue)}
-                    className="px-[1.25rem] py-[0.62rem]"
+                    className="cursor-pointer px-[1.25rem] py-[0.62rem]"
                   >
                     <div
                       className={cn(

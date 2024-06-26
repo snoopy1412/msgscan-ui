@@ -1,41 +1,33 @@
-'use client';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useOrmpMessageAccepted } from '@/hooks/services';
+import { ORMPMessageAccepted } from '@/graphql/type';
 import { cn } from '@/lib/utils';
-import { useMemo } from 'react';
 
 interface OrmpInfoProps {
-  id: string;
+  ormpInfo: ORMPMessageAccepted;
 }
 
-const OrmpInfo = ({ id }: OrmpInfoProps) => {
-  const { data: ormpInfo, isPending } = useOrmpMessageAccepted(id as string);
-  const info = ormpInfo?.ORMP_MessageAccepted?.[0];
-
-  const data = useMemo(() => {
-    return [
-      {
-        title: 'msgHash',
-        value: info?.msgHash || '-'
-      },
-      {
-        title: 'index',
-        value: info?.index || '-'
-      },
-      {
-        title: 'gaslimit',
-        value: info?.gasLimit || '-'
-      },
-      {
-        title: 'playload',
-        value: info?.encoded || '-'
-      },
-      {
-        title: 'channel',
-        value: info?.channel || '-'
-      }
-    ];
-  }, [info]);
+const OrmpInfo = ({ ormpInfo }: OrmpInfoProps) => {
+  const data = [
+    {
+      title: 'msgHash',
+      value: ormpInfo?.msgHash || '-'
+    },
+    {
+      title: 'index',
+      value: ormpInfo?.index || '-'
+    },
+    {
+      title: 'gaslimit',
+      value: ormpInfo?.gasLimit || '-'
+    },
+    {
+      title: 'playload',
+      value: ormpInfo?.encoded || '-'
+    },
+    {
+      title: 'channel',
+      value: ormpInfo?.channel || '-'
+    }
+  ];
 
   return (
     <div className="bg-background">
@@ -44,8 +36,14 @@ const OrmpInfo = ({ id }: OrmpInfoProps) => {
           <div className="w-[7.5rem] shrink-0 border-r border-r-muted p-5 text-xs text-muted-foreground">
             {item?.title}
           </div>
-          <div className="flex-1 truncate p-5 text-xs text-foreground">
-            {isPending ? <Skeleton className="h-5 w-full rounded" /> : item?.value}
+          <div
+            className="flex-1 p-5 text-xs text-foreground"
+            style={{
+              wordBreak: 'break-word',
+              overflowWrap: 'anywhere'
+            }}
+          >
+            {item?.value}
           </div>
         </div>
       ))}

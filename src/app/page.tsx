@@ -1,7 +1,7 @@
 'use client';
 import { useCallback, useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { MessageFullBoolExp, MessageFullQueryParams, OrderBy } from '@/graphql/type';
+import { MessagePortBoolExp, MessagePortQueryParams, OrderBy } from '@/graphql/type';
 import { useShallow } from 'zustand/react/shallow';
 import { produce } from 'immer';
 
@@ -9,7 +9,7 @@ import DataTable from './components/Table';
 import { createTimestampQuery } from '@/utils';
 import useFilterStore from '@/store/filter';
 import SearchBar from '@/components/SearchBar';
-import { useMessageFull, useMessageProgress } from '@/hooks/services';
+import { useMessagePort, useMessageProgress } from '@/hooks/services';
 
 import { Separator } from '@/components/ui/separator';
 import StatsContainer from '@/components/StatsContainer';
@@ -17,7 +17,7 @@ import StatsContainer from '@/components/StatsContainer';
 export default function Page() {
   const queryClient = useQueryClient();
 
-  const [queryVariables, setQueryVariables] = useState<MessageFullQueryParams>({
+  const [queryVariables, setQueryVariables] = useState<MessagePortQueryParams>({
     offset: 0,
     limit: 10,
     orderBy: [
@@ -27,7 +27,7 @@ export default function Page() {
     ]
   });
 
-  const updateQueryVariables = (updates: Partial<MessageFullQueryParams>) => {
+  const updateQueryVariables = (updates: Partial<MessagePortQueryParams>) => {
     setQueryVariables((prev) =>
       produce(prev, (draft) => {
         Object.assign(draft, updates);
@@ -46,7 +46,7 @@ export default function Page() {
   );
 
   useEffect(() => {
-    const where: Partial<MessageFullBoolExp> = {};
+    const where: Partial<MessagePortBoolExp> = {};
 
     where.status =
       selectedStatuses && selectedStatuses?.length > 0
@@ -77,7 +77,7 @@ export default function Page() {
       where.sourceBlockTimestamp = undefined;
     }
 
-    let params: MessageFullQueryParams = {
+    let params: MessagePortQueryParams = {
       where: Object.values(where).some((value) => value !== undefined) ? where : undefined
     };
     if (params.where) {
@@ -86,11 +86,11 @@ export default function Page() {
 
     updateQueryVariables(params);
     queryClient.resetQueries({
-      queryKey: ['messageFull']
+      queryKey: ['messagePort']
     });
   }, [queryClient, selectedStatuses, date, selectedSourceChains, selectedTargetChains]);
 
-  const { data, isFetching } = useMessageFull(queryVariables);
+  const { data, isFetching } = useMessagePort(queryVariables);
 
   const { data: messageProgress } = useMessageProgress();
 
@@ -123,7 +123,7 @@ export default function Page() {
       <Separator className="hidden lg:block" />
       <DataTable
         loading={isFetching}
-        dataSource={Array.isArray(data?.MessageFull) ? data?.MessageFull : []}
+        dataSource={Array.isArray(data?.MessagePort) ? data?.MessagePort : []}
         offset={queryVariables?.offset}
         onPreviousPageClick={handlePreviousPageClick}
         onNextPageClick={handleNextPageClick}

@@ -1,40 +1,49 @@
+import { CHAIN_OPTIONS } from '@/config/chains';
 import { client } from './client';
-import {
-  GET_ORMP_INFO,
-  GET_MESSAGE_FULL,
-  GET_MESSAGE_PROGRESS,
-  GET_ORMP_MESSAGE_ACCEPTED
-} from './queries';
+import { GET_MESSAGE_PORT, GET_MESSAGE_PROGRESS } from './queries';
 import type {
-  MessageFullQueryParams,
-  MessageFullResponse,
+  MessagePortQueryParams,
+  MessagePortResponse,
   MessageProgressResponse,
-  ORMPInfoResponse
+  MessagePortBoolExp,
+  MessageProgressQueryParams
 } from './type';
 
-export async function fetchMessageFull(
-  variables: MessageFullQueryParams = {}
-): Promise<MessageFullResponse | null> {
+const defaultSourceChainId: MessagePortBoolExp['sourceChainId'] = {
+  _in: CHAIN_OPTIONS.map((option) => option.value)
+};
+
+export async function fetchMessagePort(
+  variables: MessagePortQueryParams = {}
+): Promise<MessagePortResponse | null> {
   try {
-    const response = await client.request<MessageFullResponse, MessageFullQueryParams>(
-      GET_MESSAGE_FULL,
-      variables
+    const effectiveVariables: MessagePortQueryParams = {
+      ...variables,
+      where: {
+        ...(variables.where || {}),
+        sourceChainId: variables.where?.sourceChainId || defaultSourceChainId
+      }
+    };
+    const response = await client.request<MessagePortResponse, MessagePortQueryParams>(
+      GET_MESSAGE_PORT,
+      effectiveVariables
     );
     return response;
   } catch (error) {
-    console.error('messageFull request failed:', error);
+    console.error('messagePort request failed:', error);
     return null;
   }
 }
 
 export async function fetchMessage(
   id: string
-): Promise<MessageFullResponse['MessageFull']['0'] | null> {
+): Promise<MessagePortResponse['MessagePort']['0'] | null> {
   try {
-    const response = await client.request<MessageFullResponse, MessageFullQueryParams>(
-      GET_MESSAGE_FULL,
+    const response = await client.request<MessagePortResponse, MessagePortQueryParams>(
+      GET_MESSAGE_PORT,
       {
         where: {
+          sourceChainId: defaultSourceChainId,
           _or: [
             {
               id: {
@@ -50,7 +59,7 @@ export async function fetchMessage(
         }
       }
     );
-    return response?.MessageFull?.[0];
+    return response?.MessagePort?.[0] ?? null;
   } catch (error) {
     console.error('message request failed:', error);
     return null;
@@ -59,20 +68,19 @@ export async function fetchMessage(
 
 export async function fetchMessageProgress(): Promise<MessageProgressResponse | null> {
   try {
-    const response = await client.request<MessageProgressResponse>(GET_MESSAGE_PROGRESS);
+    const response = await client.request<MessageProgressResponse, MessageProgressQueryParams>(
+      GET_MESSAGE_PROGRESS,
+      {
+        where: {
+          id: {
+            _in: CHAIN_OPTIONS.map((option) => String(option.value))
+          }
+        }
+      }
+    );
     return response;
   } catch (error) {
     console.error('messageProgress request failed:', error);
-    return null;
-  }
-}
-
-export async function fetchOrmpMessageAccepted(id: string): Promise<ORMPInfoResponse | null> {
-  try {
-    const response = await client.request<ORMPInfoResponse>(GET_ORMP_MESSAGE_ACCEPTED, { id });
-    return response;
-  } catch (error) {
-    console.error('ormpMessageAccepted request failed:', error);
     return null;
   }
 }

@@ -10,6 +10,7 @@ interface ChainTxDisplayProps {
   chain?: CHAIN;
   value: string;
   isLink?: boolean;
+  href?: string;
   isFullText?: boolean;
   rootClassName?: string;
   className?: string;
@@ -20,6 +21,7 @@ const ChainTxDisplay = ({
   chain,
   value,
   isLink = true,
+  href,
   isFullText = false,
   rootClassName,
   className,
@@ -29,6 +31,13 @@ const ChainTxDisplay = ({
   const renderContent = () => {
     const txLink = `${chain?.blockExplorers?.default?.url}/tx/${value}`;
     if (isLink) {
+      if (href) {
+        return (
+          <Link href={href} className={cn('truncate hover:underline', className)} title={value}>
+            {isFullText ? value : toShortText(value, 6, 4)}
+          </Link>
+        );
+      }
       return (
         <Link
           href={txLink}

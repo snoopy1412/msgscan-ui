@@ -1,20 +1,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
-import { NetworkMap } from '@/config/network';
 import { ModeToggle } from './ModeToggle';
-import { DEPLOY_ENV } from '@/types/env';
 import { APP_NAME } from '@/config/site';
 
 import Logo from './icon/logo';
 import SearchBar from './SearchBar';
+import NetworkSwitcher from './NetworkSwitcher';
 
 const Header = () => {
   return (
@@ -35,19 +27,7 @@ const Header = () => {
           <div className="hidden lg:block">
             <SearchBar />
           </div>
-          <Select>
-            <SelectTrigger className="h-[1.625rem] p-[0.62rem] lg:h-[2.625rem] lg:px-[0.62rem]">
-              <SelectValue placeholder="Select a network" className="text-[0.875rem]" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value={DEPLOY_ENV.MAINNET} className="text-[0.875rem]">
-                {NetworkMap[DEPLOY_ENV.MAINNET].title}
-              </SelectItem>
-              <SelectItem value={DEPLOY_ENV.TESTNET} className="text-[0.875rem]">
-                {NetworkMap[DEPLOY_ENV.TESTNET].title}
-              </SelectItem>
-            </SelectContent>
-          </Select>
+          <NetworkSwitcher />
           <ModeToggle />
         </div>
       </div>

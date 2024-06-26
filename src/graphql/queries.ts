@@ -24,15 +24,15 @@ export const GET_ORMP_INFO = gql`
   }
 `;
 
-export const GET_MESSAGE_FULL = gql`
-  query GetMessageFull(
-    $distinctOn: [MessageFull_select_column!]
+export const GET_MESSAGE_PORT = gql`
+  query GetMessagePort(
+    $distinctOn: [MessagePort_select_column!]
     $limit: Int
     $offset: Int
-    $orderBy: [MessageFull_order_by!]
-    $where: MessageFull_bool_exp
+    $orderBy: [MessagePort_order_by!]
+    $where: MessagePort_bool_exp
   ) {
-    MessageFull(
+    MessagePort(
       distinct_on: $distinctOn
       limit: $limit
       offset: $offset
@@ -41,6 +41,30 @@ export const GET_MESSAGE_FULL = gql`
     ) {
       id
       db_write_timestamp
+      ormp {
+        blockNumber
+        blockTimestamp
+        channel
+        db_write_timestamp
+        encoded
+        eventsSummary
+        from
+        fromChainId
+        gasLimit
+        id
+        index
+        msgHash
+        oracle
+        oracleAssigned
+        oracleAssignedFee
+        relayer
+        relayerAssigned
+        relayerAssignedFee
+        to
+        toChainId
+        transactionHash
+      }
+      ormp_id
       params
       payload
       protocol
@@ -66,8 +90,8 @@ export const GET_MESSAGE_FULL = gql`
 `;
 
 export const GET_MESSAGE_PROGRESS = gql`
-  query GetMessageProgress {
-    MessageProgress {
+  query GetMessageProgress($where: MessageProgress_bool_exp) {
+    MessageProgress(where: $where) {
       db_write_timestamp
       id
       inflight

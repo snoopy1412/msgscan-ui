@@ -1,6 +1,6 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import ClientPage from './components/ClientPage';
-import { fetchMessage, fetchOrmpMessageAccepted } from '@/graphql/services';
+import { fetchMessage } from '@/graphql/services';
 
 interface PageProps {
   params: {

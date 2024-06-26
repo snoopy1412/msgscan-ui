@@ -21,14 +21,14 @@ import FadeInDown from '@/components/ui/fade-in-down';
 import BackToTop from '@/components/ui/back-to-top';
 import TransactionHashInfo from './TransactionHashInfo';
 import AddressInfo from './AddressInfo';
-import { MessageFull } from '@/graphql/type';
+import { MessagePort } from '@/graphql/type';
 import ProtocolInfo from './ProtocolInfo';
 
 const words = ['Transaction Details'];
 
 interface TxDetailProps {
   iconSize?: number;
-  message: MessageFull;
+  message: MessagePort;
   sourceChain?: CHAIN;
   targetChain?: CHAIN;
 }
@@ -109,7 +109,7 @@ export default function TxDetail({ iconSize, sourceChain, targetChain, message }
           </Card>
 
           <Card title="ORMP Info" icon={<OrmpIcon />}>
-            {message?.id ? <OrmpInfo id={message?.id} /> : null}
+            {message?.ormp ? <OrmpInfo ormpInfo={message?.ormp} /> : null}
           </Card>
         </div>
         <div className="flex items-center justify-end pt-4">

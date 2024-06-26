@@ -2,26 +2,6 @@ export interface ApiResponse<T> {
   data: T;
 }
 
-interface OrmpInfo {
-  id: string;
-  chainId: number;
-  blockNumber: number;
-  blockTimestamp: number;
-  transactionHash: string;
-  transactionIndex: number;
-  logIndex: number;
-  msgHash: string;
-  messageChannel: string;
-  messageIndex: number;
-  messageFromChainId: number;
-  messageFrom: string;
-  messageToChainId: number;
-  messageTo: string;
-  messageGasLimit: number;
-  messageEncoded: string;
-  msgId?: string;
-}
-
 interface TimestampComparisonExp {
   _eq?: Date;
   _gt?: Date;
@@ -79,10 +59,10 @@ interface IntComparisonExp {
   _neq?: number;
   _nin?: number[];
 }
-export interface MessageFullBoolExp {
-  _and?: MessageFullBoolExp[];
-  _not?: MessageFullBoolExp;
-  _or?: MessageFullBoolExp[];
+export interface MessagePortBoolExp {
+  _and?: MessagePortBoolExp[];
+  _not?: MessagePortBoolExp;
+  _or?: MessagePortBoolExp[];
   db_write_timestamp?: TimestampComparisonExp;
   id?: StringComparisonExp;
   params?: StringComparisonExp;
@@ -107,7 +87,7 @@ export interface MessageFullBoolExp {
   targetTransactionIndex?: IntComparisonExp;
 }
 
-enum MessageFullSelectColumn {
+enum MessagePortSelectColumn {
   DbWriteTimestamp = 'db_write_timestamp',
   Id = 'id',
   Params = 'params',
@@ -141,7 +121,7 @@ export enum OrderBy {
   DescNullsLast = 'desc_nulls_last'
 }
 
-interface MessageFullOrderBy {
+interface MessagePortOrderBy {
   db_write_timestamp?: OrderBy;
   id?: OrderBy;
   params?: OrderBy;
@@ -166,9 +146,34 @@ interface MessageFullOrderBy {
   targetTransactionIndex?: OrderBy;
 }
 
-export interface MessageFull {
+export interface ORMPMessageAccepted {
+  blockNumber: number;
+  blockTimestamp: number;
+  channel: string;
+  db_write_timestamp: Date;
+  encoded: string;
+  eventsSummary: string;
+  from: string;
+  fromChainId: number;
+  gasLimit: number;
+  id: string;
+  index: number;
+  msgHash: string;
+  oracle: string | null;
+  oracleAssigned: boolean;
+  oracleAssignedFee: number;
+  relayer: string;
+  relayerAssigned: boolean;
+  relayerAssignedFee: number;
+  to: string;
+  toChainId: number;
+  transactionHash: string;
+}
+export interface MessagePort {
   db_write_timestamp?: Date;
   id: string;
+  ormp?: ORMPMessageAccepted;
+  ormp_id?: string;
   params?: string;
   payload?: string;
   protocol: string;
@@ -190,18 +195,31 @@ export interface MessageFull {
   targetTransactionHash?: string;
   targetTransactionIndex?: number;
 }
-export interface MessageFullResponse {
-  MessageFull: MessageFull[];
+export interface MessagePortResponse {
+  MessagePort: MessagePort[];
 }
 
-export interface MessageFullQueryParams {
-  distinctOn?: MessageFullSelectColumn[];
+export interface MessagePortQueryParams {
+  distinctOn?: MessagePortSelectColumn[];
   limit?: number;
   offset?: number;
-  orderBy?: MessageFullOrderBy[];
-  where?: MessageFullBoolExp;
+  orderBy?: MessagePortOrderBy[];
+  where?: MessagePortBoolExp;
 }
 
+export interface MessageProgressBoolExp {
+  _and?: MessageProgressBoolExp[];
+  _or?: MessageProgressBoolExp[];
+  _not?: MessageProgressBoolExp;
+  db_write_timestamp?: TimestampComparisonExp;
+  id?: StringComparisonExp;
+  inflight?: NumericComparisonExp;
+  total?: NumericComparisonExp;
+}
+
+export interface MessageProgressQueryParams {
+  where?: MessageProgressBoolExp;
+}
 export interface MessageProgress {
   db_write_timestamp: Date;
   id: string;
@@ -211,31 +229,4 @@ export interface MessageProgress {
 
 export interface MessageProgressResponse {
   MessageProgress: MessageProgress;
-}
-
-export interface ORMPMessageAccepted {
-  blockNumber: number;
-  channel: string;
-  db_write_timestamp: string;
-  encoded: string;
-  eventsSummary: string;
-  from: string;
-  fromChainId: number;
-  gasLimit: number;
-  id: string;
-  index: number;
-  msgHash: string;
-  oracle: string;
-  oracleAssigned: string;
-  oracleAssignedFee: number;
-  relayer: string;
-  relayerAssigned: string;
-  relayerAssignedFee: number;
-  to: string;
-  toChainId: number;
-  transactionHash: string;
-}
-
-export interface ORMPInfoResponse {
-  ORMP_MessageAccepted: ORMPMessageAccepted[];
 }

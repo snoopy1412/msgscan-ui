@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration';
-import { MessageFullBoolExp } from '@/graphql/type';
+import { MessagePortBoolExp } from '@/graphql/type';
 import { DateRange } from 'react-day-picker';
 
 dayjs.extend(relativeTime);
@@ -32,7 +32,7 @@ export function formatTimeAgo(timestamp: string) {
   return dayjs().from(date);
 }
 
-type TimestampQuery = MessageFullBoolExp['sourceBlockTimestamp'];
+type TimestampQuery = MessagePortBoolExp['sourceBlockTimestamp'];
 
 export function createTimestampQuery(date?: DateRange): TimestampQuery {
   const query: TimestampQuery = {};

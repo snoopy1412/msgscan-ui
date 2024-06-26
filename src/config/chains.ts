@@ -53,7 +53,8 @@ export const chains: CHAIN[] = [
         url: 'https://sepolia.arbiscan.io',
         apiUrl: 'https://api-sepolia.arbiscan.io/api'
       }
-    }
+    },
+    testnet: true
   },
   {
     id: ChAIN_ID.DARWINIA,
@@ -77,21 +78,7 @@ export const chains: CHAIN[] = [
         name: 'Subscan',
         url: 'https://crab.subscan.io'
       }
-    },
-    testnet: true
-  },
-  {
-    id: ChAIN_ID.PANGOLIN,
-    name: 'Pangolin',
-    shortName: 'pangolin',
-    iconUrl: '/images/chains/pangolin.png',
-    blockExplorers: {
-      default: {
-        name: 'Subscan',
-        url: 'https://pangolin.subscan.io'
-      }
-    },
-    testnet: true
+    }
   },
   {
     id: ChAIN_ID.POLYGON,
@@ -120,7 +107,15 @@ export const chains: CHAIN[] = [
   }
 ];
 
-export const CHAIN_OPTIONS: TableFilterOption[] = chains?.map((chain) => ({
+const filterChains = chains.filter((chain) => {
+  if (process.env.NEXT_PUBLIC_DEPLOYMENT_MODE === 'testnet') {
+    return chain.testnet;
+  } else {
+    return !chain.testnet;
+  }
+});
+
+export const CHAIN_OPTIONS: TableFilterOption[] = filterChains?.map((chain) => ({
   label: chain.shortName,
   value: chain.id
 }));

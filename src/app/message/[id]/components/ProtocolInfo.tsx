@@ -1,8 +1,8 @@
 import { protocols } from '@/config/protocols';
-import { MessageFull } from '@/graphql/type';
+import { MessagePort } from '@/graphql/type';
 
 interface ProtocolInfoProps {
-  protocol?: MessageFull['protocol'];
+  protocol?: MessagePort['protocol'];
 }
 const ProtocolInfo = ({ protocol }: ProtocolInfoProps) => {
   const currentProtocol = protocols?.find((item) => item.value === protocol);

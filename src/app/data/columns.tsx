@@ -2,7 +2,7 @@
 
 import MessageStatus from '@/components/MessageStatus';
 import Link from 'next/link';
-import { MessageFull } from '@/graphql/type';
+import { MessagePort } from '@/graphql/type';
 import { chains } from '@/config/chains';
 import { ChAIN_ID } from '@/types/chains';
 import { protocols } from '@/config/protocols';
@@ -16,7 +16,7 @@ export type Column = {
   dataIndex: string;
   title: string;
   width?: string;
-  render: (value: any, record: MessageFull, index: number) => any;
+  render: (value: any, record: MessagePort, index: number) => any;
 };
 
 export const columns: Column[] = [
@@ -78,11 +78,7 @@ export const columns: Column[] = [
       const chain = chains?.find(
         (chain) => chain.id === (Number(record?.sourceChainId) as unknown as ChAIN_ID)
       );
-      return (
-        <Link href={`/message/${value}`} className="hover:underline" title={value}>
-          <ChainTxDisplay chain={chain} value={value} isLink />
-        </Link>
-      );
+      return <ChainTxDisplay chain={chain} value={value} isLink href={`message/${value}`} />;
     }
   },
   {

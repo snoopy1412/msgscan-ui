@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/pagination';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import { MessageFull, MessageFullQueryParams } from '@/graphql/type';
+import { MessagePort, MessagePortQueryParams } from '@/graphql/type';
 import { columns } from '../data/columns';
 import DesktopFilterToolbar from './DesktopFilterToolbar';
 import MobileFilterToolbar from './MobileFilterToolbar';
@@ -30,13 +30,13 @@ const fadeInOut = {
 
 interface TableProps {
   loading: boolean;
-  dataSource: MessageFull[];
+  dataSource: MessagePort[];
 }
 
 interface TableProps {
   loading: boolean;
-  dataSource: MessageFull[];
-  offset: MessageFullQueryParams['offset'];
+  dataSource: MessagePort[];
+  offset: MessagePortQueryParams['offset'];
   onPreviousPageClick: React.MouseEventHandler<HTMLLIElement>;
   onNextPageClick: React.MouseEventHandler<HTMLLIElement>;
 }
