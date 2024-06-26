@@ -1,20 +1,13 @@
 import { REFRESH_INTERVAL } from '@/config/site';
 import {
   fetchMessage,
-  fetchOrmpInfo,
   fetchMessageFull,
-  fetchMessageProgress
+  fetchMessageProgress,
+  fetchOrmpMessageAccepted
 } from '@/graphql/services';
 import { MessageFullQueryParams } from '@/graphql/type';
 import { MESSAGE_STATUS } from '@/types/message';
 import { useQuery } from '@tanstack/react-query';
-
-export function useOrmpInfo(id: string) {
-  return useQuery({
-    queryKey: ['ormpInfo', id],
-    queryFn: async () => fetchOrmpInfo(id)
-  });
-}
 
 export function useMessageFull(variables: MessageFullQueryParams = {}) {
   return useQuery({
@@ -54,5 +47,17 @@ export function useMessageProgress() {
     queryKey: ['messageProgress'],
     queryFn: async () => fetchMessageProgress(),
     refetchInterval: REFRESH_INTERVAL
+  });
+}
+
+export function useOrmpMessageAccepted(id: string) {
+  return useQuery({
+    queryKey: ['ormpMessageAccepted', id],
+    queryFn: async () => fetchOrmpMessageAccepted(id),
+    refetchInterval(query) {
+      const info = query?.state?.data?.ORMP_MessageAccepted?.[0];
+
+      return !info ? REFRESH_INTERVAL : undefined;
+    }
   });
 }

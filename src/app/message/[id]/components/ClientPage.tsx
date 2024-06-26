@@ -41,7 +41,6 @@ export default function ClientPage({ id }: ClientPageProps) {
   }
   return data ? (
     <TxDetail
-      id={id}
       sourceChain={sourceChain}
       targetChain={targetChain}
       message={data}

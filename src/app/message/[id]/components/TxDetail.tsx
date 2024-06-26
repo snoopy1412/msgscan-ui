@@ -27,19 +27,12 @@ import ProtocolInfo from './ProtocolInfo';
 const words = ['Transaction Details'];
 
 interface TxDetailProps {
-  id: string;
   iconSize?: number;
   message: MessageFull;
   sourceChain?: CHAIN;
   targetChain?: CHAIN;
 }
-export default function TxDetail({
-  id,
-  iconSize,
-  sourceChain,
-  targetChain,
-  message
-}: TxDetailProps) {
+export default function TxDetail({ iconSize, sourceChain, targetChain, message }: TxDetailProps) {
   return (
     <FadeInDown duration={0.2}>
       <div>
@@ -116,7 +109,7 @@ export default function TxDetail({
           </Card>
 
           <Card title="ORMP Info" icon={<OrmpIcon />}>
-            <OrmpInfo id={id} />
+            {message?.id ? <OrmpInfo id={message?.id} /> : null}
           </Card>
         </div>
         <div className="flex items-center justify-end pt-4">

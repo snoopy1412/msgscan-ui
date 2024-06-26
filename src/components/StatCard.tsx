@@ -24,9 +24,9 @@ export const StatCard: React.FC<StatCardProps> = ({ title, value, percentageChan
         <div className="text-xl leading-[2rem] tracking-[0.0625rem] sm:text-[1.625rem] sm:leading-[2.6rem]">
           <Counter target={numberValue} />
         </div>
-        <p className="text-xs text-muted-foreground">
+        {/* <p className="text-xs text-muted-foreground">
           {percentageChange > 0 ? `+${percentageChange}%` : `${percentageChange}%`} from last month
-        </p>
+        </p> */}
       </CardContent>
       {<Separator className="block w-full sm:hidden" />}
     </Card>

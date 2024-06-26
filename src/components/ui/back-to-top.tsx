@@ -2,6 +2,7 @@ import React from 'react';
 import { useWindowScroll } from 'react-use';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
+import useMounted from '@/hooks/useMounted';
 import { cn } from '@/lib/utils';
 
 const animationVariants = {
@@ -16,6 +17,7 @@ interface BackToTopButtonProps {
 const BackToTopButton = ({ className }: BackToTopButtonProps) => {
   const { y: pageYOffset } = useWindowScroll();
   const isVisible = pageYOffset > 200;
+  const isMounted = useMounted();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -23,7 +25,7 @@ const BackToTopButton = ({ className }: BackToTopButtonProps) => {
 
   return (
     <AnimatePresence>
-      {isVisible && (
+      {isVisible && isMounted && (
         <motion.button
           initial={animationVariants.initial}
           animate={animationVariants.animate}

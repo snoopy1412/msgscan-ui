@@ -21,9 +21,6 @@ interface OrmpInfo {
   messageEncoded: string;
   msgId?: string;
 }
-export interface OrmpInfoResponse {
-  ormpInfo: OrmpInfo;
-}
 
 interface TimestampComparisonExp {
   _eq?: Date;
@@ -214,4 +211,31 @@ export interface MessageProgress {
 
 export interface MessageProgressResponse {
   MessageProgress: MessageProgress;
+}
+
+export interface ORMPMessageAccepted {
+  blockNumber: number;
+  channel: string;
+  db_write_timestamp: string;
+  encoded: string;
+  eventsSummary: string;
+  from: string;
+  fromChainId: number;
+  gasLimit: number;
+  id: string;
+  index: number;
+  msgHash: string;
+  oracle: string;
+  oracleAssigned: string;
+  oracleAssignedFee: number;
+  relayer: string;
+  relayerAssigned: string;
+  relayerAssignedFee: number;
+  to: string;
+  toChainId: number;
+  transactionHash: string;
+}
+
+export interface ORMPInfoResponse {
+  ORMP_MessageAccepted: ORMPMessageAccepted[];
 }
