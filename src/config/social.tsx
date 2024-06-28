@@ -12,7 +12,7 @@ function createSocialConfig(name: string, url: string, icon: React.ReactNode): S
 }
 
 export const socialConfig: SocialConfig[] = [
-  createSocialConfig('Twitter', 'https://twitter.com/DarwiniaNetwork', <Twitter />),
-  createSocialConfig('Telegram', 'https://t.me/DarwiniaNetwork', <Telegram />),
-  createSocialConfig('Github', 'https://github.com/darwinia-network', <Github />)
+  createSocialConfig('Twitter', 'https://x.com/msgport_xyz', <Twitter />),
+  createSocialConfig('Telegram', 'https://t.me/msgport', <Telegram />),
+  createSocialConfig('Github', 'https://github.com/msgport', <Github />)
 ];
