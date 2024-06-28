@@ -31,7 +31,7 @@ export const chains: CHAIN[] = [
   },
   {
     id: ChAIN_ID.ARBITRUM,
-    name: 'Arbitrum One',
+    name: 'Arbitrum',
     shortName: 'arb1',
     iconUrl: '/images/chains/arbitrum.svg',
     blockExplorers: {
@@ -116,6 +116,6 @@ const filterChains = chains.filter((chain) => {
 });
 
 export const CHAIN_OPTIONS: TableFilterOption[] = filterChains?.map((chain) => ({
-  label: chain.shortName,
+  label: chain.name,
   value: chain.id
 }));
