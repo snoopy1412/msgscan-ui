@@ -6,15 +6,16 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { NetworkMap, defaultNetwork } from '@/config/network';
+import { NetworkMap } from '@/config/network';
 import { Network } from '@/types/network';
 
-import { useCallback } from 'react';
+import { Suspense, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { useNetworkFromQuery } from '@/hooks/useNetwork';
 
 const NetworkSwitcher = () => {
+  const network = useNetworkFromQuery();
   const router = useRouter();
-
   const handleChange = useCallback(
     (value: Network) => {
       router.push(`/?network=${value}`);
@@ -23,7 +24,7 @@ const NetworkSwitcher = () => {
   );
 
   return (
-    <Select defaultValue={defaultNetwork} onValueChange={handleChange}>
+    <Select defaultValue={network} onValueChange={handleChange}>
       <SelectTrigger className="h-[1.625rem] p-[0.62rem] lg:h-[2.625rem] lg:px-[0.62rem]">
         <SelectValue placeholder="Select a network" className="text-[0.875rem]" />
       </SelectTrigger>
@@ -39,4 +40,12 @@ const NetworkSwitcher = () => {
   );
 };
 
-export default NetworkSwitcher;
+const NetworkSwitcherWrapper = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <NetworkSwitcher />
+    </Suspense>
+  );
+};
+
+export default NetworkSwitcherWrapper;

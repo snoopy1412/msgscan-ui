@@ -99,7 +99,7 @@ export const columns: Column[] = [
     dataIndex: 'sourceDappAddress',
     title: 'From',
     width: '8rem',
-    render(value, record) {
+    render(value, record, index, network) {
       if (record?.status === -1) {
         return <Skeleton className="h-[22px] w-full rounded-full" />;
       }
@@ -107,7 +107,8 @@ export const columns: Column[] = [
       const chain = chains?.find(
         (chain) => chain.id === (Number(record?.sourceChainId) as unknown as ChAIN_ID)
       );
-      return <BlockchainAddressLink chain={chain} address={value} />;
+      const href = `/sent_by/${value}?network=${getNetwork(network)}`;
+      return <BlockchainAddressLink chain={chain} address={value} href={href} />;
     }
   },
   {

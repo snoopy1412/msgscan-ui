@@ -71,14 +71,21 @@ export async function fetchMessage(
   }
 }
 
-export async function fetchMessageProgress(): Promise<MessageProgressResponse | null> {
+type FetchMessageProgressType = {
+  chains: CHAIN[];
+};
+export async function fetchMessageProgress({
+  chains
+}: FetchMessageProgressType): Promise<MessageProgressResponse | null> {
+  console.log('fetchMessageProgress', chains);
+
   try {
     const response = await client.request<MessageProgressResponse, MessageProgressQueryParams>(
       GET_MESSAGE_PROGRESS,
       {
         where: {
           id: {
-            _in: CHAIN_OPTIONS.map((option) => String(option.value))
+            _in: chains?.map((chain) => chain.id?.toString())
           }
         }
       }

@@ -38,10 +38,16 @@ export function useMessage(id: string, chains: CHAIN[]) {
   });
 }
 
-export function useMessageProgress() {
+type MessageProgressQueryParams = {
+  chains: CHAIN[];
+};
+export function useMessageProgress({ chains }: MessageProgressQueryParams) {
   return useQuery({
-    queryKey: ['messageProgress'],
-    queryFn: async () => fetchMessageProgress(),
+    queryKey: ['messageProgress', chains],
+    queryFn: async () =>
+      fetchMessageProgress({
+        chains
+      }),
     refetchInterval: REFRESH_INTERVAL
   });
 }
