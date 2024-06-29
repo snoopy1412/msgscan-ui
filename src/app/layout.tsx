@@ -1,9 +1,8 @@
 import type { Metadata } from 'next';
 import { APP_NAME } from '@/config/site';
-import { Inter as FontSans } from 'next/font/google';
 
 import { cn } from '@/lib/utils';
-
+import { GlobalFont } from '@/config/font';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AppProvider from '@/provider/AppProvider';
@@ -59,11 +58,6 @@ export const metadata: Metadata = {
   ]
 };
 
-const fontSans = FontSans({
-  subsets: ['latin'],
-  variable: '--font-sans'
-});
-
 export default function RootLayout({
   children
 }: Readonly<{
@@ -71,7 +65,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
+      <body
+        className={cn('min-h-screen bg-background font-sans antialiased', GlobalFont.className)}
+      >
         <AppProvider>
           <div>
             <Header />

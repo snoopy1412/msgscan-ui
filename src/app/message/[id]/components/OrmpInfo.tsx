@@ -1,3 +1,4 @@
+import { CodeFont } from '@/config/font';
 import { ORMPMessageAccepted } from '@/graphql/type';
 import { cn } from '@/lib/utils';
 
@@ -37,7 +38,7 @@ const OrmpInfo = ({ ormpInfo }: OrmpInfoProps) => {
             {item?.title}
           </div>
           <div
-            className="flex-1 p-5 text-xs text-foreground"
+            className={cn('flex-1 p-5 text-xs text-foreground', CodeFont.className)}
             style={{
               wordBreak: 'break-word',
               overflowWrap: 'anywhere'

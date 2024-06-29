@@ -5,6 +5,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { cn } from '@/lib/utils';
 import { CHAIN } from '@/types/chains';
 import { toShortText } from '@/utils';
+import { CodeFont } from '@/config/font';
 
 interface ChainTxDisplayProps {
   chain?: CHAIN;
@@ -33,7 +34,11 @@ const ChainTxDisplay = ({
     if (isLink) {
       if (href) {
         return (
-          <Link href={href} className={cn('truncate hover:underline', className)} title={value}>
+          <Link
+            href={href}
+            className={cn('truncate hover:underline', CodeFont.className, className)}
+            title={value}
+          >
             {isFullText ? value : toShortText(value, 6, 4)}
           </Link>
         );
@@ -41,7 +46,7 @@ const ChainTxDisplay = ({
       return (
         <Link
           href={txLink}
-          className={cn('truncate hover:underline', className)}
+          className={cn('truncate hover:underline', CodeFont.className, className)}
           title={value}
           target="_blank"
           rel="noreferrer noopener"
@@ -51,7 +56,7 @@ const ChainTxDisplay = ({
       );
     } else {
       return (
-        <span className={cn('truncate', className)} title={value}>
+        <span className={cn('truncate', CodeFont.className, className)} title={value}>
           {isFullText ? value : toShortText(value, 6, 4)}
         </span>
       );

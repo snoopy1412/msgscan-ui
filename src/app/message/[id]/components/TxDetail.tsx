@@ -11,18 +11,19 @@ import {
 } from 'lucide-react';
 import Card from './Card';
 import { FlipWords } from '@/components/ui/flip-words';
-
+import { cn } from '@/lib/utils';
+import { CodeFont } from '@/config/font';
 import OrmpIcon from '@/components/icon/ormp';
 import MessageStatus from '@/components/MessageStatus';
-import OrmpInfo from './OrmpInfo';
 import { CHAIN } from '@/types/chains';
-
 import FadeInDown from '@/components/ui/fade-in-down';
 import BackToTop from '@/components/ui/back-to-top';
+
 import TransactionHashInfo from './TransactionHashInfo';
 import AddressInfo from './AddressInfo';
 import { MessagePort } from '@/graphql/type';
 import ProtocolInfo from './ProtocolInfo';
+import OrmpInfo from './OrmpInfo';
 
 const words = ['Transaction Details'];
 
@@ -41,7 +42,7 @@ export default function TxDetail({ iconSize, sourceChain, targetChain, message }
         </header>
         <div className="flex flex-col gap-[0.12rem]">
           <Card title="MsgId" icon={<SquareUser size={iconSize} strokeWidth={1.25} />}>
-            <div className="w-full break-words">{message?.id}</div>
+            <div className={cn('w-full break-words', CodeFont.className)}>{message?.id}</div>
           </Card>
 
           <Card title="Status" icon={<PackageSearch size={iconSize} strokeWidth={1.25} />}>
@@ -74,7 +75,11 @@ export default function TxDetail({ iconSize, sourceChain, targetChain, message }
             icon={<MessageSquareWarning size={iconSize} strokeWidth={1.25} />}
           >
             {message?.payload ? (
-              <div className="w-full break-words rounded bg-background p-5">{message?.payload}</div>
+              <div
+                className={cn('w-full break-words rounded bg-background p-5', CodeFont.className)}
+              >
+                {message?.payload}
+              </div>
             ) : null}
           </Card>
 
@@ -83,7 +88,11 @@ export default function TxDetail({ iconSize, sourceChain, targetChain, message }
             icon={<MessageSquareQuote size={iconSize} strokeWidth={1.25} />}
           >
             {message?.params ? (
-              <div className="w-full break-words rounded bg-background p-5">{message?.params}</div>
+              <div
+                className={cn('w-full break-words rounded bg-background p-5', CodeFont.className)}
+              >
+                {message?.params}
+              </div>
             ) : null}
           </Card>
 

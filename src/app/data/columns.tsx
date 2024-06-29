@@ -11,6 +11,8 @@ import { formatTimeAgo, formatTimeDifference } from '@/utils';
 import ChainTxDisplay from '@/components/ChainTxDisplay';
 import BlockchainAddressLink from '@/components/BlockchainAddressLink';
 import { Skeleton } from '@/components/ui/skeleton';
+import { CodeFont } from '@/config/font';
+import { cn } from '@/lib/utils';
 
 export type Column = {
   dataIndex: string;
@@ -40,7 +42,11 @@ export const columns: Column[] = [
         return <Skeleton className="h-[22px] w-full rounded-full" />;
       }
       return (
-        <Link href={`/message/${value}`} className="hover:underline" title={value}>
+        <Link
+          href={`/message/${value}`}
+          className={cn('hover:underline', CodeFont.className)}
+          title={value}
+        >
           {value}
         </Link>
       );

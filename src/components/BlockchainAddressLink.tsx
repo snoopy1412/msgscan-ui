@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { toShortText } from '@/utils';
 import { CHAIN } from '@/types/chains';
 import { cn } from '@/lib/utils';
+import { CodeFont } from '@/config/font';
 
 interface BlockchainAddressLinkProps {
   chain?: CHAIN;
@@ -27,7 +28,7 @@ const BlockchainAddressLink = ({
       <Link
         title={address}
         href={getUrl()}
-        className={cn('hover:underline', className)}
+        className={cn('hover:underline', CodeFont.className, className)}
         target="_blank"
         rel="noreferrer noopener"
       >
