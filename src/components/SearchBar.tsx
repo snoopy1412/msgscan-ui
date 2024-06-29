@@ -42,7 +42,7 @@ const SearchBar = () => {
   );
 
   return (
-    <form className="ml-auto flex-1 sm:flex-initial">
+    <div className="ml-auto flex-1 sm:flex-initial">
       <div className="relative">
         {loading ? (
           <Spin className="absolute left-2.5 top-3.5 h-4 w-4 text-muted-foreground" />
@@ -62,7 +62,7 @@ const SearchBar = () => {
           </p>
         )}
       </div>
-    </form>
+    </div>
   );
 };
 
