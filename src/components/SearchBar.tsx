@@ -1,5 +1,5 @@
 'use client';
-import { useState, useCallback, ChangeEventHandler } from 'react';
+import { useState, useCallback, ChangeEventHandler, Suspense } from 'react';
 import { useDebounce } from 'react-use';
 import { Search } from 'lucide-react';
 import { Input } from './ui/input';
@@ -66,4 +66,11 @@ const SearchBar = () => {
   );
 };
 
-export default SearchBar;
+const SearchBarWrapper = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SearchBar />
+    </Suspense>
+  );
+};
+export default SearchBarWrapper;

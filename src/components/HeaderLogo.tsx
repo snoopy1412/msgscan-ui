@@ -6,6 +6,7 @@ import { APP_NAME } from '@/config/site';
 import { useNetworkFromQuery } from '@/hooks/useNetwork';
 
 import Logo from './icon/logo';
+import { Suspense } from 'react';
 
 const HeaderLogo = () => {
   const network = useNetworkFromQuery();
@@ -24,4 +25,12 @@ const HeaderLogo = () => {
   );
 };
 
-export default HeaderLogo;
+const HeaderLogoWrapper = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <HeaderLogo />
+    </Suspense>
+  );
+};
+
+export default HeaderLogoWrapper;
