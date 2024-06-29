@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button';
 
 import { MESSAGE_STATUS_LIST } from '@/config/status';
 import { useCallback, useMemo, useState } from 'react';
-import { CHAIN_OPTIONS } from '@/config/chains';
 import MobileTableStatusFilter from './TableStatusFilter';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { SlidersHorizontal } from 'lucide-react';
@@ -14,11 +13,17 @@ import MobileTableChainFilter from './TableChainFilter';
 import MobileTableDateFilter from './TableDateFilter';
 import useFilter from '../hooks/useFilter';
 import { CURRENT_FILTERS, CURRENT_FILTERS_LIST, CURRENT_FILTERS_STATE } from '@/types/filter';
+import { CHAIN } from '@/types/chains';
 
 export interface TableFilterToolbarProps {
+  chains: CHAIN[];
   className?: string;
 }
-const TableFilterToolbar = ({ className }: TableFilterToolbarProps) => {
+const TableFilterToolbar = ({ chains, className }: TableFilterToolbarProps) => {
+  const CHAIN_OPTIONS = chains?.map((chain) => ({
+    label: chain.name,
+    value: chain.id
+  }));
   const [open, setOpen] = useState(false);
 
   const [currentFilterInfo, setCurrentFilterInfo] = useState<CURRENT_FILTERS_STATE>({

@@ -1,7 +1,7 @@
 'use client';
 
 import { chains } from '@/config/chains';
-import { ChAIN_ID } from '@/types/chains';
+import { CHAIN, ChAIN_ID } from '@/types/chains';
 import { useMessage } from '@/hooks/services';
 import Pending from './Pending';
 import TxDetail from './TxDetail';
@@ -11,11 +11,12 @@ import useBreakpoint from '@/hooks/breakpoint';
 
 interface ClientPageProps {
   id: string;
+  chains: CHAIN[];
 }
-export default function ClientPage({ id }: ClientPageProps) {
+export default function ClientPage({ id, chains }: ClientPageProps) {
   const breakpoint = useBreakpoint();
   const [iconSize, setIconSize] = useState(22);
-  const { data, isPending, isSuccess, isError } = useMessage(id as string);
+  const { data, isPending, isSuccess, isError } = useMessage(id as string, chains);
 
   const sourceChain = chains?.find(
     (chain) => chain.id === (Number(data?.sourceChainId) as unknown as ChAIN_ID)

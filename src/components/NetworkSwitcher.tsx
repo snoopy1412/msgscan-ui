@@ -6,22 +6,18 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { NetworkMap } from '@/config/network';
-import { DEPLOY_ENV } from '@/types/env';
+import { NetworkMap, defaultNetwork } from '@/config/network';
+import { Network } from '@/types/network';
+
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-
-const defaultNetwork = process.env.NEXT_PUBLIC_DEPLOYMENT_MODE as DEPLOY_ENV;
 
 const NetworkSwitcher = () => {
   const router = useRouter();
 
   const handleChange = useCallback(
-    (value: DEPLOY_ENV) => {
-      const switchTo = NetworkMap[value].url;
-      if (switchTo) {
-        router.push(switchTo);
-      }
+    (value: Network) => {
+      router.push(`/?network=${value}`);
     },
     [router]
   );
@@ -32,11 +28,11 @@ const NetworkSwitcher = () => {
         <SelectValue placeholder="Select a network" className="text-[0.875rem]" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value={DEPLOY_ENV.MAINNET} className="text-[0.875rem]">
-          {NetworkMap[DEPLOY_ENV.MAINNET].title}
+        <SelectItem value={Network.MAINNET} className="text-[0.875rem]">
+          {NetworkMap[Network.MAINNET].title}
         </SelectItem>
-        <SelectItem value={DEPLOY_ENV.TESTNET} className="text-[0.875rem]">
-          {NetworkMap[DEPLOY_ENV.TESTNET].title}
+        <SelectItem value={Network.TESTNET} className="text-[0.875rem]">
+          {NetworkMap[Network.TESTNET].title}
         </SelectItem>
       </SelectContent>
     </Select>

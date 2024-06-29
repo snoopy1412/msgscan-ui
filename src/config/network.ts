@@ -1,12 +1,13 @@
-import { DEPLOY_ENV } from "@/types/env";
+import { Network } from '@/types/network';
 
 export const NetworkMap = {
-  [DEPLOY_ENV.TESTNET]: {
-    title: "Testnet",
-    url: "https://testnet.scan.msgport.xyz",
+  [Network.TESTNET]: {
+    title: 'Testnet'
   },
-  [DEPLOY_ENV.MAINNET]: {
-    title: "Mainnet",
-    url: "https://scan.msgport.xyz",
-  },
+  [Network.MAINNET]: {
+    title: 'Mainnet'
+  }
 };
+
+export const networkList = [Network.MAINNET, Network.TESTNET];
+export const defaultNetwork = Network.MAINNET;

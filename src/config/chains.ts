@@ -115,7 +115,7 @@ const filterChains = chains.filter((chain) => {
   }
 });
 
-export const CHAIN_OPTIONS: TableFilterOption[] = filterChains?.map((chain) => ({
+export const CHAIN_OPTIONS: TableFilterOption[] = chains?.map((chain) => ({
   label: chain.name,
   value: chain.id
 }));

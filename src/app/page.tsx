@@ -13,6 +13,7 @@ import { useMessagePort, useMessageProgress } from '@/hooks/services';
 
 import { Separator } from '@/components/ui/separator';
 import StatsContainer from '@/components/StatsContainer';
+import { getChainsByNetwork } from '@/utils/network';
 
 const defaultQueryVariables: MessagePortQueryParams = {
   offset: 0,
@@ -23,7 +24,14 @@ const defaultQueryVariables: MessagePortQueryParams = {
     }
   ]
 };
-export default function Page() {
+interface PageProps {
+  searchParams: {
+    network: string;
+  };
+}
+export default function Page({ searchParams }: PageProps) {
+  const chains = getChainsByNetwork(searchParams?.network);
+
   const queryClient = useQueryClient();
 
   const [queryVariables, setQueryVariables] =
@@ -92,7 +100,7 @@ export default function Page() {
     });
   }, [queryClient, selectedStatuses, date, selectedSourceChains, selectedTargetChains]);
 
-  const { data, isFetching } = useMessagePort(queryVariables);
+  const { data, isFetching } = useMessagePort(queryVariables, chains);
 
   const { data: messageProgress } = useMessageProgress();
 
@@ -125,6 +133,8 @@ export default function Page() {
       <Separator className="hidden lg:block" />
       <DataTable
         loading={isFetching}
+        network={searchParams?.network}
+        chains={chains}
         dataSource={Array.isArray(data?.MessagePort) ? data?.MessagePort : []}
         offset={queryVariables?.offset}
         onPreviousPageClick={handlePreviousPageClick}

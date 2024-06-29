@@ -6,8 +6,13 @@ import { Input } from './ui/input';
 import Spin from './ui/spin';
 import { useRouter } from 'next/navigation';
 import { fetchMessage } from '@/graphql/services';
+import { getChainsByNetwork, getNetwork } from '@/utils/network';
+import { useNetworkFromQuery } from '@/hooks/useNetwork';
 
 const SearchBar = () => {
+  const network = useNetworkFromQuery();
+  const chains = getChainsByNetwork(network);
+
   const [keyword, setKeyword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
@@ -25,15 +30,15 @@ const SearchBar = () => {
         return;
       }
       setLoading(true);
-      const response = await fetchMessage(keyword);
+      const response = await fetchMessage(keyword, chains);
       if (response?.id) {
-        router.push(`/message/${keyword}`);
+        router.push(`/message/${keyword}?network=${getNetwork(network)}`);
         setKeyword('');
       }
       setLoading(false);
     },
     500,
-    [keyword]
+    [keyword, network]
   );
 
   return (

@@ -8,14 +8,15 @@ import type {
   MessagePortBoolExp,
   MessageProgressQueryParams
 } from './type';
-
-const defaultSourceChainId: MessagePortBoolExp['sourceChainId'] = {
-  _in: CHAIN_OPTIONS.map((option) => option.value)
-};
+import { CHAIN } from '@/types/chains';
 
 export async function fetchMessagePort(
-  variables: MessagePortQueryParams = {}
+  variables: MessagePortQueryParams = {},
+  chains: CHAIN[]
 ): Promise<MessagePortResponse | null> {
+  const defaultSourceChainId: MessagePortBoolExp['sourceChainId'] = {
+    _in: chains?.map((chain) => chain.id)
+  };
   try {
     const effectiveVariables: MessagePortQueryParams = {
       ...variables,
@@ -36,8 +37,12 @@ export async function fetchMessagePort(
 }
 
 export async function fetchMessage(
-  id: string
+  id: string,
+  chains: CHAIN[]
 ): Promise<MessagePortResponse['MessagePort']['0'] | null> {
+  const defaultSourceChainId: MessagePortBoolExp['sourceChainId'] = {
+    _in: chains?.map((chain) => chain.id)
+  };
   try {
     const response = await client.request<MessagePortResponse, MessagePortQueryParams>(
       GET_MESSAGE_PORT,

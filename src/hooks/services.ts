@@ -1,13 +1,14 @@
 import { REFRESH_INTERVAL } from '@/config/site';
 import { fetchMessage, fetchMessagePort, fetchMessageProgress } from '@/graphql/services';
 import { MessagePortQueryParams } from '@/graphql/type';
+import { CHAIN } from '@/types/chains';
 import { MESSAGE_STATUS } from '@/types/message';
 import { useQuery } from '@tanstack/react-query';
 
-export function useMessagePort(variables: MessagePortQueryParams = {}) {
+export function useMessagePort(variables: MessagePortQueryParams = {}, chains: CHAIN[]) {
   return useQuery({
-    queryKey: ['messagePort', variables],
-    queryFn: async () => fetchMessagePort(variables),
+    queryKey: ['messagePort', variables, chains],
+    queryFn: async () => fetchMessagePort(variables, chains),
     refetchInterval: REFRESH_INTERVAL,
     placeholderData(prevData) {
       const hasRealData = prevData?.MessagePort?.some((item) => item.status !== -1);
@@ -24,10 +25,10 @@ export function useMessagePort(variables: MessagePortQueryParams = {}) {
   });
 }
 
-export function useMessage(id: string) {
+export function useMessage(id: string, chains: CHAIN[]) {
   return useQuery({
-    queryKey: ['message', id],
-    queryFn: async () => fetchMessage(id),
+    queryKey: ['message', id, chains],
+    queryFn: async () => fetchMessage(id, chains),
     refetchInterval(query) {
       const status = query?.state?.data?.status;
       return status !== MESSAGE_STATUS.FAILED && status !== MESSAGE_STATUS.SUCCESS

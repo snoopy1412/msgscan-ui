@@ -22,6 +22,7 @@ import { MessagePort, MessagePortQueryParams } from '@/graphql/type';
 import { columns } from '../data/columns';
 import DesktopFilterToolbar from './DesktopFilterToolbar';
 import MobileFilterToolbar from './MobileFilterToolbar';
+import { CHAIN } from '@/types/chains';
 
 const fadeInOut = {
   hidden: { opacity: 0 },
@@ -35,6 +36,8 @@ interface TableProps {
 
 interface TableProps {
   loading: boolean;
+  network: string;
+  chains: CHAIN[];
   dataSource: MessagePort[];
   offset: MessagePortQueryParams['offset'];
   onPreviousPageClick: React.MouseEventHandler<HTMLLIElement>;
@@ -43,6 +46,8 @@ interface TableProps {
 
 const DataTable = ({
   loading,
+  network,
+  chains,
   dataSource,
   offset,
   onPreviousPageClick,
@@ -74,8 +79,8 @@ const DataTable = ({
 
   return (
     <div className="relative">
-      <MobileFilterToolbar className="flex lg:hidden" />
-      <DesktopFilterToolbar className="hidden lg:flex" />
+      <MobileFilterToolbar className="flex lg:hidden" chains={chains} />
+      <DesktopFilterToolbar className="hidden lg:flex" chains={chains} />
       <Separator />
       <Table className="table-fixed">
         <TableHeader>
@@ -124,7 +129,12 @@ const DataTable = ({
                       variants={fadeInOut}
                       className="truncate text-sm"
                     >
-                      {column.render((message as unknown as any)[column.dataIndex], message, index)}
+                      {column.render(
+                        (message as unknown as any)[column.dataIndex],
+                        message,
+                        index,
+                        network
+                      )}
                     </motion.div>
                   </TableCell>
                 ))}

@@ -1,18 +1,23 @@
 import { Button } from '@/components/ui/button';
 
 import { MESSAGE_STATUS_LIST } from '@/config/status';
-import { CHAIN_OPTIONS } from '@/config/chains';
 import TableChainFilter from './TableChainFilter';
 import TableStatusFilter from './TableStatusFilter';
 import TableDateFilter from './TableDateFilter';
 
 import useFilter from '../hooks/useFilter';
 import { cn } from '@/lib/utils';
+import { CHAIN } from '@/types/chains';
 
 export interface TableFilterToolbarProps {
+  chains: CHAIN[];
   className?: string;
 }
-const TableFilterToolbar = ({ className }: TableFilterToolbarProps) => {
+const TableFilterToolbar = ({ chains, className }: TableFilterToolbarProps) => {
+  const CHAIN_OPTIONS = chains?.map((chain) => ({
+    label: chain.name,
+    value: chain.id
+  }));
   const {
     selectedStatuses,
     date,

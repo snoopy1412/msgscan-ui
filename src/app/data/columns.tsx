@@ -13,12 +13,13 @@ import BlockchainAddressLink from '@/components/BlockchainAddressLink';
 import { Skeleton } from '@/components/ui/skeleton';
 import { CodeFont } from '@/config/font';
 import { cn } from '@/lib/utils';
+import { getNetwork } from '@/utils/network';
 
 export type Column = {
   dataIndex: string;
   title: string;
   width?: string;
-  render: (value: any, record: MessagePort, index: number) => any;
+  render: (value: any, record: MessagePort, index: number, network: string) => any;
 };
 
 export const columns: Column[] = [
@@ -37,13 +38,13 @@ export const columns: Column[] = [
     dataIndex: 'id',
     title: 'Msgid',
     width: '10rem',
-    render(value, record) {
+    render(value, record, index, network) {
       if (record?.status === -1) {
         return <Skeleton className="h-[22px] w-full rounded-full" />;
       }
       return (
         <Link
-          href={`/message/${value}`}
+          href={`/message/${value}?network=${getNetwork(network)}`}
           className={cn('hover:underline', CodeFont.className)}
           title={value}
         >
@@ -76,7 +77,7 @@ export const columns: Column[] = [
     dataIndex: 'sourceTransactionHash',
     title: 'Source Tx Hash',
     width: '10rem',
-    render(value, record) {
+    render(value, record, index, network) {
       if (record?.status === -1) {
         return <Skeleton className="h-[22px] w-full rounded-full" />;
       }
@@ -84,7 +85,14 @@ export const columns: Column[] = [
       const chain = chains?.find(
         (chain) => chain.id === (Number(record?.sourceChainId) as unknown as ChAIN_ID)
       );
-      return <ChainTxDisplay chain={chain} value={value} isLink href={`message/${value}`} />;
+      return (
+        <ChainTxDisplay
+          chain={chain}
+          value={value}
+          isLink
+          href={`/message/${value}?network=${getNetwork(network)}`}
+        />
+      );
     }
   },
   {
