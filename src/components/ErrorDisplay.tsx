@@ -12,8 +12,8 @@ const ErrorDisplay = ({ title, description, svgPath, svgPathLight }: Props) => {
   return (
     <div className="flex flex-col items-center justify-center gap-[1.25rem]">
       <div className="relative h-[7.53125rem] w-[10rem]">
-        <Image alt={title} src={svgPath} fill={true} className="hidden dark:inline" />
-        <Image alt={title} src={svgPathLight} fill={true} className="inline dark:hidden" />
+        <Image alt={title} src={svgPath} fill={true} className="hidden dark:inline" priority />
+        <Image alt={title} src={svgPathLight} fill={true} className="inline dark:hidden" priority />
       </div>
       <div>
         <h2 className="text-center text-[1.875rem] font-bold italic leading-[3rem] text-foreground">
