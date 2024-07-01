@@ -16,6 +16,20 @@ import { getChainsByNetwork, getNetwork } from '@/utils/network';
 import { useNetworkFromQuery } from '@/hooks/useNetwork';
 import { useQuery } from '@tanstack/react-query';
 import { REFRESH_INTERVAL } from '@/config/site';
+import { CHAIN } from '@/types/chains';
+
+const fetchMessageWithDelay = async (id: string, chains: CHAIN[]) => {
+  const startTime = Date.now();
+  const result = await fetchMessage(id, chains);
+  const endTime = Date.now();
+  const elapsed = endTime - startTime;
+
+  if (elapsed < 5000) {
+    await new Promise((resolve) => setTimeout(resolve, 5000 - elapsed));
+  }
+
+  return result;
+};
 
 const SearchBar = () => {
   const router = useRouter();
@@ -45,7 +59,7 @@ const SearchBar = () => {
 
   const { isFetching } = useQuery({
     queryKey: ['message', submitKeyword, chains],
-    queryFn: async () => fetchMessage(submitKeyword, chains),
+    queryFn: async () => fetchMessageWithDelay(submitKeyword, chains),
     enabled: Boolean(submitKeyword) && !isErrorMessage,
     refetchOnWindowFocus: false,
     refetchInterval(query) {
