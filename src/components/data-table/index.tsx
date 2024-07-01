@@ -19,7 +19,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { MessagePort, MessagePortQueryParams } from '@/graphql/type';
-import { columns } from '../data/columns';
+import { columns } from './columns';
 import DesktopFilterToolbar from './DesktopFilterToolbar';
 import MobileFilterToolbar from './MobileFilterToolbar';
 import { CHAIN } from '@/types/chains';

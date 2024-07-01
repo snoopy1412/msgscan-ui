@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { MessagePortBoolExp, MessagePortQueryParams, OrderBy } from '@/graphql/type';
 import { useShallow } from 'zustand/react/shallow';
 
-import DataTable from '@/app/components/Table';
+import DataTable from '@/components/data-table';
 import { createTimestampQuery } from '@/utils';
 import useFilterStore from '@/store/filter';
 import { useMessagePort } from '@/hooks/services';
