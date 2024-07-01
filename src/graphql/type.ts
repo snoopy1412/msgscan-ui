@@ -221,12 +221,25 @@ export interface MessageProgressQueryParams {
   where?: MessageProgressBoolExp;
 }
 export interface MessageProgress {
-  db_write_timestamp: Date;
   id: string;
-  inflight: number;
-  total: number;
+  amount: number;
 }
 
 export interface MessageProgressResponse {
   MessageProgress: MessageProgress;
+}
+
+export interface MessagePortAggregateQueryParams {
+  where?: MessagePortBoolExp;
+  sourceChainId?: NumericComparisonExp;
+}
+
+export interface MessagePortAggregate {
+  aggregate: {
+    count: number;
+  };
+}
+
+export interface MessagePortAggregateResponse {
+  MessagePort_aggregate: MessagePortAggregate;
 }

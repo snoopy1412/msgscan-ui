@@ -90,12 +90,10 @@ export const GET_MESSAGE_PORT = gql`
 `;
 
 export const GET_MESSAGE_PROGRESS = gql`
-  query GetMessageProgress($where: MessageProgress_bool_exp) {
-    MessageProgress(where: $where) {
-      db_write_timestamp
+  query GetMessageProgress {
+    MessageProgress {
       id
-      inflight
-      total
+      amount
     }
   }
 `;

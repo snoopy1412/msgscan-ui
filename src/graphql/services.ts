@@ -1,4 +1,3 @@
-import { CHAIN_OPTIONS } from '@/config/chains';
 import { client } from './client';
 import { GET_MESSAGE_PORT, GET_MESSAGE_PROGRESS } from './queries';
 import type {
@@ -71,25 +70,9 @@ export async function fetchMessage(
   }
 }
 
-type FetchMessageProgressType = {
-  chains: CHAIN[];
-};
-export async function fetchMessageProgress({
-  chains
-}: FetchMessageProgressType): Promise<MessageProgressResponse | null> {
-  console.log('fetchMessageProgress', chains);
-
+export async function fetchMessageProgress(): Promise<MessageProgressResponse | null> {
   try {
-    const response = await client.request<MessageProgressResponse, MessageProgressQueryParams>(
-      GET_MESSAGE_PROGRESS,
-      {
-        where: {
-          id: {
-            _in: chains?.map((chain) => chain.id?.toString())
-          }
-        }
-      }
-    );
+    const response = await client.request<MessageProgressResponse>(GET_MESSAGE_PROGRESS);
     return response;
   } catch (error) {
     console.error('messageProgress request failed:', error);

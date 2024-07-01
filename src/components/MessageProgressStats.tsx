@@ -16,6 +16,7 @@ const MessageProgressStats = ({ chains }: MessageProgressStatsProps) => {
   return (
     <div className="py-[2.5rem] lg:py-0">
       <StatsContainer
+        networkTotal={chains?.length}
         data={
           Array.isArray(messageProgress?.MessageProgress) ? messageProgress?.MessageProgress : []
         }

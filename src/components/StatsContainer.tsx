@@ -1,14 +1,15 @@
 import { MessageProgress } from '@/graphql/type';
 import { StatCard } from './StatCard';
-import { sumBy } from 'lodash-es';
 
 interface StatsContainerProps {
   data?: MessageProgress[];
+  networkTotal: number;
 }
-const StatsContainer = ({ data }: StatsContainerProps) => {
-  const totalMessageValue = sumBy(data, (item) => Number(item.total));
-  const inflightMessageValue = sumBy(data, (item) => Number(item.inflight));
-  const networkValue = data?.length ?? 0;
+const StatsContainer = ({ data, networkTotal }: StatsContainerProps) => {
+  const totalMessageValue = data?.find((item) => item.id === 'total')?.amount ?? 0;
+  const inflightMessageValue = data?.find((item) => item.id === 'inflight')?.amount ?? 0;
+  //  networkTotal is the total number of networks
+  const networkValue = networkTotal ?? 0;
   // only ormp protocol is supported
   const protocolValue = 1;
 
