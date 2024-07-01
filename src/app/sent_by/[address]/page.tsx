@@ -27,8 +27,8 @@ export default function Page({ params, searchParams }: PageProps) {
         <SearchBar />
       </div>
       <div className="py-4">
-        <span className="text-xs text-muted-foreground">Address</span>
-        <header className={cn('text-sm font-light text-foreground', CodeFont.className)}>
+        <span className="text-sm text-muted-foreground">Address</span>
+        <header className={cn('text-base font-light text-foreground', CodeFont.className)}>
           <FlipWords words={words} />
         </header>
       </div>
