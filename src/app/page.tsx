@@ -13,7 +13,7 @@ export default function Page({ searchParams }: PageProps) {
   const chains = getChainsByNetwork(searchParams?.network);
   return (
     <>
-      <div className="block lg:hidden">
+      <div className="mt-4 block lg:hidden">
         <SearchBar />
       </div>
       <MessageProgressStats chains={chains} />
