@@ -38,14 +38,14 @@ export function createTimestampQuery(date?: DateRange): TimestampQuery {
   const query: TimestampQuery = {};
 
   if (date?.from) {
-    query._gte = date.from.getTime();
+    query._gte = Math.floor(date.from.getTime() / 1000);
   }
 
   if (date?.to) {
     const endOfDay = new Date(date.to);
     endOfDay.setDate(endOfDay.getDate() + 1);
     endOfDay.setMilliseconds(-1);
-    query._lte = endOfDay.getTime();
+    query._lte = Math.floor(endOfDay.getTime() / 1000);
   }
 
   return query;
