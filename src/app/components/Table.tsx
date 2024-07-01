@@ -55,6 +55,10 @@ const DataTable = ({
 }: TableProps) => {
   const [activePageType, setActivePageType] = useState<'previous' | 'next' | ''>('');
 
+  const showPagination = Boolean(dataSource?.length || offset !== 0);
+  const enablePreviousPage = offset !== 0;
+  const enableNextPage = Boolean(dataSource?.length);
+
   const handlePreviousPageClick = useCallback<React.MouseEventHandler<HTMLLIElement>>(
     (e) => {
       setActivePageType('previous');
@@ -153,28 +157,39 @@ const DataTable = ({
           )}
         </TableBody>
       </Table>
-      {dataSource?.length ? (
+      {showPagination ? (
         <Pagination className="justify-center gap-[0.31rem] py-5 lg:justify-end">
           <PaginationContent>
-            <PaginationItem
-              className="rounded bg-card"
-              onClick={offset !== 0 ? handlePreviousPageClick : undefined}
-            >
-              <PaginationPrevious
-                loading={loading && activePageType === 'previous'}
-                className={cn(
-                  offset !== 0
-                    ? 'cursor-pointer'
-                    : 'cursor-not-allowed text-secondary-foreground hover:bg-transparent hover:text-secondary-foreground'
-                )}
-              />
-            </PaginationItem>
-            <PaginationItem className="rounded bg-card" onClick={handleNextPageClick}>
-              <PaginationNext
-                loading={loading && activePageType === 'next'}
-                className={cn('cursor-pointer')}
-              />
-            </PaginationItem>
+            {
+              <PaginationItem
+                className="rounded bg-card"
+                onClick={enablePreviousPage ? handlePreviousPageClick : undefined}
+              >
+                <PaginationPrevious
+                  loading={loading && activePageType === 'previous'}
+                  className={cn(
+                    enablePreviousPage
+                      ? 'cursor-pointer'
+                      : 'cursor-not-allowed text-secondary-foreground hover:bg-transparent hover:text-secondary-foreground'
+                  )}
+                />
+              </PaginationItem>
+            }
+            {
+              <PaginationItem
+                className="rounded bg-card"
+                onClick={enableNextPage ? handleNextPageClick : undefined}
+              >
+                <PaginationNext
+                  loading={loading && activePageType === 'next'}
+                  className={cn(
+                    enableNextPage
+                      ? 'cursor-pointer'
+                      : 'cursor-not-allowed text-secondary-foreground hover:bg-transparent hover:text-secondary-foreground'
+                  )}
+                />
+              </PaginationItem>
+            }
           </PaginationContent>
         </Pagination>
       ) : null}
