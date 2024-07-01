@@ -1,5 +1,12 @@
 'use client';
-import { useState, useCallback, ChangeEventHandler, Suspense, FormEventHandler } from 'react';
+import {
+  useState,
+  useCallback,
+  ChangeEventHandler,
+  Suspense,
+  FormEventHandler,
+  useEffect
+} from 'react';
 import { Search } from 'lucide-react';
 import { Input } from './ui/input';
 import Spin from './ui/spin';
@@ -46,12 +53,20 @@ const SearchBar = () => {
       if (id) {
         router.push(`/message/${submitKeyword}?network=${getNetwork(network)}`);
         setKeyword('');
+        setSubmitKeyword('');
         return undefined;
       } else {
         return REFRESH_INTERVAL;
       }
     }
   });
+
+  useEffect(() => {
+    () => {
+      setKeyword('');
+      setSubmitKeyword('');
+    };
+  }, []);
 
   return (
     <div className="ml-auto flex-1 sm:flex-initial">
