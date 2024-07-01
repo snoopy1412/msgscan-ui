@@ -1,5 +1,4 @@
 import { ChAIN_ID, CHAIN } from '@/types/chains';
-import { TableFilterOption } from '@/types/helper';
 
 export const chains: CHAIN[] = [
   {
@@ -106,16 +105,3 @@ export const chains: CHAIN[] = [
     }
   }
 ];
-
-const filterChains = chains.filter((chain) => {
-  if (process.env.NEXT_PUBLIC_DEPLOYMENT_MODE === 'testnet') {
-    return chain.testnet;
-  } else {
-    return !chain.testnet;
-  }
-});
-
-export const CHAIN_OPTIONS: TableFilterOption[] = chains?.map((chain) => ({
-  label: chain.name,
-  value: chain.id
-}));
