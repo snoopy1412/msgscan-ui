@@ -119,7 +119,6 @@ export const columns: Column[] = [
       if (record?.status === -1) {
         return <Skeleton className="h-[22px] w-full rounded-full" />;
       }
-      if (!value) return '';
       const chain = chains?.find(
         (chain) => chain.id === (Number(record?.targetChainId) as unknown as ChAIN_ID)
       );

@@ -9,7 +9,6 @@ interface TransactionHashInfoProps {
 }
 
 const TransactionHashInfo = ({ chain, hash }: TransactionHashInfoProps) => {
-  if (!hash) return null;
   return (
     <div className="flex items-center">
       <ChainTxDisplay
@@ -20,8 +19,8 @@ const TransactionHashInfo = ({ chain, hash }: TransactionHashInfoProps) => {
         value={hash}
         isLink={false}
       >
-        <ClipboardIconButton text={hash} size={16} />
-        {chain ? (
+        {hash && <ClipboardIconButton text={hash} size={16} />}
+        {hash && chain ? (
           <ExplorerLinkButton url={`${chain?.blockExplorers?.default?.url}/tx/${hash}`} />
         ) : null}
       </ChainTxDisplay>

@@ -127,6 +127,7 @@ const MessagePortTable = ({ chains, network, sourceAddress }: MessagePortTablePr
     });
     updateQueryVariables({ offset: 0 });
   }, [queryClient, network]);
+
   return (
     <DataTable
       loading={isFetching}

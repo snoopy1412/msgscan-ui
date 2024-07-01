@@ -9,7 +9,7 @@ import { CodeFont } from '@/config/font';
 
 interface ChainTxDisplayProps {
   chain?: CHAIN;
-  value: string;
+  value?: string;
   isLink?: boolean;
   href?: string;
   isFullText?: boolean;
