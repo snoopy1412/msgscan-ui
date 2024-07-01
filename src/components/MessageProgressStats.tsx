@@ -9,9 +9,7 @@ interface MessageProgressStatsProps {
   chains: CHAIN[];
 }
 const MessageProgressStats = ({ chains }: MessageProgressStatsProps) => {
-  const { data: messageProgress } = useMessageProgress({
-    chains
-  });
+  const { data: messageProgress } = useMessageProgress();
 
   return (
     <div className="py-[2.5rem] lg:py-0">
