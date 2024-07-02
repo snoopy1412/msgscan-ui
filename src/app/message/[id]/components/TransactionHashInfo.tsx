@@ -1,6 +1,6 @@
-import ChainTxDisplay from '@/components/ChainTxDisplay';
-import ClipboardIconButton from '@/components/ClipboardIconButton';
-import ExplorerLinkButton from '@/components/ExplorerLinkButton';
+import ChainTxDisplay from '@/components/chain-tx-display';
+import ClipboardIconButton from '@/components/clipboard-icon-button';
+import ExplorerLinkButton from '@/components/explorer-link-button';
 import type { CHAIN } from '@/types/chains';
 
 interface TransactionHashInfoProps {

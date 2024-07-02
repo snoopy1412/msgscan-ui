@@ -1,11 +1,11 @@
 'use client';
 
-import SearchBar from '@/components/SearchBar';
+import SearchBar from '@/components/search-bar';
 
 import { Separator } from '@/components/ui/separator';
 import { FlipWords } from '@/components/ui/flip-words';
 import { getChainsByNetwork } from '@/utils/network';
-import MessagePortTable from '@/components/MessagePortTable';
+import MessagePortTable from '@/components/message-port-table';
 import { CodeFont } from '@/config/font';
 import { cn } from '@/lib/utils';
 

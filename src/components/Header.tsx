@@ -1,8 +1,8 @@
-import { ModeToggle } from './ModeToggle';
+import { ModeToggle } from './mode-toggle';
 
-import SearchBar from './SearchBar';
-import NetworkSwitcher from './NetworkSwitcher';
-import HeaderLogo from './HeaderLogo';
+import SearchBar from './search-bar';
+import NetworkSwitcher from './network-switcher';
+import HeaderLogo from './header-logo';
 
 const Header = () => {
   return (

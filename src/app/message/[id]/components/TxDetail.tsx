@@ -14,7 +14,7 @@ import { FlipWords } from '@/components/ui/flip-words';
 import { cn } from '@/lib/utils';
 import { CodeFont } from '@/config/font';
 import OrmpIcon from '@/components/icon/ormp';
-import MessageStatus from '@/components/MessageStatus';
+import MessageStatus from '@/components/message-status';
 import { CHAIN } from '@/types/chains';
 import FadeInDown from '@/components/ui/fade-in-down';
 import BackToTop from '@/components/ui/back-to-top';

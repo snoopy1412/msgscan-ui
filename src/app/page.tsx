@@ -1,8 +1,8 @@
 import { getChainsByNetwork } from '@/utils/network';
-import SearchBar from '@/components/SearchBar';
+import SearchBar from '@/components/search-bar';
 import { Separator } from '@/components/ui/separator';
-import MessagePortTable from '@/components/MessagePortTable';
-import MessageProgressStats from '@/components/MessageProgressStats';
+import MessagePortTable from '@/components/message-port-table';
+import MessageProgressStats from '@/components/message-progress-stats';
 
 interface PageProps {
   searchParams: {

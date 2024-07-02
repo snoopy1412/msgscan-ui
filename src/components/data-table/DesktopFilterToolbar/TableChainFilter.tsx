@@ -6,7 +6,7 @@ import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
-import SelectedLabels from '@/components/SelectedLabels';
+import SelectedLabels from '@/components/selected-labels';
 import useChainFilterLogic from '../hooks/useChainFilterLogic';
 
 interface TableChainFilterProps {

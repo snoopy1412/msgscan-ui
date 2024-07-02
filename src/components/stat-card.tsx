@@ -1,9 +1,8 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { convertToNumber } from '@/utils';
-import Counter from './Counter';
+import Counter from './counter';
 import { Separator } from './ui/separator';
-import { Skeleton } from './ui/skeleton';
 
 interface StatCardProps {
   title: string;

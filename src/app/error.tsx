@@ -1,6 +1,6 @@
 'use client';
 
-import ErrorDisplay from '@/components/ErrorDisplay';
+import ErrorDisplay from '@/components/error-display';
 
 const ErrorComponent = () => {
   return (

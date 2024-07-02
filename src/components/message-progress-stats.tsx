@@ -2,7 +2,7 @@
 
 import { useMessageProgress } from '@/hooks/services';
 
-import StatsContainer from '@/components/StatsContainer';
+import StatsContainer from '@/components/stats-container';
 import { CHAIN } from '@/types/chains';
 
 interface MessageProgressStatsProps {

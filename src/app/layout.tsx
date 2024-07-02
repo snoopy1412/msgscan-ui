@@ -3,8 +3,8 @@ import { APP_NAME } from '@/config/site';
 
 import { cn } from '@/lib/utils';
 import { GlobalFont } from '@/config/font';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import Header from '@/components/header';
+import Footer from '@/components/footer';
 import AppProvider from '@/provider/AppProvider';
 
 import './globals.css';

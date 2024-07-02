@@ -1,15 +1,15 @@
 'use client';
 
-import MessageStatus from '@/components/MessageStatus';
 import Link from 'next/link';
+import MessageStatus from '@/components/message-status';
 import { MessagePort } from '@/graphql/type';
 import { chains } from '@/config/chains';
 import { ChAIN_ID } from '@/types/chains';
 import { protocols } from '@/config/protocols';
 import { formatTimeAgo, formatTimeDifference } from '@/utils';
 
-import ChainTxDisplay from '@/components/ChainTxDisplay';
-import BlockchainAddressLink from '@/components/BlockchainAddressLink';
+import ChainTxDisplay from '@/components/chain-tx-display';
+import BlockchainAddressLink from '@/components/blockchain-address-link';
 import { Skeleton } from '@/components/ui/skeleton';
 import { CodeFont } from '@/config/font';
 import { cn } from '@/lib/utils';
